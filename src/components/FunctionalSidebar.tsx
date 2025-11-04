@@ -1,24 +1,24 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { Calendar, FileText, Users, Truck, Briefcase, BarChart3, Settings, UserCog } from 'lucide-react';
-import imgFrame1171275132 from "figma:asset/366d22b376904052a04d70c3c539386a40689990.png";
+import logoImg from '@/assets/366d22b376904052a04d70c3c539386a40689990.png';
 
 export default function FunctionalSidebar() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return router.pathname === path;
   };
 
-  const isVehiclesActive = location.pathname === '/vehicles';
+  const isVehiclesActive = router.pathname === '/vehicles';
 
   return (
-    <div className="bg-white h-screen sticky top-0 w-[269px] flex-shrink-0" data-name="Sidebar">
+    <div className="bg-white h-screen sticky top-0 w-[269px] flex-shrink-0 overflow-y-auto" data-name="Sidebar">
       <div aria-hidden="true" className="absolute border-[0px_1px_0px_0px] border-[rgba(0,0,0,0.1)] border-solid inset-0 pointer-events-none shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)]" />
       
       {/* Logo */}
       <div className="absolute h-[63.063px] left-[10px] top-[10px] w-[93px]">
-        <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none size-full" src={imgFrame1171275132} />
+        <Image alt="" src={logoImg} width={93} height={63} className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none" />
       </div>
 
       {/* Main Navigation Container */}
@@ -36,7 +36,7 @@ export default function FunctionalSidebar() {
 
                 <div className="flex flex-col gap-[8px] pl-[16px]">
                   <button
-                    onClick={() => navigate('/calendar')}
+                    onClick={() => router.push('/calendar')}
                     className={`box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left transition-colors ${
                       isActive('/calendar') ? 'bg-[rgba(33,96,173,0.1)]' : 'hover:bg-[rgba(33,96,173,0.05)]'
                     }`}
@@ -46,7 +46,7 @@ export default function FunctionalSidebar() {
                   </button>
 
                   <button
-                    onClick={() => navigate('/cases')}
+                    onClick={() => router.push('/cases')}
                     className={`box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left transition-colors ${
                       isActive('/cases') ? 'bg-[rgba(33,96,173,0.1)]' : 'hover:bg-[rgba(33,96,173,0.05)]'
                     }`}
@@ -56,9 +56,9 @@ export default function FunctionalSidebar() {
                   </button>
 
                   <button
-                    onClick={() => navigate('/rostering')}
+                    onClick={() => router.push('/roster')}
                     className={`box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left transition-colors ${
-                      location.pathname.startsWith('/rostering') ? 'bg-[rgba(33,96,173,0.1)]' : 'hover:bg-[rgba(33,96,173,0.05)]'
+                      router.pathname.startsWith('/roster') ? 'bg-[rgba(33,96,173,0.1)]' : 'hover:bg-[rgba(33,96,173,0.05)]'
                     }`}
                   >
                     <Users className="w-[26px] h-[26px]" stroke="black" />
@@ -67,7 +67,7 @@ export default function FunctionalSidebar() {
 
                   <div className="relative">
                     <button
-                      onClick={() => navigate('/vehicles')}
+                      onClick={() => router.push('/vehicles')}
                       className={`box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left transition-colors ${
                         isVehiclesActive ? 'bg-[#2160ad] shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)]' : 'hover:bg-[rgba(33,96,173,0.05)]'
                       }`}
@@ -93,7 +93,7 @@ export default function FunctionalSidebar() {
 
                 <div className="flex flex-col gap-[8px] pl-[16px]">
                   <button
-                    onClick={() => navigate('/services')}
+                    onClick={() => router.push('/services')}
                     className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left hover:bg-[rgba(33,96,173,0.05)] transition-colors"
                   >
                     <Briefcase className="w-[24px] h-[24px]" stroke="black" />
@@ -101,7 +101,7 @@ export default function FunctionalSidebar() {
                   </button>
 
                   <button
-                    onClick={() => navigate('/hr')}
+                    onClick={() => router.push('/hrm')}
                     className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left hover:bg-[rgba(33,96,173,0.05)] transition-colors"
                   >
                     <Users className="w-[26px] h-[26px]" stroke="black" />
@@ -109,7 +109,7 @@ export default function FunctionalSidebar() {
                   </button>
 
                   <button
-                    onClick={() => navigate('/analytics')}
+                    onClick={() => router.push('/analytics')}
                     className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left hover:bg-[rgba(33,96,173,0.05)] transition-colors"
                   >
                     <BarChart3 className="w-[24px] h-[24px]" stroke="black" />
@@ -129,7 +129,7 @@ export default function FunctionalSidebar() {
 
                 <div className="flex flex-col gap-[8px] pl-[16px]">
                   <button
-                    onClick={() => navigate('/settings')}
+                    onClick={() => router.push('/settings')}
                     className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left hover:bg-[rgba(33,96,173,0.05)] transition-colors"
                   >
                     <Settings className="w-[26px] h-[26px]" stroke="black" />
@@ -137,7 +137,7 @@ export default function FunctionalSidebar() {
                   </button>
 
                   <button
-                    onClick={() => navigate('/users')}
+                    onClick={() => router.push('/users')}
                     className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0 rounded-[8px] w-full text-left hover:bg-[rgba(33,96,173,0.05)] transition-colors"
                   >
                     <UserCog className="w-[26px] h-[26px]" stroke="black" />
@@ -170,7 +170,7 @@ export default function FunctionalSidebar() {
           </div>
 
           <button
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/login')}
             className="h-[61px] rounded-[10px] w-full hover:bg-[rgba(231,0,11,0.05)] transition-colors"
           >
             <div className="flex flex-row items-center size-full">
