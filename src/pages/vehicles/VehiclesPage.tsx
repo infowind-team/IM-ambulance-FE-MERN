@@ -143,7 +143,7 @@ export default function VehiclesPage() {
 
   return (
     <div className="bg-white content-stretch flex items-start size-full">
-      <FunctionalSidebar />
+      {/* <FunctionalSidebar /> */}
       
       <div className="flex-1 bg-white h-screen overflow-auto">
         {/* Page Header */}

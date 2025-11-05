@@ -121,7 +121,7 @@ export default function AddNewContractPage() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      <FunctionalSidebar />
+      {/* <FunctionalSidebar /> */}
       
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header with Breadcrumbs */}

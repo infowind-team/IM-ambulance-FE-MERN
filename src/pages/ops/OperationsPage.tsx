@@ -313,7 +313,7 @@ export default function OperationsPage() {
   return (
     <div className="bg-white content-stretch flex items-start min-h-screen w-full">
       {/* Sidebar */}
-      <FunctionalSidebar />
+      {/* <FunctionalSidebar /> */}
 
       {/* Main Content */}
       <div className="flex-1 bg-white overflow-x-hidden">

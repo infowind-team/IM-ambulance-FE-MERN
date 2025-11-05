@@ -1,3 +1,4 @@
+import React from "react";
 interface CardProps {
   children: React.ReactNode;
   className?: string;
@@ -6,7 +7,7 @@ interface CardProps {
 export function Card({ children, className = '' }: CardProps) {
   return (
     <div 
-      className={`bg-white box-border content-stretch flex flex-col gap-[31.996px] pb-0 pt-[31.996px] px-[31.996px] rounded-[16px] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] w-full max-w-[383.986px] ${className}`}
+      className={`bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm relative z-50 pointer-events-auto ${className}`}
       data-name="Container"
     >
       {children}

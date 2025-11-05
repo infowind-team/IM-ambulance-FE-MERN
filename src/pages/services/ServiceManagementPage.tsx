@@ -395,7 +395,7 @@ export default function ServiceManagementPage() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      <FunctionalSidebar />
+      {/* <FunctionalSidebar /> */}
       
       <div className="flex-1 flex flex-col">
         {/* Header with Breadcrumbs */}

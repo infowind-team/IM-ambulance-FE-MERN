@@ -11,7 +11,6 @@ export function Link({ children, onClick, variant = 'primary' }: LinkProps) {
 
   return (
     <button
-      type="button"
       onClick={onClick}
       className={`leading-[24px] not-italic text-[16px] ${colorClass} cursor-pointer hover:underline`}
     >
