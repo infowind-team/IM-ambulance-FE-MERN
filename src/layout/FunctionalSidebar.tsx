@@ -104,7 +104,7 @@ export default function FunctionalSidebar() {
 
           <div className="space-y-1">
             <NavItem to="/services" icon={Briefcase} label="Services" />
-            <NavItem to="/hr" icon={Users} label="HR" />
+            <NavItem to="/hrm" icon={Users} label="HR" />
             <NavItem to="/analytics" icon={BarChart3} label="Analytics & Reports" />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function FunctionalSidebar() {
 
       {/* Bottom: Profile & Logout */}
       <div className="border-t border-[#2160AD]/10 p-4 space-y-2">
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors">
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => router.push('/my-profile')}>
           <div className="w-10 h-10 bg-[#2160AD] rounded-full flex items-center justify-center">
             <UserCog className="w-5 h-5 text-white" />
           </div>

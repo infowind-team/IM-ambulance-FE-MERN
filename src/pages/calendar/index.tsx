@@ -7,6 +7,7 @@ import FunctionalHeader from '@/layout/FunctionalHeader';
 import DayView from './DayView';
 import WeekView from './WeekView';
 import MonthView from './MonthView';
+import { Button } from '@/components/ui/button';
 
 // === CONFIG ===
 const STATUS_CONFIG = {
@@ -303,14 +304,15 @@ export default function CalendarPage() {
 
                   {/* Date Navigation */}
                   <div className="flex items-center gap-2">
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       onClick={goPrev}
-                      className="p-2 h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10 rounded-md transition-colors"
+                      className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
                       aria-label="Previous"
                     >
                       <ChevronLeft className="w-4 h-4" />
-                    </button>
+                    </Button>
 
                     <button
                       type="button"
@@ -320,14 +322,15 @@ export default function CalendarPage() {
                       {format(currentDate, 'EEEE, MMMM d, yyyy')}
                     </button>
 
-                    <button
-                      type="button"
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
                       onClick={goNext}
-                      className="p-2 h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10 rounded-md transition-colors"
                       aria-label="Next"
                     >
                       <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

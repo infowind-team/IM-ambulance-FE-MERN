@@ -14,8 +14,14 @@ import {
   FileText,
   Circle,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import FunctionalHeader from "@/layout/FunctionalHeader";
-import SelectDropdown from "@/components/theme-ui/SelectDropdown";
 import { Textarea } from "@/components/ui/textarea";
 import { InputBox } from "@/components/theme-ui/InputBox";
 import { ServiceSearch } from "../ServiceSearch";
@@ -42,7 +48,6 @@ interface SelectedService {
   quantity: number;
 }
 
-/* One trip – all fields that belong to a single leg */
 interface Trip {
   id: string;
   pickupLocation: string;
@@ -66,8 +71,7 @@ interface Trip {
 /*                               MAIN COMPONENT                               */
 /* -------------------------------------------------------------------------- */
 export default function CasesAddPage() {
-  /* ------------------------------ Global state ----------------------------- */
-  const [status, setStatus] = useState("All Status");
+  const [status, setStatus] = useState("Open");
   const [intake, setIntake] = useState("Phone Call");
   const [transport, setTransport] = useState("Select transport mode");
   const [gender, setGender] = useState("Male");
@@ -107,9 +111,7 @@ export default function CasesAddPage() {
 
   /* Services */
   const [serviceSearch, setServiceSearch] = useState("");
-  const [selectedServices, setSelectedServices] = useState<SelectedService[]>(
-    []
-  );
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
 
   /* ------------------------------ Trip state ----------------------------- */
   const [trips, setTrips] = useState<Trip[]>([
@@ -121,19 +123,16 @@ export default function CasesAddPage() {
       pickupWard: "",
       pickupRoom: "",
       pickupBed: "",
-
       dropoffLocation: "",
       dropoffBlock: "",
       dropoffUnit: "",
       dropoffWard: "",
       dropoffRoom: "",
       dropoffBed: "",
-
       scheduledTime: "",
     },
   ]);
 
-  /* When trip type changes → keep existing trips (up to the new count) */
   React.useEffect(() => {
     const count = tripType === "one-way" ? 1 : tripType === "two-way" ? 2 : 3;
     setTrips((prev) => {
@@ -149,28 +148,24 @@ export default function CasesAddPage() {
           pickupWard: "",
           pickupRoom: "",
           pickupBed: "",
-
           dropoffLocation: "",
           dropoffBlock: "",
           dropoffUnit: "",
           dropoffWard: "",
           dropoffRoom: "",
           dropoffBed: "",
-
           scheduledTime: "",
         })),
       ];
     });
   }, [tripType]);
 
-  /* Helper to update a field inside a specific trip */
   const updateTrip = (tripId: string, field: keyof Trip, value: string) => {
     setTrips((prev) =>
       prev.map((t) => (t.id === tripId ? { ...t, [field]: value } : t))
     );
   };
 
-  /* ------------------------------ Utils ------------------------------ */
   const formatPrice = (amount: number) => `$${amount.toFixed(2)}`;
 
   const servicesTotal = useMemo(() => {
@@ -193,7 +188,6 @@ export default function CasesAddPage() {
     setServiceSearch("");
   };
 
-  /* --------------------------------------------------------------------- */
   return (
     <>
       <FunctionalHeader title="Add New Case" />
@@ -204,11 +198,18 @@ export default function CasesAddPage() {
             <label className="text-base font-medium text-base-optimized mb-2 block">
               Status <span className="text-red-500">*</span>
             </label>
-            <SelectDropdown
-              value={status}
-              options={options}
-              onChange={setStatus}
-            />
+            <Select value={status} onValueChange={setStatus}>
+              <SelectTrigger className="w-full text-base-optimized">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((opt) => (
+                  <SelectItem key={opt} value={opt}>
+                    {opt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Booking & Requestor Information */}
@@ -224,12 +225,20 @@ export default function CasesAddPage() {
                 <label className="text-base font-medium text-base-optimized mb-2 block">
                   Mode of Intake <span className="text-red-500">*</span>
                 </label>
-                <SelectDropdown
-                  value={intake}
-                  options={["Phone Call", "Whatapp", "Email", "Walk-in"]}
-                  onChange={setIntake}
-                />
+                <Select value={intake} onValueChange={setIntake}>
+                  <SelectTrigger className="w-full text-base-optimized">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["Phone Call", "Whatapp", "Email", "Walk-in"].map((opt) => (
+                      <SelectItem key={opt} value={opt}>
+                        {opt}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-base font-medium text-base-optimized mb-2 block">
@@ -251,7 +260,9 @@ export default function CasesAddPage() {
                   />
                 </div>
               </div>
+
               <div className="bg-gray-200 h-px my-4"></div>
+
               <div>
                 <InputBox
                   placeholder="Enter requestor name"
@@ -262,6 +273,7 @@ export default function CasesAddPage() {
                   required={true}
                 />
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <InputBox
@@ -277,20 +289,27 @@ export default function CasesAddPage() {
                   <label className="text-base font-medium text-base-optimized mb-2 block">
                     Mode of Transport
                   </label>
-                  <SelectDropdown
-                    value={transport}
-                    options={[
-                      "Select transport mode",
-                      "Wheelchair",
-                      "Stretcher",
-                      "Walking",
-                      "Crutches",
-                      "Walker",
-                      "Carry Chair",
-                      "Ambulatory",
-                    ]}
-                    onChange={setTransport}
-                  />
+                  <Select value={transport} onValueChange={setTransport}>
+                    <SelectTrigger className="w-full text-base-optimized">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[
+                        "Select transport mode",
+                        "Wheelchair",
+                        "Stretcher",
+                        "Walking",
+                        "Crutches",
+                        "Walker",
+                        "Carry Chair",
+                        "Ambulatory",
+                      ].map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
@@ -327,6 +346,7 @@ export default function CasesAddPage() {
                   />
                 </div>
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <InputBox
@@ -335,7 +355,6 @@ export default function CasesAddPage() {
                     type="number"
                     value={patientAge}
                     onChange={(e) => setPatientAge(e.target.value)}
-                    required={false}
                   />
                 </div>
                 <div>
@@ -345,20 +364,27 @@ export default function CasesAddPage() {
                     type="number"
                     value={patientWeight}
                     onChange={(e) => setPatientWeight(e.target.value)}
-                    required={false}
                   />
                 </div>
                 <div>
                   <label className="text-base font-medium text-base-optimized mb-2 block">
                     Gender
                   </label>
-                  <SelectDropdown
-                    value={gender}
-                    options={["Male", "Female"]}
-                    onChange={setGender}
-                  />
+                  <Select value={gender} onValueChange={setGender}>
+                    <SelectTrigger className="w-full text-base-optimized">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["Male", "Female"].map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
+
               <div>
                 <InputBox
                   placeholder="+65 XXXX XXXX"
@@ -369,6 +395,7 @@ export default function CasesAddPage() {
                   required
                 />
               </div>
+
               <div>
                 <label className="text-base font-medium text-base-optimized mb-2 block">
                   Patient's Condition | Chief Complaint
@@ -376,12 +403,12 @@ export default function CasesAddPage() {
                 <Textarea
                   placeholder="Describe patient's condition or chief complaint..."
                   value={patientCondition}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setPatientCondition(e.target.value)
-                  }
+                  onChange={(e) => setPatientCondition(e.target.value)}
                 />
               </div>
+
               <div className="bg-gray-200 h-px my-4"></div>
+
               <div className="space-y-4">
                 <h4 className="text-base font-medium text-[#2160AD]">
                   Next of Kin Details
@@ -413,18 +440,20 @@ export default function CasesAddPage() {
                     <label className="text-base font-medium text-base-optimized mb-2 block">
                       Relationship
                     </label>
-                    <SelectDropdown
-                      value={nokRelationship}
-                      options={[
-                        "Parent",
-                        "Spouse",
-                        "Child",
-                        "Sibling",
-                        "Friend",
-                        "Other",
-                      ]}
-                      onChange={setNokRelationship}
-                    />
+                    <Select value={nokRelationship} onValueChange={setNokRelationship}>
+                      <SelectTrigger className="w-full text-base-optimized">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {["Parent", "Spouse", "Child", "Sibling", "Friend", "Other"].map(
+                          (opt) => (
+                            <SelectItem key={opt} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <InputBox
@@ -449,51 +478,39 @@ export default function CasesAddPage() {
               </h4>
             </div>
             <div className="p-6 space-y-6">
-              {/* Trip Type Radio */}
               <div>
                 <label className="text-base font-medium text-base-optimized mb-2 block">
                   Trip Type <span className="text-red-500">*</span>
                 </label>
                 <div role="radiogroup" className="flex gap-4">
-                  {(["one-way", "two-way", "three-way"] as const).map(
-                    (type) => (
-                      <div
-                        key={type}
-                        className="flex items-center space-x-2 relative"
-                        onClick={() => setTripType(type)}
+                  {(["one-way", "two-way", "three-way"] as const).map((type) => (
+                    <div
+                      key={type}
+                      className="flex items-center space-x-2"
+                      onClick={() => setTripType(type)}
+                    >
+                      <button
+                        type="button"
+                        role="radio"
+                        aria-checked={tripType === type}
+                        className={`border-gray-300 aspect-square size-4 rounded-full transition-all relative bg-gray-200`}
                       >
-                        <button
-                          type="button"
-                          role="radio"
-                          aria-checked={tripType === type}
-                          data-state={
-                            tripType === type ? "checked" : "unchecked"
-                          }
-                          value={type}
-                          className={`border-gray-300 aspect-square size-4 rounded-full transition-all relative bg-gray-200`}
-                        >
-                          {tripType === type && (
-                            <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
-                          )}
-                        </button>
-                        <label className="font-medium text-base">
-                          {type.charAt(0).toUpperCase() +
-                            type.slice(1).replace("-", " ")}
-                        </label>
-                      </div>
-                    )
-                  )}
+                        {tripType === type && (
+                          <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
+                        )}
+                      </button>
+                      <label className="font-medium text-base">
+                        {type.charAt(0).toUpperCase() + type.slice(1).replace("-", " ")}
+                      </label>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               <div className="bg-gray-200 h-px my-4"></div>
 
-              {/* -------------------------- DYNAMIC TRIPS -------------------------- */}
               {trips.map((trip, idx) => (
-                <div
-                  key={trip.id}
-                  className="border rounded-lg p-4 bg-gray-50/30"
-                >
+                <div key={trip.id} className="border rounded-lg p-4 bg-gray-50/30">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded-full bg-[#2160AD] text-white text-sm flex items-center justify-center font-medium">
                       {idx + 1}
@@ -502,7 +519,7 @@ export default function CasesAddPage() {
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* ---- PICKUP ---- */}
+                    {/* Pickup */}
                     <div className="space-y-4">
                       <div>
                         <InputBox
@@ -510,116 +527,60 @@ export default function CasesAddPage() {
                           label="Pickup Location"
                           type="text"
                           value={trip.pickupLocation}
-                          onChange={(e) =>
-                            updateTrip(
-                              trip.id,
-                              "pickupLocation",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => updateTrip(trip.id, "pickupLocation", e.target.value)}
                           required={true}
                         />
                       </div>
-
                       <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <label className="text-base font-medium">
-                            Address Details
-                          </label>
+                          <label className="text-base font-medium">Address Details</label>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div>
-                            <InputBox
-                              placeholder="e.g., 123"
-                              label="Block Number"
-                              type="text"
-                              value={trip.pickupBlock}
-                              onChange={(e) =>
-                                updateTrip(
-                                  trip.id,
-                                  "pickupBlock",
-                                  e.target.value
-                                )
-                              }
-                              required={false}
-                            />
-                          </div>
-                          <div>
-                            <InputBox
-                              placeholder="e.g., #12-34"
-                              label="Unit Number"
-                              type="text"
-                              value={trip.pickupUnit}
-                              onChange={(e) =>
-                                updateTrip(
-                                  trip.id,
-                                  "pickupUnit",
-                                  e.target.value
-                                )
-                              }
-                              required={false}
-                            />
-                          </div>
+                          <InputBox
+                            placeholder="e.g., 123"
+                            label="Block Number"
+                            type="text"
+                            value={trip.pickupBlock}
+                            onChange={(e) => updateTrip(trip.id, "pickupBlock", e.target.value)}
+                          />
+                          <InputBox
+                            placeholder="e.g., #12-34"
+                            label="Unit Number"
+                            type="text"
+                            value={trip.pickupUnit}
+                            onChange={(e) => updateTrip(trip.id, "pickupUnit", e.target.value)}
+                          />
                         </div>
-
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div>
-                              <InputBox
-                                placeholder="e.g., Ward A"
-                                label="Ward Details"
-                                type="text"
-                                value={trip.pickupWard}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "pickupWard",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
-                            <div>
-                              <InputBox
-                                placeholder="e.g., 101"
-                                label="Room Number"
-                                type="text"
-                                value={trip.pickupRoom}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "pickupRoom",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
-                            <div>
-                              <InputBox
-                                placeholder="e.g., A1"
-                                label="Bed Number"
-                                type="text"
-                                value={trip.pickupBed}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "pickupBed",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
+                            <InputBox
+                              placeholder="e.g., Ward A"
+                              label="Ward Details"
+                              type="text"
+                              value={trip.pickupWard}
+                              onChange={(e) => updateTrip(trip.id, "pickupWard", e.target.value)}
+                            />
+                            <InputBox
+                              placeholder="e.g., 101"
+                              label="Room Number"
+                              type="text"
+                              value={trip.pickupRoom}
+                              onChange={(e) => updateTrip(trip.id, "pickupRoom", e.target.value)}
+                            />
+                            <InputBox
+                              placeholder="e.g., A1"
+                              label="Bed Number"
+                              type="text"
+                              value={trip.pickupBed}
+                              onChange={(e) => updateTrip(trip.id, "pickupBed", e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* ---- DROPOFF ---- */}
+                    {/* Dropoff */}
                     <div className="space-y-4">
                       <div>
                         <InputBox
@@ -627,127 +588,67 @@ export default function CasesAddPage() {
                           label="Dropoff Location"
                           type="text"
                           value={trip.dropoffLocation}
-                          onChange={(e) =>
-                            updateTrip(
-                              trip.id,
-                              "dropoffLocation",
-                              e.target.value
-                            )
-                          }
+                          onChange={(e) => updateTrip(trip.id, "dropoffLocation", e.target.value)}
                           required={true}
                         />
                       </div>
-
                       <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <label className="text-base font-medium">
-                            Address Details
-                          </label>
+                          <label className="text-base font-medium">Address Details</label>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div>
-                            <InputBox
-                              placeholder="e.g., 123"
-                              label="Block Number"
-                              type="text"
-                              value={trip.dropoffBlock}
-                              onChange={(e) =>
-                                updateTrip(
-                                  trip.id,
-                                  "dropoffBlock",
-                                  e.target.value
-                                )
-                              }
-                              required={false}
-                            />
-                          </div>
-                          <div>
-                            <InputBox
-                              placeholder="e.g., #12-34"
-                              label="Unit Number"
-                              type="text"
-                              value={trip.dropoffUnit}
-                              onChange={(e) =>
-                                updateTrip(
-                                  trip.id,
-                                  "dropoffUnit",
-                                  e.target.value
-                                )
-                              }
-                              required={false}
-                            />
-                          </div>
+                          <InputBox
+                            placeholder="e.g., 123"
+                            label="Block Number"
+                            type="text"
+                            value={trip.dropoffBlock}
+                            onChange={(e) => updateTrip(trip.id, "dropoffBlock", e.target.value)}
+                          />
+                          <InputBox
+                            placeholder="e.g., #12-34"
+                            label="Unit Number"
+                            type="text"
+                            value={trip.dropoffUnit}
+                            onChange={(e) => updateTrip(trip.id, "dropoffUnit", e.target.value)}
+                          />
                         </div>
-
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div>
-                              <InputBox
-                                placeholder="e.g., Ward A"
-                                label="Ward Details"
-                                type="text"
-                                value={trip.dropoffWard}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "dropoffWard",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
-                            <div>
-                              <InputBox
-                                placeholder="e.g., 101"
-                                label="Room Number"
-                                type="text"
-                                value={trip.dropoffRoom}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "dropoffRoom",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
-                            <div>
-                              <InputBox
-                                placeholder="e.g., A1"
-                                label="Bed Number"
-                                type="text"
-                                value={trip.dropoffBed}
-                                onChange={(e) =>
-                                  updateTrip(
-                                    trip.id,
-                                    "dropoffBed",
-                                    e.target.value
-                                  )
-                                }
-                                required={false}
-                              />
-                            </div>
+                            <InputBox
+                              placeholder="e.g., Ward A"
+                              label="Ward Details"
+                              type="text"
+                              value={trip.dropoffWard}
+                              onChange={(e) => updateTrip(trip.id, "dropoffWard", e.target.value)}
+                            />
+                            <InputBox
+                              placeholder="e.g., 101"
+                              label="Room Number"
+                              type="text"
+                              value={trip.dropoffRoom}
+                              onChange={(e) => updateTrip(trip.id, "dropoffRoom", e.target.value)}
+                            />
+                            <InputBox
+                              placeholder="e.g., A1"
+                              label="Bed Number"
+                              type="text"
+                              value={trip.dropoffBed}
+                              onChange={(e) => updateTrip(trip.id, "dropoffBed", e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Scheduled Time for this trip */}
                   <div className="mt-4">
                     <div className="max-w-md">
                       <InputBox
                         label="Pick up - Scheduled Time"
                         type="time"
                         value={trip.scheduledTime}
-                        onChange={(e) =>
-                          updateTrip(trip.id, "scheduledTime", e.target.value)
-                        }
-                        required={false}
+                        onChange={(e) => updateTrip(trip.id, "scheduledTime", e.target.value)}
                       />
                     </div>
                   </div>
@@ -770,60 +671,62 @@ export default function CasesAddPage() {
                     <label className="text-base font-medium text-base-optimized mb-2 block">
                       Vehicle Type
                     </label>
-                    <SelectDropdown
-                      value={vehicleType}
-                      options={[
-                        "Ambulance",
-                        "ICU Ambulance",
-                        "Patient Transport",
-                        "Wheelchair Vehicle",
-                      ]}
-                      onChange={setVehicleType}
-                    />
+                    <Select value={vehicleType} onValueChange={setVehicleType}>
+                      <SelectTrigger className="w-full text-base-optimized">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {["Ambulance", "ICU Ambulance", "Patient Transport", "Wheelchair Vehicle"].map(
+                          (opt) => (
+                            <SelectItem key={opt} value={opt}>
+                              {opt}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <label className="text-base font-medium text-base-optimized mb-2 block">
                       Vehicle Number
                     </label>
-                    <SelectDropdown
-                      value={vehicleNumber}
-                      options={["AMB001", "AMB002", "AMB003", "ICU001"]}
-                      onChange={setVehicleNumber}
-                    />
+                    <Select value={vehicleNumber} onValueChange={setVehicleNumber}>
+                      <SelectTrigger className="w-full text-base-optimized">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {["AMB001", "AMB002", "AMB003", "ICU001"].map((opt) => (
+                          <SelectItem key={opt} value={opt}>
+                            {opt}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div>
-                    <InputBox
-                      placeholder="Medical Transport Officer"
-                      label="MTO"
-                      type="text"
-                      value={mto}
-                      onChange={(e) => setMto(e.target.value)}
-                      required={false}
-                    />
-                  </div>
-                  <div>
-                    <InputBox
-                      placeholder="Emergency Medical Technician"
-                      label="EMT / EN / PRM"
-                      type="text"
-                      value={emt}
-                      onChange={(e) => setEmt(e.target.value)}
-                      required={false}
-                    />
-                  </div>
-                  <div>
-                    <InputBox
-                      placeholder="Escort name"
-                      label="Escort (Person)"
-                      type="text"
-                      value={escort}
-                      onChange={(e) => setEscort(e.target.value)}
-                      required={false}
-                    />
-                  </div>
+                  <InputBox
+                    placeholder="Medical Transport Officer"
+                    label="MTO"
+                    type="text"
+                    value={mto}
+                    onChange={(e) => setMto(e.target.value)}
+                  />
+                  <InputBox
+                    placeholder="Emergency Medical Technician"
+                    label="EMT / EN / PRM"
+                    type="text"
+                    value={emt}
+                    onChange={(e) => setEmt(e.target.value)}
+                  />
+                  <InputBox
+                    placeholder="Escort name"
+                    label="Escort (Person)"
+                    type="text"
+                    value={escort}
+                    onChange={(e) => setEscort(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
@@ -851,32 +754,27 @@ export default function CasesAddPage() {
                     Quick Add Services
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {[
-                      "Oxygen Support",
-                      "Wheelchair Service",
-                      "Stretcher Service",
-                      "Medical Escort",
-                    ].map((service) => (
-                      <button
-                        key={service}
-                        onClick={() => setServiceSearch(service)}
-                        className="inline-flex items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all border bg-white hover:bg-[#2160AD]/10 h-8 px-3 border-[#2160AD]/30"
-                      >
-                        <Plus className="w-3 h-3 mr-1" />
-                        {service}
-                      </button>
-                    ))}
+                    {["Oxygen Support", "Wheelchair Service", "Stretcher Service", "Medical Escort"].map(
+                      (service) => (
+                        <button
+                          key={service}
+                          onClick={() => setServiceSearch(service)}
+                          className="inline-flex items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all border bg-white hover:bg-[#2160AD]/10 h-8 px-3 border-[#2160AD]/30"
+                        >
+                          <Plus className="w-3 h-3 mr-1" />
+                          {service}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
 
-              {/* Added Services Table */}
               {selectedServices.length > 0 && (
                 <div>
-                  <label className="items-center gap-2 text-sm leading-none select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 text-base-optimized font-medium mb-3 block">
+                  <label className="text-base-optimized font-medium mb-3 block">
                     Added Services
                   </label>
-
                   <div className="border rounded-lg overflow-hidden">
                     <div className="bg-gray-50 px-4 py-2 border-b">
                       <div className="grid grid-cols-6 gap-4 text-sm font-medium text-gray-700">
@@ -887,83 +785,43 @@ export default function CasesAddPage() {
                         <div>Action</div>
                       </div>
                     </div>
-
                     <div className="divide-y">
                       {selectedServices.map((svc) => {
                         const total = svc.price * svc.quantity;
                         return (
-                          <div
-                            key={svc.id}
-                            className="px-4 py-3 hover:bg-gray-50 transition-colors"
-                          >
+                          <div key={svc.id} className="px-4 py-3 hover:bg-gray-50">
                             <div className="grid grid-cols-6 gap-4 items-center">
-                              <div className="col-span-2">
-                                <span className="font-medium text-base-optimized">
-                                  {svc.name}
-                                </span>
+                              <div className="col-span-2 font-medium text-base-optimized">
+                                {svc.name}
                               </div>
-
                               <div>
                                 <input
                                   type="number"
                                   min="0"
-                                  step="1"
                                   value={svc.quantity}
                                   onChange={(e) => {
-                                    const qty = Math.max(
-                                      0,
-                                      parseInt(e.target.value) || 0
-                                    );
+                                    const qty = Math.max(0, parseInt(e.target.value) || 0);
                                     setSelectedServices((prev) =>
                                       prev.map((s) =>
-                                        s.id === svc.id
-                                          ? { ...s, quantity: qty }
-                                          : s
+                                        s.id === svc.id ? { ...s, quantity: qty } : s
                                       )
                                     );
                                   }}
-                                  className="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex min-w-0 rounded-md border px-3 py-1 bg-input-background transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-base-optimized h-8 w-20"
+                                  className="border rounded-md px-2 py-1 w-16 text-sm"
                                 />
                               </div>
-
-                              <div>
-                                <span className="text-base-optimized text-gray-600">
-                                  {svc.unit}
-                                </span>
-                              </div>
-
-                              <div>
-                                <span className="text-base-optimized font-medium">
-                                  {formatPrice(total)}
-                                </span>
-                              </div>
-
+                              <div className="text-gray-600">{svc.unit}</div>
+                              <div className="font-medium">{formatPrice(total)}</div>
                               <div>
                                 <button
-                                  type="button"
-                                  onClick={() => {
+                                  onClick={() =>
                                     setSelectedServices((prev) =>
                                       prev.filter((s) => s.id !== svc.id)
-                                    );
-                                  }}
-                                  className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 rounded-md gap-1.5 has-[>svg]:px-2.5 text-red-500 hover:text-red-700 h-8 w-8 p-0"
+                                    )
+                                  }
+                                  className="text-red-500 hover:text-red-700"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    className="lucide lucide-x w-4 h-4"
-                                    aria-hidden="true"
-                                  >
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
-                                  </svg>
+                                  Remove
                                 </button>
                               </div>
                             </div>
@@ -993,56 +851,37 @@ export default function CasesAddPage() {
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between items-start py-3 border-b border-gray-200">
                     <div className="flex-1">
-                      <span className="font-medium text-base">
-                        Base Transport Fee
-                      </span>
-                      <div className="text-sm text-gray-600 mt-1 max-w-md">
-                        {trips.some(
-                          (t) => t.pickupLocation && t.dropoffLocation
-                        )
+                      <span className="font-medium text-base">Base Transport Fee</span>
+                      <div className="text-sm text-gray-600 mt-1">
+                        {trips.some((t) => t.pickupLocation && t.dropoffLocation)
                           ? "Calculated from route"
                           : "No pickup/dropoff selected"}
                       </div>
                     </div>
                     <span className="text-base font-semibold ml-4">$0.00</span>
                   </div>
-
                   {selectedServices.length > 0 ? (
                     selectedServices.map((svc) => (
-                      <div
-                        key={svc.id}
-                        className="flex justify-between py-2 text-sm border-b border-dashed"
-                      >
+                      <div key={svc.id} className="flex justify-between py-2 text-sm border-b border-dashed">
                         <div className="flex-1">
-                          <span className="font-medium text-base">
-                            {svc.name}
-                          </span>
-                          <div className="text-sm text-gray-600 mt-1 max-w-md">
+                          <span className="font-medium text-base">{svc.name}</span>
+                          <div className="text-sm text-gray-600 mt-1">
                             {formatPrice(svc.price)}
                           </div>
                         </div>
-                        <span className="font-medium">
-                          {formatPrice(svc.price * svc.quantity)}
-                        </span>
+                        <span className="font-medium">{formatPrice(svc.price * svc.quantity)}</span>
                       </div>
                     ))
                   ) : (
                     <div className="text-center py-4 text-gray-500">
-                      <div className="text-base">
-                        No additional services selected
-                      </div>
-                      <div className="text-sm mt-1">
-                        Add services above to see breakdown
-                      </div>
+                      <div className="text-base">No additional services selected</div>
                     </div>
                   )}
                 </div>
                 <div className="bg-gray-200 h-px"></div>
-                <div className="space-y-2 pt-4">
-                  <div className="flex justify-between font-semibold text-lg text-[#2160AD] pt-2 border-t">
-                    <span>Total Amount:</span>
-                    <span>{formatPrice(servicesTotal)}</span>
-                  </div>
+                <div className="flex justify-between font-semibold text-lg text-[#2160AD] pt-4">
+                  <span>Total Amount:</span>
+                  <span>{formatPrice(servicesTotal)}</span>
                 </div>
               </div>
             </div>
@@ -1060,19 +899,17 @@ export default function CasesAddPage() {
               <Textarea
                 placeholder="Add any additional remarks or special instructions..."
                 value={patientCondition}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                  setPatientCondition(e.target.value)
-                }
+                onChange={(e) => setPatientCondition(e.target.value)}
               />
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t">
-            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all border bg-white hover:bg-gray-50 h-9 py-2 px-6 lg:px-8 hover-lift order-3 sm:order-1">
+            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all border bg-white hover:bg-gray-50 h-9 py-2 px-6 lg:px-8 hover-lift">
               Cancel
             </button>
-            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all bg-[#2160AD] hover:bg-[#1d5497] h-9 py-2 px-6 lg:px-8 hover-lift order-1 sm:order-3 text-white">
+            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all bg-[#2160AD] hover:bg-[#1d5497] h-9 py-2 px-6 lg:px-8 hover-lift text-white">
               Create Case
             </button>
           </div>

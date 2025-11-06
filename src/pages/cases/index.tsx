@@ -13,9 +13,15 @@ import {
   SquarePen,
   Trash2,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import FunctionalHeader from "@/layout/FunctionalHeader";
 import Link from "next/link";
-import SelectDropdown from "@/components/theme-ui/SelectDropdown";
 
 // === MAIN PAGE ===
 interface Case {
@@ -100,19 +106,8 @@ const CASES_DATA: Case[] = [
   },
 ];
 
- const options = [
-  'All Status',
-  'Open',
-  'Pending for Dispatch',
-  'Dispatched',
-  'Pending Confirmation',
-  'Pending for Payment',
-  'Completed',
-  'Cancelled',
-];
-
 export default function CasesPage() {
-  const [status, setStatus] = useState('All Status');
+  const [status, setStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
 
@@ -187,12 +182,22 @@ export default function CasesPage() {
               </div>
 
               {/* Status Filter */}
-              <div className="md:w-[200px]">
-                <SelectDropdown
-                  value={status}
-                  options={options}
-                  onChange={setStatus}
-                />
+              <div className="md:w-[200px]"> 
+                 <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger className="w-[140px] text-base-optimized">
+                    <SelectValue placeholder="All Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='all'>All Status</SelectItem>
+                    <SelectItem value='Open'>Open</SelectItem>
+                    <SelectItem value='Pending for Dispatch'>Pending for Dispatch</SelectItem>
+                    <SelectItem value='Dispatched'>Dispatched</SelectItem>
+                    <SelectItem value='Pending Confirmation'>Pending Confirmation</SelectItem>
+                    <SelectItem value='Pending for Payment'>Pending for Payment</SelectItem>
+                    <SelectItem value='Completed'>Completed</SelectItem>
+                    <SelectItem value='Cancelled'>Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
