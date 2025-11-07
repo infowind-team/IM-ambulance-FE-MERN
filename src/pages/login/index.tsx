@@ -7,18 +7,54 @@ import AuthLayout from '@/layout/AuthLayout';
 import { Card } from '@/components/Card';
 import { TextField } from '@/components/TextField';
 import { Button } from '@/components/Button';
+import { da } from 'date-fns/locale';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const validateForm = ()=>{
+    if(!username || !password){
+      alert("username or password missing")
+      return false
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(username)) {
+      alert('Please enter a valid username.');
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleLogin = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+
+    if (!validateForm()) return;
+    
     console.log('Login with:', { username, password });
 
-    // Simulate login success → redirect to calendar
-    router.push('/calendar');
+    try{
+      const response = await fetch('/api/login',{
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: username, password })
+      })
+
+      const data  = await response.json();
+      if(!response.ok){
+        alert( "Login failed. Please try again.");
+        return;
+      }
+      console.log('login data' , data)
+      router.push('/calendar');
+    }catch(err: any){
+      console.log(err)
+    }
+
   };
 
   return (
