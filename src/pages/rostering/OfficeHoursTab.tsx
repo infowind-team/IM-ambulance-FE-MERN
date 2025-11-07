@@ -202,7 +202,7 @@ export default function OfficeHoursTab() {
       {/* Scrollable Table */}
       <Card className="rounded-xl border shadow-sm p-6 overflow-x-auto">
         <Table className="w-full min-w-[1800px] border-collapse">
-          <TableHeader className="bg-gray-50">
+          <TableHeader className="header-bg-soft">
             <TableRow>
               <TableHead
                 className="text-gray-700 font-semibold px-4 py-3 text-left sticky left-0 z-10"
@@ -226,7 +226,7 @@ export default function OfficeHoursTab() {
             {staff.map((member) => (
               <TableRow
                 key={member.id}
-                className="hover:bg-gray-50 transition"
+                className="hover:header-bg-soft transition"
               >
                 <TableCell className="py-4 border-r border-gray-200 bg-white sticky left-0 z-10">
                   <div>

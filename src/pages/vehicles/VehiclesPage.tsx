@@ -227,7 +227,7 @@ export default function VehiclesPage() {
           {/* Table Card */}
           <Card className="rounded-xl border shadow-sm p-6">
             <Table>
-              <TableHeader className="bg-gray-50">
+              <TableHeader className="header-bg-soft">
                 <TableRow>
                   <TableHead className="text-gray-700 font-semibold px-4 py-3">
                     <button 
@@ -291,7 +291,7 @@ export default function VehiclesPage() {
               </TableHeader>
               <TableBody>
                 {filteredVehicles.map((vehicle) => (
-                  <TableRow key={vehicle.id} className="hover:bg-gray-50 transition">
+                  <TableRow key={vehicle.id} className="hover:header-bg-soft transition">
                     {/* Vehicle Number */}
                     <TableCell className="py-4">
                         <div>

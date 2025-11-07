@@ -121,7 +121,7 @@ export default function ApplicationsTab() {
               </TableHeader>
               <TableBody>
                 {applications.map((app) => (
-                  <TableRow key={app.id} className="border-b hover:bg-gray-50">
+                  <TableRow key={app.id} className="border-b hover:header-bg-soft">
                     <TableCell className="p-4">
                       <div>
                         <div className="font-medium">{app.employee}</div>

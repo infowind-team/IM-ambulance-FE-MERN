@@ -196,7 +196,7 @@ export default function VehiclesPage() {
           <div className="bg-white rounded-xl border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-base">
-                <thead className="border-b bg-gray-50 sticky top-0 z-10">
+                <thead className="border-b header-bg-soft sticky top-0 z-10">
                   <tr>
                     <th className="text-left p-4 font-medium">Vehicle Number</th>
                     <th className="text-left p-4 font-medium">Vehicle Name</th>
@@ -212,7 +212,7 @@ export default function VehiclesPage() {
                   {filteredVehicles.map((item) => (
                     <tr
                       key={item.id}
-                      className="border-b hover:bg-gray-50 transition-colors"
+                      className="border-b hover:header-bg-soft transition-colors"
                     >
                       {/* Vehicle Number */}
                       <td className="p-4">

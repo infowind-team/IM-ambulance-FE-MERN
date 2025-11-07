@@ -676,7 +676,7 @@ export default function PublicRatesConfig() {
                       {...register(`additionalCharges.${chargeIdx}.name`)}
                       disabled={isFixed || !isEditing}
                       readOnly={isFixed}
-                      className={isFixed ? "bg-gray-50" : ""}
+                      className={isFixed ? "header-bg-soft" : ""}
                     />
                   </div>
                   <div className="space-y-2">

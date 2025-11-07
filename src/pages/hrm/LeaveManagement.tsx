@@ -214,7 +214,7 @@ export default function LeaveManagement() {
                         {filteredSchemes.map((scheme) => (
                           <TableRow
                             key={scheme.id}
-                            className="border-b hover:bg-gray-50"
+                            className="border-b hover:header-bg-soft"
                           >
                             <TableCell className="p-4">
                               <div>

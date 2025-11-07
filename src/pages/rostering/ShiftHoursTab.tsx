@@ -129,7 +129,7 @@ export default function ShiftHoursTab() {
       case "Completed":
         return "bg-emerald-500";
       default:
-        return "bg-gray-500";
+        return "header-bg-soft0";
     }
   };
 

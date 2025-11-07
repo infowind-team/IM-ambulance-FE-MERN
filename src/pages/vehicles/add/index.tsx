@@ -915,7 +915,7 @@ export default function VehiclesAddPage() {
                       </thead>
                       <tbody className="divide-y">
                         {maintenanceRecords.map((record) => (
-                          <tr key={record.id} className="hover:bg-gray-50">
+                          <tr key={record.id} className="hover:header-bg-soft">
                             <td className="px-4 py-3">{record.lastService}</td>
                             <td className="px-4 py-3">{record.nextDue}</td>
                             <td className="px-4 py-3">{record.odometer}</td>
@@ -984,7 +984,7 @@ export default function VehiclesAddPage() {
                       </thead>
                       <tbody className="divide-y">
                         {certificateRecords.map((cert) => (
-                          <tr key={cert.id} className="hover:bg-gray-50">
+                          <tr key={cert.id} className="hover:header-bg-soft">
                             <td className="px-4 py-3">{cert.type}</td>
                             <td className="px-4 py-3">{cert.number}</td>
                             <td className="px-4 py-3">{cert.issued}</td>

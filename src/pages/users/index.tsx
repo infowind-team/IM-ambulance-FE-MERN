@@ -245,7 +245,7 @@ export default function UsersPage() {
         {/* Users Table */}
         <Card className="rounded-xl border shadow-sm p-6">
           <Table>
-            <TableHeader className="bg-gray-50">
+            <TableHeader className="header-bg-soft">
               <TableRow>
                 <TableHead className="text-gray-700 font-semibold px-4 py-3">User</TableHead>
                 <TableHead className="text-gray-700 font-semibold px-4 py-3">Staff ID</TableHead>
@@ -257,7 +257,7 @@ export default function UsersPage() {
               {filteredUsers.map((user) => (
                 <TableRow
                   key={user.id}
-                  className="hover:bg-gray-50 transition"
+                  className="hover:header-bg-soft transition"
                 >
                   <TableCell className="py-4">
                     <div className="flex items-center gap-3">

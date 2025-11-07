@@ -349,31 +349,31 @@ export default function MyProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-gray-600">Employee ID</Label>
-                  <div className="p-3 bg-gray-50 rounded-lg mt-1">
+                  <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base font-mono">{profile.employeeId}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-gray-600">Employment Status</Label>
-                  <div className="p-3 bg-gray-50 rounded-lg mt-1">
+                  <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base capitalize">{profile.status}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-gray-600">Department</Label>
-                  <div className="p-3 bg-gray-50 rounded-lg mt-1">
+                  <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.department}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-gray-600">Role</Label>
-                  <div className="p-3 bg-gray-50 rounded-lg mt-1">
+                  <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.role}</p>
                   </div>
                 </div>
                 <div className="md:col-span-2 space-y-2">
                   <Label className="text-gray-600">Join Date</Label>
-                  <div className="p-3 bg-gray-50 rounded-lg mt-1">
+                  <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.joinDate}</p>
                   </div>
                 </div>

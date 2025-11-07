@@ -168,7 +168,7 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-80 border-r bg-gray-50 flex flex-col">
+        <div className="w-80 border-r header-bg-soft flex flex-col">
           <div className="p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Employee Setup</h3>
             <div className="space-y-2">

@@ -262,7 +262,7 @@ export default function MassAdjustmentTab() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 border-b border-gray-100">
+                <TableRow className="header-bg-soft border-b border-gray-100">
                   <TableHead className="w-12 p-2">
                     <Checkbox
                       checked={selectedStaff.length === filteredStaff.length && filteredStaff.length > 0}
@@ -278,7 +278,7 @@ export default function MassAdjustmentTab() {
               </TableHeader>
               <TableBody>
                 {filteredStaff.map(staff => (
-                  <TableRow key={staff.id} className="hover:bg-gray-50/50 border-b border-gray-50">
+                  <TableRow key={staff.id} className="hover:header-bg-soft/50 border-b border-gray-50">
                     <TableCell className="p-2">
                       <Checkbox
                         checked={selectedStaff.includes(staff.id)}
@@ -300,7 +300,7 @@ export default function MassAdjustmentTab() {
               {selectedStaff.length} of {filteredStaff.length} employees selected
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" className="border-gray-200 hover:bg-gray-50">
+              <Button variant="outline" className="border-gray-200 hover:header-bg-soft">
                 Preview Changes
               </Button>
               <Button className="bg-[#2160AD] hover:bg-[#1a4d8a] text-white">
@@ -320,7 +320,7 @@ export default function MassAdjustmentTab() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50 border-b border-gray-100">
+                <TableRow className="header-bg-soft border-b border-gray-100">
                   <TableHead className="p-2">Adjustment ID</TableHead>
                   <TableHead className="p-2">Leave Type</TableHead>
                   <TableHead className="p-2">Reason</TableHead>
@@ -331,7 +331,7 @@ export default function MassAdjustmentTab() {
               </TableHeader>
               <TableBody>
                 {auditData.map(entry => (
-                  <TableRow key={entry.id} className="hover:bg-gray-50/50 border-b border-gray-50">
+                  <TableRow key={entry.id} className="hover:header-bg-soft/50 border-b border-gray-50">
                     <TableCell className="p-2 font-mono">{entry.id}</TableCell>
                     <TableCell className="p-2">{entry.leaveType}</TableCell>
                     <TableCell className="p-2">{entry.reason}</TableCell>

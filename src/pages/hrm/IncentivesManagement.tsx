@@ -251,7 +251,7 @@ export default function IncentivesManagement() {
                       </div>
                     </TableCell>
                     <TableCell className="text-center px-4 py-4">
-                      <div className="inline-flex items-center justify-center min-w-[40px] h-8 px-3 bg-gray-50 rounded-md">
+                      <div className="inline-flex items-center justify-center min-w-[40px] h-8 px-3 header-bg-soft rounded-md">
                         {entry.cases}
                       </div>
                     </TableCell>

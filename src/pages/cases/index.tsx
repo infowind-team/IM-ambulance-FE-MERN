@@ -1,4 +1,5 @@
-"use client";
+// app/cases/page.tsx
+'use client';
 
 import React, { useState, useMemo } from "react";
 import {
@@ -31,7 +32,8 @@ import {
 import FunctionalHeader from "@/layout/FunctionalHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation"; // ← fixed: useRouter → useNavigation
 
 // === MAIN PAGE ===
 interface Case {
@@ -117,13 +119,16 @@ const CASES_DATA: Case[] = [
 ];
 
 export default function CasesPage() {
-  const [status, setStatus] = useState('all');
+  const router = useRouter();
+
+  // --- STATE ---
+  const [cases, setCases] = useState<Case[]>(CASES_DATA); // ← now mutable
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
 
-  // Filter logic
+  // --- FILTER LOGIC ---
   const filteredCases = useMemo(() => {
-    return CASES_DATA.filter((item) => {
+    return cases.filter((item) => {
       const matchesSearch =
         searchQuery === "" ||
         item.caseId.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,18 +140,32 @@ export default function CasesPage() {
 
       return matchesSearch && matchesStatus;
     });
-  }, [searchQuery, selectedStatus]);
+  }, [cases, searchQuery, selectedStatus]);
+
+  // --- DELETE HANDLER ---
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this case?")) {
+      setCases((prev) => prev.filter((c) => c.id !== id));
+    }
+  };
 
   return (
     <>
-      <FunctionalHeader title="Case Management" />
+      <FunctionalHeader
+        title="Case Management"
+        breadcrumb={[
+          { label: 'Operations' },
+          { label: 'Cases' },
+        ]}
+      />
 
       <div className="flex-1 w-full overflow-auto">
         <div className="space-y-6 p-4 lg:p-6 w-full">
-          {/* Stats Cards */}
+          {/* ... Stats Cards ... */}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <Card>
-              <CardContent className="flex items-center justify-between">
+              <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Today's Cases</p>
                   <p className="text-2xl font-semibold text-[#2160AD]">1</p>
@@ -156,7 +175,7 @@ export default function CasesPage() {
             </Card>
 
             <Card>
-              <CardContent className="flex items-center justify-between">
+              <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Completed</p>
                   <p className="text-2xl font-semibold text-green-600">0</p>
@@ -166,7 +185,7 @@ export default function CasesPage() {
             </Card>
 
             <Card>
-              <CardContent className="flex items-center justify-between">
+              <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Dispatched</p>
                   <p className="text-2xl font-semibold text-orange-600">0</p>
@@ -179,194 +198,161 @@ export default function CasesPage() {
           {/* Search + Filters + New Case */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
-              {/* Search */}
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
+                <Input
                   type="text"
                   placeholder="Search cases..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#2160AD]/50 focus:border-[#2160AD] text-sm"
+                  className="pl-10"
                 />
               </div>
 
-              {/* Status Filter */}
-              <div className="md:w-[200px]"> 
-                 <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger className="w-[140px] text-base-optimized">
-                    <SelectValue placeholder="All Status" />
+              <div className="md:w-[200px]">
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                  <SelectTrigger className="w-full text-base-optimized">
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='all'>All Status</SelectItem>
-                    <SelectItem value='Open'>Open</SelectItem>
-                    <SelectItem value='Pending for Dispatch'>Pending for Dispatch</SelectItem>
-                    <SelectItem value='Dispatched'>Dispatched</SelectItem>
-                    <SelectItem value='Pending Confirmation'>Pending Confirmation</SelectItem>
-                    <SelectItem value='Pending for Payment'>Pending for Payment</SelectItem>
-                    <SelectItem value='Completed'>Completed</SelectItem>
-                    <SelectItem value='Cancelled'>Cancelled</SelectItem>
+                    <SelectItem value="All Status">All Status</SelectItem>
+                    <SelectItem value="Open">Open</SelectItem>
+                    <SelectItem value="Pending for Dispatch">Pending for Dispatch</SelectItem>
+                    <SelectItem value="Dispatched">Dispatched</SelectItem>
+                    <SelectItem value="Pending Confirmation">Pending Confirmation</SelectItem>
+                    <SelectItem value="Pending for Payment">Pending for Payment</SelectItem>
+                    <SelectItem value="Completed">Completed</SelectItem>
+                    <SelectItem value="Cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* New Case Button */}
-            <Link
-              href={"/cases/add"}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#2160AD] hover:bg-[#1d5497] text-white rounded-md text-sm font-medium transition-all hover-lift"
-            >
+            <Button onClick={() => router.push('/cases/add')}>
               <Plus className="w-4 h-4" />
               New Case
-            </Link>
+            </Button>
           </div>
 
-          {/* Table Card */}
-          <Card className="rounded-xl border shadow-sm p-6">
+          {/* Table */}
+          <Card className="overflow-hidden">
             <Table>
-              <TableHeader className="bg-gray-50">
+              <TableHeader className="header-bg-soft">
                 <TableRow>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Case ID</TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
-                    Patient Details
-                  </TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Vehicle</TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
-                    Booking Date | Time
-                  </TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
-                    Pickup Location
-                  </TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Status</TableHead>
-                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Case ID</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Patient Details</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Vehicle</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Booking Date | Time</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Pickup Location</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Status</TableHead>
+                  <TableHead className="text-gray-700 font-semibold p-4">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredCases.map((item) => (
-                  <TableRow
-                    key={item.id}
-                    className="hover:bg-gray-50 transition"
-                  >
+                  <TableRow key={item.id} className="hover:header-bg-soft transition">
                     {/* Case ID */}
-                    <TableCell className="py-4">
-                        <div className="font-mono font-medium text-[#2160AD]">
-                          {item.caseId}
-                        </div>
-                      </TableCell>
+                    <TableCell className="p-4">
+                      <div className="font-mono font-medium text-[#2160AD]">{item.caseId}</div>
+                    </TableCell>
 
-                      {/* Patient Details */}
-                      <TableCell className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
-                            {item.patientInitials}
+                    {/* Patient Details */}
+                    <TableCell className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
+                          {item.patientInitials}
+                        </div>
+                        <div>
+                          <div className="font-medium">{item.patientName}</div>
+                          <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <Phone className="w-3 h-3" />
+                            {item.phone}
                           </div>
-                          <div>
-                            <div className="font-medium">
-                              {item.patientName}
-                            </div>
-                            <div className="flex items-center gap-1 text-sm text-gray-600">
-                              <Phone className="w-3 h-3" />
-                              {item.phone}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {item.type}
-                            </div>
-                          </div>
+                          <div className="text-sm text-gray-600">{item.type}</div>
                         </div>
-                      </TableCell>
+                      </div>
+                    </TableCell>
 
-                      {/* Vehicle */}
-                      <TableCell className="py-4">
-                        <div className="font-medium">{item.vehicle}</div>
-                      </TableCell>
+                    {/* Vehicle */}
+                    <TableCell className="p-4">
+                      <div className="font-medium">{item.vehicle}</div>
+                    </TableCell>
 
-                      {/* Date & Time */}
-                      <TableCell className="py-4">
-                        <div className="font-medium">{item.date}</div>
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                          <Clock className="w-3 h-3" />
-                          {item.time}
-                        </div>
-                      </TableCell>
+                    {/* Date & Time */}
+                    <TableCell className="p-4">
+                      <div className="font-medium">{item.date}</div>
+                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <Clock className="w-3 h-3" />
+                        {item.time}
+                      </div>
+                    </TableCell>
 
-                      {/* Pickup Location */}
-                      <TableCell className="py-4">
-                        <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                          <span className="leading-relaxed">
-                            {item.location}
-                          </span>
-                        </div>
-                      </TableCell>
+                    {/* Pickup Location */}
+                    <TableCell className="p-4">
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                        <span className="leading-relaxed">{item.location}</span>
+                      </div>
+                    </TableCell>
 
-                      {/* Status Badge */}
-                      <TableCell className="py-4">
-                        <div
-                          className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-medium ${
-                            item.status === "Pending for Dispatch"
-                              ? "bg-[#EEA61F] text-white"
-                              : item.status === "Dispatched"
+                    {/* Status */}
+                    <TableCell className="p-4">
+                      <div
+                        className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-base font-medium ${item.status === "Pending for Dispatch"
+                            ? "bg-[#EEA61F] text-white"
+                            : item.status === "Dispatched"
                               ? "bg-[#E2CC3B] text-black"
                               : "bg-gray-200 text-gray-700"
                           }`}
+                      >
+                        {item.status}
+                      </div>
+                    </TableCell>
+
+                    {/* Actions */}
+                    <TableCell className="p-4">
+                      <div className="flex gap-2">
+                        <Button variant="ghost" size="icon" className="" title="View Case">
+                          <Eye className="h-4 w-4 text-blue-600" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="" title="Edit Case">
+                          <SquarePen className="h-4 w-4 text-gray-500" />
+                        </Button>
+
+                        {/* DELETE BUTTON – NOW WORKS */}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-600 hover:text-red-800"
+                          title="Delete Case"
+                          onClick={() => handleDelete(item.id)} // ← removes this row
                         >
-                          {item.status}
-                        </div>
-                      </TableCell>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-                      {/* Actions */}
-                      <TableCell className="py-4">
-                        <div className="flex gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-lift"
-                            title="View Case"
-                          >
-                            <Eye className="h-4 w-4 text-blue-600" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-lift"
-                            title="Edit Case"
-                          >
-                            <SquarePen className="h-4 w-4 text-gray-500" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="hover-lift text-red-600 hover:text-red-800"
-                            title="Delete Case"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-
-              {filteredCases.length <= 0 && (
-                <div className="text-center py-12">
-                  <div className="text-gray-500">
-                    <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                    <p className="text-base font-medium text-gray-700">
-                      No cases found
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Try adjusting your search or filter criteria
-                    </p>
-                  </div>
+            {filteredCases.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-gray-500">
+                  <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                  <p className="text-base font-medium text-gray-700">No cases found</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Try adjusting your search or filter criteria
+                  </p>
                 </div>
-              )}
+              </div>
+            )}
           </Card>
 
           {/* Footer */}
           <div className="flex justify-between items-center text-sm text-gray-600">
             <span>
-              Showing {filteredCases.length} of {CASES_DATA.length} cases
+              Showing {filteredCases.length} of {cases.length} cases
             </span>
           </div>
         </div>
@@ -374,3 +360,4 @@ export default function CasesPage() {
     </>
   );
 }
+

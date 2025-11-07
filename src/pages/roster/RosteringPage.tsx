@@ -119,7 +119,7 @@ function Sidebar() {
             {/* Calendar */}
             <button 
               onClick={() => navigate('/calendar')}
-              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-0 w-[228px] hover:bg-gray-50 transition-colors cursor-pointer"
+              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-0 w-[228px] hover:header-bg-soft transition-colors cursor-pointer"
             >
               <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
                 <path d="M8.66602 2.16699V6.50033" stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.16667" />
@@ -133,7 +133,7 @@ function Sidebar() {
             {/* Cases */}
             <button 
               onClick={() => navigate('/cases')}
-              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-[52px] w-[228px] hover:bg-gray-50 transition-colors cursor-pointer"
+              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-[52px] w-[228px] hover:header-bg-soft transition-colors cursor-pointer"
             >
               <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
                 <path d={svgPaths.p38251100} stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.16667" />
@@ -159,7 +159,7 @@ function Sidebar() {
             {/* Vehicles */}
             <button 
               onClick={() => navigate('/vehicles')}
-              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-[156px] w-[228px] hover:bg-gray-50 transition-colors cursor-pointer"
+              className="absolute box-border content-stretch flex gap-[12px] h-[44px] items-center left-[16px] overflow-clip pl-[16px] pr-0 py-0 rounded-[8px] top-[156px] w-[228px] hover:header-bg-soft transition-colors cursor-pointer"
             >
               <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
                 <path d={svgPaths.p3a126700} stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.16667" />
@@ -184,7 +184,7 @@ function Sidebar() {
           <div className="absolute box-border content-stretch flex flex-col gap-[8px] h-[148px] items-start left-0 pl-[24px] pr-[8px] py-0 top-[61px] w-[252px]">
             <button 
               onClick={() => navigate('/services')}
-              className="h-[44px] rounded-[8px] w-full hover:bg-gray-50 transition-colors"
+              className="h-[44px] rounded-[8px] w-full hover:header-bg-soft transition-colors"
             >
               <div className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0">
                 <svg className="w-[24px] h-[24px]" fill="none" viewBox="0 0 24 24">
@@ -197,7 +197,7 @@ function Sidebar() {
 
             <button 
               onClick={() => navigate('/hr')}
-              className="h-[44px] rounded-[8px] w-full hover:bg-gray-50 transition-colors"
+              className="h-[44px] rounded-[8px] w-full hover:header-bg-soft transition-colors"
             >
               <div className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0">
                 <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
@@ -211,7 +211,7 @@ function Sidebar() {
 
             <button 
               onClick={() => navigate('/analytics')}
-              className="h-[44px] rounded-[8px] w-full hover:bg-gray-50 transition-colors"
+              className="h-[44px] rounded-[8px] w-full hover:header-bg-soft transition-colors"
             >
               <div className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0">
                 <svg className="w-[24px] h-[24px]" fill="none" viewBox="0 0 24 24">
@@ -238,7 +238,7 @@ function Sidebar() {
           <div className="absolute box-border content-stretch flex flex-col gap-[8px] h-[96px] items-start left-0 pl-[24px] pr-[8px] py-0 top-[61px] w-[252px]">
             <button 
               onClick={() => navigate('/settings')}
-              className="h-[44px] rounded-[8px] w-full hover:bg-gray-50 transition-colors"
+              className="h-[44px] rounded-[8px] w-full hover:header-bg-soft transition-colors"
             >
               <div className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0">
                 <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
@@ -251,7 +251,7 @@ function Sidebar() {
 
             <button 
               onClick={() => navigate('/users')}
-              className="h-[44px] rounded-[8px] w-full hover:bg-gray-50 transition-colors"
+              className="h-[44px] rounded-[8px] w-full hover:header-bg-soft transition-colors"
             >
               <div className="box-border content-stretch flex gap-[12px] h-[44px] items-center pl-[16px] pr-0 py-0">
                 <svg className="w-[26px] h-[26px]" fill="none" viewBox="0 0 26 26">
@@ -292,7 +292,7 @@ function Sidebar() {
 
           <button 
             onClick={() => navigate('/')}
-            className="h-[61px] rounded-[10px] w-full hover:bg-gray-50 transition-colors"
+            className="h-[61px] rounded-[10px] w-full hover:header-bg-soft transition-colors"
           >
             <div className="box-border content-stretch flex gap-[12px] h-[61px] items-center px-[12px] py-0">
               <div className="bg-[#ffe2e2] relative rounded-[3.35544e+07px] size-[37px]">

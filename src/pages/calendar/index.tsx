@@ -1,15 +1,12 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Check, CalendarIcon } from 'lucide-react';
-import { format, addDays, subDays, addMonths, subMonths } from 'date-fns';
+import { Check } from 'lucide-react';
 import FunctionalHeader from '@/layout/FunctionalHeader';
 import DayView from './DayView';
 import WeekView from './WeekView';
 import MonthView from './MonthView';
-import { Button } from '@/components/ui/button';
-import { DatePicker } from '@/components/ui/date-picker';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { SharedDatePicker } from '@/components/ui/shared-date-picker';
 
 // === CONFIG ===
 const STATUS_CONFIG = {
@@ -173,47 +170,15 @@ export default function CalendarPage() {
     setSelectedTypes(new Set());
   };
 
-  const goPrev = () => {
-    setCurrentDate((prev) => {
-      if (activeTab === 'day') return subDays(prev, 1);
-      if (activeTab === 'week') return subDays(prev, 7);
-      if (activeTab === 'month') return subMonths(prev, 1);
-      return prev;
-    });
-  };
-
-  const goNext = () => {
-    setCurrentDate((prev) => {
-      if (activeTab === 'day') return addDays(prev, 1);
-      if (activeTab === 'week') return addDays(prev, 7);
-      if (activeTab === 'month') return addMonths(prev, 1);
-      return prev;
-    });
-  };
-
-  // === FORMAT WEEK RANGE ===
-  const formatWeekRange = (date: Date) => {
-    const dayOfWeek = date.getDay();
-    const startOffset = dayOfWeek === 0 ? -6 : 0 - dayOfWeek; // Monday start
-    const start = addDays(date, startOffset);
-    const end = addDays(start, 6);
-
-    const sameMonth = start.getMonth() === end.getMonth();
-    const sameYear = start.getFullYear() === end.getFullYear();
-
-    const formatStart = sameMonth
-      ? format(start, 'MMM d')
-      : format(start, 'MMM d, yyyy');
-    const formatEnd = sameYear
-      ? format(end, 'MMM d, yyyy')
-      : format(end, 'MMM d, yyyy');
-
-    return `${formatStart} - ${formatEnd}`;
-  };
-
   return (
     <>
-      <FunctionalHeader title="Calendar" />
+      <FunctionalHeader
+        title="Calendar"
+        breadcrumb={[
+          { label: 'Operations' },
+          { label: 'Calendar' },
+        ]}
+      />
 
       <div className="flex-1 flex w-full overflow-auto">
         {/* Sidebar Filters */}
@@ -247,11 +212,10 @@ export default function CalendarPage() {
                     <button
                       type="button"
                       onClick={() => toggleStatus(status as StatusKey)}
-                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                        selectedStatuses.has(status as StatusKey)
+                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${selectedStatuses.has(status as StatusKey)
                           ? 'bg-[#2160AD] border-[#2160AD]'
                           : 'border-[#2160AD]/30'
-                      }`}
+                        }`}
                       aria-label={`Toggle ${status}`}
                     >
                       {selectedStatuses.has(status as StatusKey) && (
@@ -282,11 +246,10 @@ export default function CalendarPage() {
                     <button
                       type="button"
                       onClick={() => toggleType(type)}
-                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                        selectedTypes.has(type)
+                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${selectedTypes.has(type)
                           ? 'bg-[#2160AD] border-[#2160AD]'
                           : 'border-[#2160AD]/30'
-                      }`}
+                        }`}
                       aria-label={`Toggle ${type}`}
                     >
                       {selectedTypes.has(type) && (
@@ -317,11 +280,10 @@ export default function CalendarPage() {
                         key={mode}
                         type="button"
                         onClick={() => setActiveTab(key)}
-                        className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${
-                          isActive
+                        className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${isActive
                             ? 'bg-[#2160AD] text-white'
                             : 'border border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10'
-                        }`}
+                          }`}
                       >
                         {mode}
                       </button>
@@ -329,58 +291,13 @@ export default function CalendarPage() {
                   })}
                 </div>
 
-                {/* Date Navigation */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={goPrev}
-                    className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </Button>
-
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className={`justify-start text-center text-[#2160AD] text-base font-normal h-9 px-4 ${
-                          !currentDate && 'text-muted-foreground'
-                        }`}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-[#2160AD]" />
-                        {currentDate ? (
-                          activeTab === 'month' ? (
-                            format(currentDate, 'MMMM yyyy')
-                          ) : activeTab === 'week' ? (
-                            formatWeekRange(currentDate)
-                          ) : (
-                            format(currentDate, 'EEEE, MMMM d, yyyy')
-                          )
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <DatePicker
-                        mode="single"
-                        selected={currentDate}
-                        onSelect={(date) => date && setCurrentDate(date)}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={goNext}
-                    className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                </div>
+                {/* Shared DatePicker */}
+                <SharedDatePicker
+                  date={currentDate}
+                  onDateChange={setCurrentDate}
+                  mode={activeTab}
+                  showWeekRange={activeTab === 'week'}
+                />
               </div>
             </div>
           </header>

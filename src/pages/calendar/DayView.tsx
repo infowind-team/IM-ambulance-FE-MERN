@@ -83,7 +83,7 @@ export default function DayView({ date, events }: DayViewProps) {
               </div>
 
               {/* Events */}
-              <div className="p-2 relative hover:bg-gray-50 transition-colors">
+              <div className="p-2 relative hover:header-bg-soft transition-colors">
                 <div className="flex flex-wrap gap-2">
                   {hourEvents.map((event) => (
                     <div

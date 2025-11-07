@@ -90,7 +90,7 @@ export default function WeekView({ date, events }: WeekViewProps) {
           return (
             <div key={hour} className="grid grid-cols-8 border-b border-gray-100 min-h-20">
               {/* Time Label */}
-              <div className="p-3 text-right text-gray-500 bg-gray-50 border-r border-[#2160AD]/20 text-sm font-medium">
+              <div className="p-3 text-right text-gray-500 header-bg-soft border-r border-[#2160AD]/20 text-sm font-medium">
                 {hour.toString().padStart(2, '0')}:00
               </div>
 
@@ -100,7 +100,7 @@ export default function WeekView({ date, events }: WeekViewProps) {
                 return (
                   <div
                     key={dayIdx}
-                    className="border-l border-gray-100 p-1 relative hover:bg-gray-50 transition-colors cursor-pointer"
+                    className="border-l border-gray-100 p-1 relative hover:header-bg-soft transition-colors cursor-pointer"
                   >
                     <div className="space-y-1">
                       {dayEvents.map((event) => (

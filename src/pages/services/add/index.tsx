@@ -683,7 +683,7 @@ export default function CreateContractPage() {
                           {ruleFields.map((rule, ruleIndex) => (
                             <div
                               key={rule.id}
-                              className="grid grid-cols-5 gap-4 p-3 bg-gray-50 rounded-lg items-center"
+                              className="grid grid-cols-5 gap-4 p-3 header-bg-soft rounded-lg items-center"
                             >
                               <Select defaultValue="First (Fixed cost for initial units)">
                                 <SelectTrigger>

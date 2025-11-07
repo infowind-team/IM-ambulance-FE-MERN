@@ -106,6 +106,7 @@ export default function CasesAddPage() {
 
   /* Times */
   const [bookingTime, setBookingTime] = useState("");
+  const [bookingDate, setBookingDate] = useState("");
 
   /* Vehicle assignment */
   const [mto, setMto] = useState("");
@@ -193,7 +194,14 @@ export default function CasesAddPage() {
 
   return (
     <>
-      <FunctionalHeader title="Add New Case" />
+      <FunctionalHeader
+        title="Add New Case"
+        breadcrumb={[
+          { label: 'Operations' },
+          { label: 'Cases' },
+          { label: 'Add New Case' },
+        ]}
+      />
       <div className="flex-1 w-full overflow-auto">
         <div className="p-4 lg:p-6 space-y-6 w-full">
           {/* Status */}
@@ -217,7 +225,7 @@ export default function CasesAddPage() {
 
           {/* Booking & Requestor Information */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Phone className="w-5 h-5" />
                 Booking & Requestor Information
@@ -247,10 +255,13 @@ export default function CasesAddPage() {
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Booking Date <span className="text-red-500">*</span>
                   </Label>
-                  <Button variant="outline" className="w-full justify-start text-left">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Select booking date
-                  </Button>
+                  <Input
+                    type="date"
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    placeholder="Select booking date"
+                    className="w-full"
+                  />
                 </div>
                 <div>
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
@@ -325,7 +336,7 @@ export default function CasesAddPage() {
 
           {/* Patient Information */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
                 Patient Information
@@ -497,7 +508,7 @@ export default function CasesAddPage() {
 
           {/* Trip Details */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Navigation className="w-5 h-5" />
                 Trip Details
@@ -536,7 +547,7 @@ export default function CasesAddPage() {
               <div className="bg-gray-200 h-px my-4"></div>
 
               {trips.map((trip, idx) => (
-                <div key={trip.id} className="border rounded-lg p-4 bg-gray-50/30">
+                <div key={trip.id} className="border rounded-lg p-4 header-bg-soft/30">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded-full bg-[#2160AD] text-white text-sm flex items-center justify-center font-medium">
                       {idx + 1}
@@ -559,7 +570,7 @@ export default function CasesAddPage() {
                           className="w-full"
                         />
                       </div>
-                      <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
+                      <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
                           <Label className="text-base font-medium">Address Details</Label>
@@ -647,7 +658,7 @@ export default function CasesAddPage() {
                           className="w-full"
                         />
                       </div>
-                      <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
+                      <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
                           <Label className="text-base font-medium">Address Details</Label>
@@ -832,7 +843,7 @@ export default function CasesAddPage() {
 
           {/* Services */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Plus className="w-5 h-5" />
                 Services
@@ -876,7 +887,7 @@ export default function CasesAddPage() {
                     Added Services
                   </Label>
                   <div className="border rounded-lg overflow-hidden">
-                    <div className="bg-gray-50 px-4 py-2 border-b">
+                    <div className="header-bg-soft px-4 py-2 border-b">
                       <div className="grid grid-cols-6 gap-4 text-sm font-medium text-gray-700">
                         <div className="col-span-2">Service Name</div>
                         <div>Quantity</div>
@@ -889,7 +900,7 @@ export default function CasesAddPage() {
                       {selectedServices.map((svc) => {
                         const total = svc.price * svc.quantity;
                         return (
-                          <div key={svc.id} className="px-4 py-3 hover:bg-gray-50">
+                          <div key={svc.id} className="px-4 py-3 hover:header-bg-soft">
                             <div className="grid grid-cols-6 gap-4 items-center">
                               <div className="col-span-2 font-medium text-base-optimized">
                                 {svc.name}
@@ -938,14 +949,14 @@ export default function CasesAddPage() {
 
           {/* Billing Summary */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Car className="w-5 h-5" />
                 Billing Summary
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-gray-50 p-6 rounded-lg border">
+              <div className="header-bg-soft p-6 rounded-lg border">
                 <div className="font-semibold mb-4 text-[#2160AD] text-lg">
                   Billing Summary
                 </div>
@@ -990,7 +1001,7 @@ export default function CasesAddPage() {
 
           {/* Additional Remarks */}
           <Card className="w-full">
-            <CardHeader>
+            <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Additional Remarks
