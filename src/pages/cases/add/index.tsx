@@ -225,7 +225,7 @@ export default function CasesAddPage() {
           </div>
 
           {/* Booking & Requestor Information */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Phone className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Patient Information */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
@@ -508,7 +508,7 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Trip Details */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Navigation className="w-5 h-5" />
@@ -869,7 +869,7 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Services */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Plus className="w-5 h-5" />
@@ -976,7 +976,7 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Billing Summary */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <Car className="w-5 h-5" />
@@ -1028,7 +1028,7 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Additional Remarks */}
-          <Card className="w-full">
+          <Card className="overflow-hidden w-full">
             <CardHeader className="header-bg-soft pb-6">
               <CardTitle className="flex items-center gap-2">
                 <FileText className="w-5 h-5" />
@@ -1049,7 +1049,7 @@ export default function CasesAddPage() {
             <Button variant="outline" className="px-6 lg:px-8">
               Cancel
             </Button>
-            <Button className="px-6 lg:px-8 bg-[#2160AD] hover:bg-[#1d5497]">
+            <Button className="px-6 lg:px-8">
               Create Case
             </Button>
           </div>
