@@ -21,9 +21,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-function cn(...classes: Array<string | boolean | null | undefined>): string {
-  return classes.filter(Boolean).join(" ");
-}
+import { cn } from "@/components/ui/utils";
 
 import {
   Table,

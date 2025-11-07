@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import { cn } from "@/components/ui/utils";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,9 +30,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import EmployeeForm from "./EmployeeForm";
 import DocumentsSection from "./DocumentsSection";
-
-// Utility: cn
-const cn = (...inputs: any[]) => twMerge(clsx(inputs));
 
 // Zod Schema
 const formSchema = z.object({

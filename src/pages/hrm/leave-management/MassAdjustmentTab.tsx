@@ -22,7 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { DatePicker as CalendarComponent } from "@/components/ui/date-picker";
 import {
   Table,
   TableBody,
