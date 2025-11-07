@@ -5,6 +5,7 @@ import * as React from "react";
 import { Command } from "cmdk";
 import * as Popover from "@radix-ui/react-popover";
 import { Plus } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 interface Service {
   value: string;
@@ -79,9 +80,9 @@ export function ServiceSearch({
   return (
     <div className="space-y-2 w-full">
       {label && (
-        <label className="text-base font-medium text-base-optimized mb-2 block">
+        <Label className="text-base font-medium text-base-optimized mb-2 block">
           {label} {required && <span className="text-red-500">*</span>}
-        </label>
+        </Label>
       )}
 
       <Popover.Root open={open} onOpenChange={setOpen}>

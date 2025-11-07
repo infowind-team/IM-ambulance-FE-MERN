@@ -27,6 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import EmployeeForm from "./EmployeeForm";
+import DocumentsSection from "./DocumentsSection";
 
 // Utility: cn
 const cn = (...inputs: any[]) => twMerge(clsx(inputs));
@@ -108,8 +110,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
         step === 2
           ? ["name", "contact", "email"]
           : step === 3
-          ? ["postalCode", "block", "street"]
-          : [];
+            ? ["postalCode", "block", "street"]
+            : [];
       const result =
         fieldsToValidate.length > 0
           ? await trigger(fieldsToValidate as any)
@@ -150,6 +152,20 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
             Next Section <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         )}
+        {/* Final Submit */}
+        {currentStep === steps.length && (
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="outline" onClick={onBack}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="bg-[#2160AD] hover:bg-[#1a4d8c]"
+            >
+              Add Employee +
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 overflow-hidden">
@@ -171,7 +187,7 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                       "w-full text-left p-4 rounded-lg transition-all flex items-center gap-3",
                       isActive && "bg-[#2160AD] text-white shadow-lg",
                       !isActive &&
-                        "bg-white text-gray-700 hover:bg-gray-100 border"
+                      "bg-white text-gray-700 hover:bg-gray-100 border"
                     )}
                   >
                     <div
@@ -210,8 +226,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                         {isComplete
                           ? "Complete"
                           : currentStep === step.id
-                          ? "In Progress"
-                          : "Incomplete"}
+                            ? "In Progress"
+                            : "Incomplete"}
                       </div>
                     </div>
                   </button>
@@ -224,270 +240,257 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
         {/* Main Content */}
         <div className="flex-1 overflow-auto">
           <form onSubmit={handleSubmit(onSubmit)} className="p-6">
-            
+
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Personal Details</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>
-                          Staff Name <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          placeholder="Enter full name"
-                          {...register("name")}
-                        />
-                        {errors.name && (
-                          <p className="text-sm text-red-500">
-                            {errors.name.message}
-                          </p>
-                        )}
+              <div className="">
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Personal Details</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>
+                            Staff Name <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            placeholder="Enter full name"
+                            {...register("name")}
+                          />
+                          {errors.name && (
+                            <p className="text-sm text-red-500">
+                              {errors.name.message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label>
+                            Contact <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            placeholder="+65 9000 0000"
+                            {...register("contact")}
+                          />
+                          {errors.contact && (
+                            <p className="text-sm text-red-500">
+                              {errors.contact.message}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>
-                          Contact <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          placeholder="+65 9000 0000"
-                          {...register("contact")}
-                        />
-                        {errors.contact && (
-                          <p className="text-sm text-red-500">
-                            {errors.contact.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>
-                          Email <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          type="email"
-                          placeholder="email@example.com"
-                          {...register("email")}
-                        />
-                        {errors.email && (
-                          <p className="text-sm text-red-500">
-                            {errors.email.message}
-                          </p>
-                        )}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>
+                            Email <span className="text-red-500">*</span>
+                          </Label>
+                          <Input
+                            type="email"
+                            placeholder="email@example.com"
+                            {...register("email")}
+                          />
+                          {errors.email && (
+                            <p className="text-sm text-red-500">
+                              {errors.email.message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Date of Birth</Label>
+                          <Input type="date" {...register("dob")} />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Date of Birth</Label>
-                        <Input type="date" {...register("dob")} />
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Marital Status</Label>
-                        <Select
-                          onValueChange={(value) =>
-                            setValue("maritalStatus", value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="single">Single</SelectItem>
-                            <SelectItem value="married">Married</SelectItem>
-                            <SelectItem value="divorced">Divorced</SelectItem>
-                            <SelectItem value="widowed">Widowed</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Marital Status</Label>
+                          <Select
+                            onValueChange={(value) =>
+                              setValue("maritalStatus", value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="single">Single</SelectItem>
+                              <SelectItem value="married">Married</SelectItem>
+                              <SelectItem value="divorced">Divorced</SelectItem>
+                              <SelectItem value="widowed">Widowed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Marital Status Date</Label>
+                          <Input type="date" {...register("maritalStatusDate")} />
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label>Marital Status Date</Label>
-                        <Input type="date" {...register("maritalStatusDate")} />
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Address Information</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label>Postal Code</Label>
+                          <Input
+                            placeholder="123456"
+                            {...register("postalCode")}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Block/House No</Label>
+                          <Input placeholder="Block 123" {...register("block")} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Street Name</Label>
+                          <Input
+                            placeholder="Main Street"
+                            {...register("street")}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Address Information</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label>Postal Code</Label>
-                        <Input
-                          placeholder="123456"
-                          {...register("postalCode")}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Block/House No</Label>
-                        <Input placeholder="Block 123" {...register("block")} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Street Name</Label>
-                        <Input
-                          placeholder="Main Street"
-                          {...register("street")}
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-3">
-                    <CardTitle>Family Members</CardTitle>
-                    <Button
-                      type="button"
-                      size="sm"
-                      className="bg-[#2160AD] hover:bg-[#1d5497]"
-                      onClick={() =>
-                        append({
-                          name: "",
-                          relationship: "Other",
-                          contact: "",
-                          isEmergency: false,
-                          dob: "",
-                          age: undefined,
-                        })
-                      }
-                    >
-                      <Plus className="w-4 h-4 mr-1" /> Add
-                    </Button>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {fields.map((field, index) => (
-                      <div
-                        key={field.id}
-                        className="border rounded-lg p-4 space-y-4"
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between pb-3">
+                      <CardTitle>Family Members</CardTitle>
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="bg-[#2160AD] hover:bg-[#1d5497]"
+                        onClick={() =>
+                          append({
+                            name: "",
+                            relationship: "Other",
+                            contact: "",
+                            isEmergency: false,
+                            dob: "",
+                            age: undefined,
+                          })
+                        }
                       >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label>Name</Label>
-                            <Input
-                              placeholder="Family member name"
-                              {...register(`family.${index}.name`)}
-                            />
-                            {errors.family?.[index]?.name && (
-                              <p className="text-sm text-red-500">
-                                {errors.family[index].name?.message}
-                              </p>
-                            )}
-                          </div>
-                          <div className="space-y-2">
-                            <Label>Relationship</Label>
-                            <Select
-                              onValueChange={(value) =>
-                                setValue(`family.${index}.relationship`, value)
-                              }
-                              defaultValue={watch(
-                                `family.${index}.relationship`
+                        <Plus className="w-4 h-4 mr-1" /> Add
+                      </Button>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {fields.map((field, index) => (
+                        <div
+                          key={field.id}
+                          className="border rounded-lg p-4 space-y-4"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Name</Label>
+                              <Input
+                                placeholder="Family member name"
+                                {...register(`family.${index}.name`)}
+                              />
+                              {errors.family?.[index]?.name && (
+                                <p className="text-sm text-red-500">
+                                  {errors.family[index].name?.message}
+                                </p>
                               )}
-                            >
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Spouse">Spouse</SelectItem>
-                                <SelectItem value="Child">Child</SelectItem>
-                                <SelectItem value="Parent">Parent</SelectItem>
-                                <SelectItem value="Sibling">Sibling</SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label>Relationship</Label>
+                              <Select
+                                onValueChange={(value) =>
+                                  setValue(`family.${index}.relationship`, value)
+                                }
+                                defaultValue={watch(
+                                  `family.${index}.relationship`
+                                )}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Spouse">Spouse</SelectItem>
+                                  <SelectItem value="Child">Child</SelectItem>
+                                  <SelectItem value="Parent">Parent</SelectItem>
+                                  <SelectItem value="Sibling">Sibling</SelectItem>
+                                  <SelectItem value="Other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label>Contact Number</Label>
-                            <Input
-                              placeholder="+65 9000 0000"
-                              {...register(`family.${index}.contact`)}
-                            />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Contact Number</Label>
+                              <Input
+                                placeholder="+65 9000 0000"
+                                {...register(`family.${index}.contact`)}
+                              />
+                            </div>
+                            <div className="flex items-center space-x-2 h-9">
+                              <Checkbox
+                                id={`emergency-${index}`}
+                                {...register(`family.${index}.isEmergency`)}
+                              />
+                              <Label
+                                htmlFor={`emergency-${index}`}
+                                className="cursor-pointer text-sm"
+                              >
+                                Set as emergency contact
+                              </Label>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2 h-9">
-                            <Checkbox
-                              id={`emergency-${index}`}
-                              {...register(`family.${index}.isEmergency`)}
-                            />
-                            <Label
-                              htmlFor={`emergency-${index}`}
-                              className="cursor-pointer text-sm"
-                            >
-                              Set as emergency contact
-                            </Label>
-                          </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label>Date of Birth</Label>
-                            <Input
-                              type="date"
-                              {...register(`family.${index}.dob`)}
-                            />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label>Date of Birth</Label>
+                              <Input
+                                type="date"
+                                {...register(`family.${index}.dob`)}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label>Age</Label>
+                              <Input
+                                type="number"
+                                placeholder="Age"
+                                {...register(`family.${index}.age`, {
+                                  valueAsNumber: true,
+                                })}
+                              />
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <Label>Age</Label>
-                            <Input
-                              type="number"
-                              placeholder="Age"
-                              {...register(`family.${index}.age`, {
-                                valueAsNumber: true,
-                              })}
-                            />
-                          </div>
-                        </div>
 
-                        {fields.length > 1 && (
-                          <div className="flex justify-end pt-2">
-                            <Button
-                              type="button"
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => remove(index)}
-                              className="w-full"
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                          {fields.length > 1 && (
+                            <div className="flex justify-end pt-2">
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => remove(index)}
+                                className="w-full"
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             )}
 
             {currentStep === 2 && (
-              <div className="space-y-6">
-                 Employment Details
+              <div className="">
+                <EmployeeForm />
               </div>
             )}
 
             {currentStep === 3 && (
-              <div className="space-y-6">
-                Documents
-              </div>
-            )}
-
-            {/* Final Submit */}
-            {currentStep === steps.length && (
-              <div className="flex justify-end gap-3">
-                <Button type="button" variant="outline" onClick={onBack}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-[#2160AD] hover:bg-[#1a4d8c]"
-                >
-                  Add Employee
-                </Button>
+              <div className="">
+                <DocumentsSection />
               </div>
             )}
           </form>

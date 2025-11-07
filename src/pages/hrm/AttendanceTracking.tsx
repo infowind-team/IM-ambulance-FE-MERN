@@ -226,87 +226,85 @@ export default function AttendanceTracking() {
       )}
 
       {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-base">
-              <thead className="border-b bg-gray-50 sticky top-0 z-10">
-                <tr className="border-b">
-                  <th className="text-left p-4 font-medium">Employee</th>
-                  <th className="text-left p-4 font-medium">Status</th>
-                  <th className="text-left p-4 font-medium">Clock In</th>
-                  <th className="text-left p-4 font-medium">Clock Out</th>
-                  <th className="text-left p-4 font-medium">Late</th>
-                  <th className="text-left p-4 font-medium">Overtime</th>
-                  <th className="text-left p-4 font-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((entry) => (
-                  <tr
-                    key={entry.id}
-                    className="border-b hover:bg-muted/30"
+      <Card className="rounded-xl border shadow-sm p-6">
+        <Table>
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Employee</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Status</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock In</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock Out</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Late</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Overtime</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredData.map((entry) => (
+              <TableRow
+                key={entry.id}
+                className="hover:bg-gray-50 transition"
+              >
+                {/* Employee */}
+                <TableCell className="py-4">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={placeholderImg}
+                      alt={entry.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <span className="font-medium">{entry.name}</span>
+                  </div>
+                </TableCell>
+
+                {/* Status badge */}
+                <TableCell className="py-4">
+                  <Badge
+                    className={cn(
+                      "border bg-transparent",
+                      entry.status === "Active" &&
+                        "border-[#23cf65] text-[#212143]",
+                      entry.status === "On Leave" &&
+                        "border-[#e71b1b] text-[#212143]",
+                      entry.status === "Probation" &&
+                        "border-[#eea51f] text-[#212143]",
+                      entry.status === "Inactive" &&
+                        "border-[silver] text-[#212143]",
+                      entry.status === "Suspended" &&
+                        "border-[silver] text-[#212143]"
+                    )}
                   >
-                    {/* Employee */}
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={placeholderImg}
-                          alt={entry.name}
-                          className="w-10 h-10 rounded-full object-cover"
-                        />
-                        <span className="font-medium">{entry.name}</span>
+                    {entry.status}
+                  </Badge>
+                </TableCell>
+
+                {/* Clock In */}
+                <TableCell className="py-4">
+                  <div className="flex items-center justify-between">
+                    <span>{entry.clockIn ?? "-"}</span>
+                    {entry.lateFlag && entry.clockIn && (
+                      <div className="w-[21px] h-[21px] bg-[#E71B1B] rounded-full flex items-center justify-center ml-2">
+                        <span className="text-white text-xs">!</span>
                       </div>
-                    </td>
+                    )}
+                  </div>
+                </TableCell>
 
-                    {/* Status badge */}
-                    <td className="p-4">
-                      <Badge
-                        className={cn(
-                          "border bg-transparent",
-                          entry.status === "Active" &&
-                            "border-[#23cf65] text-[#212143]",
-                          entry.status === "On Leave" &&
-                            "border-[#e71b1b] text-[#212143]",
-                          entry.status === "Probation" &&
-                            "border-[#eea51f] text-[#212143]",
-                          entry.status === "Inactive" &&
-                            "border-[silver] text-[#212143]",
-                          entry.status === "Suspended" &&
-                            "border-[silver] text-[#212143]"
-                        )}
-                      >
-                        {entry.status}
-                      </Badge>
-                    </td>
+                {/* Clock Out */}
+                <TableCell className="py-4">
+                  {entry.clockOut ?? "-"}
+                </TableCell>
 
-                    {/* Clock In */}
-                    <td className="p-4">
-                      <div className="flex items-center justify-between">
-                        <span>{entry.clockIn ?? "-"}</span>
-                        {entry.lateFlag && entry.clockIn && (
-                          <div className="w-[21px] h-[21px] bg-[#E71B1B] rounded-full flex items-center justify-center ml-2">
-                            <span className="text-white text-xs">!</span>
-                          </div>
-                        )}
-                      </div>
-                    </td>
+                {/* Late */}
+                <TableCell className="py-4">{entry.late ?? "-"}</TableCell>
 
-                    {/* Clock Out */}
-                    <td className="p-4">
-                      {entry.clockOut ?? "-"}
-                    </td>
+                {/* Overtime */}
+                <TableCell className="py-4">
+                  {entry.overtime ?? "-"}
+                </TableCell>
 
-                    {/* Late */}
-                    <td className="p-4">{entry.late ?? "-"}</td>
-
-                    {/* Overtime */}
-                    <td className="p-4">
-                      {entry.overtime ?? "-"}
-                    </td>
-
-                    {/* Actions */}
-                    <td className="p-4">
+                {/* Actions */}
+                <TableCell className="py-4">
                       <div className="flex gap-2">
                         <Button
                           size="icon"
@@ -325,14 +323,12 @@ export default function AttendanceTracking() {
                           <SquarePen className="h-4 w-4 text-blue-600" />
                         </Button>
                       </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+              </TableBody>
+            </Table>
+          </Card>
 
       {/* Pagination (static for demo) */}
       <div className="flex justify-end items-center gap-5 py-4">

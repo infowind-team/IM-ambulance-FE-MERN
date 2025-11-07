@@ -243,99 +243,85 @@ export default function UsersPage() {
         </div>
 
         {/* Users Table */}
-        <Card className="border-[#2160AD]/10 shadow-sm">
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-[#2160AD]/5 to-[#2160AD]/10 border-b-2 border-[#2160AD]/20 hover:bg-gradient-to-r hover:from-[#2160AD]/5 hover:to-[#2160AD]/10">
-                    <TableHead className="px-6 py-4 font-semibold text-base">
-                      User
-                    </TableHead>
-                    <TableHead className="px-6 py-4 font-semibold text-base">
-                      Staff ID
-                    </TableHead>
-                    <TableHead className="px-6 py-4 font-semibold text-base">
-                      Permission
-                    </TableHead>
-                    <TableHead className="px-6 py-4 font-semibold text-base text-center">
-                      Actions
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredUsers.map((user, index) => (
-                    <TableRow
-                      key={user.id}
-                      className={`border-b border-gray-100 hover:bg-[#2160AD]/5 transition-all duration-200 ${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                      }`}
-                    >
-                      <TableCell className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-11 w-11 border-2 border-[#2160AD]/20">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback className="bg-[#2160AD]/10 text-[#2160AD] font-semibold">
-                              {user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-semibold text-gray-900 text-base">
-                              {user.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {user.email}
-                            </div>
-                          </div>
+        <Card className="rounded-xl border shadow-sm p-6">
+          <Table>
+            <TableHeader className="bg-gray-50">
+              <TableRow>
+                <TableHead className="text-gray-700 font-semibold px-4 py-3">User</TableHead>
+                <TableHead className="text-gray-700 font-semibold px-4 py-3">Staff ID</TableHead>
+                <TableHead className="text-gray-700 font-semibold px-4 py-3">Permission</TableHead>
+                <TableHead className="text-gray-700 font-semibold px-4 py-3 text-center">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredUsers.map((user) => (
+                <TableRow
+                  key={user.id}
+                  className="hover:bg-gray-50 transition"
+                >
+                  <TableCell className="py-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-11 w-11 border-2 border-[#2160AD]/20">
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarFallback className="bg-[#2160AD]/10 text-[#2160AD] font-semibold">
+                          {user.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-base">
+                          {user.name}
                         </div>
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        <span className="font-mono text-sm font-medium text-gray-700 bg-gray-100 px-3 py-1 rounded">
-                          {user.staffId}
-                        </span>
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        <Badge className={getRoleColor(user.role)}>
-                          {user.role}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        <div className="flex gap-1 justify-center">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            title="View User"
-                            className="hover:bg-blue-50 hover:text-[#2160AD]"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            title="Edit User"
-                            className="hover:bg-blue-50 hover:text-[#2160AD]"
-                          >
-                            <SquarePen className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            title="Delete User"
-                            className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <div className="text-sm text-gray-500">
+                          {user.email}
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <span className="font-mono text-sm font-medium text-gray-700 bg-gray-100 px-3 py-1 rounded">
+                      {user.staffId}
+                    </span>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <Badge className={getRoleColor(user.role)}>
+                      {user.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-4">
+                    <div className="flex gap-1 justify-center">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        title="View User"
+                        className="hover:bg-blue-50 hover:text-[#2160AD]"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        title="Edit User"
+                        className="hover:bg-blue-50 hover:text-[#2160AD]"
+                      >
+                        <SquarePen className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        title="Delete User"
+                        className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Card>
 
         <div className="text-sm text-muted-foreground">

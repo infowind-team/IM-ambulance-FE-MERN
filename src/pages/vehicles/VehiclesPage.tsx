@@ -1,7 +1,25 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FunctionalSidebar from '../components/FunctionalSidebar';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Search, Plus, Eye, Pencil, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 // Vehicle data type
 interface Vehicle {
@@ -207,89 +225,83 @@ export default function VehiclesPage() {
           </div>
 
           {/* Table Card */}
-          <div className="bg-white border border-[rgba(0,0,0,0.1)] rounded-[14px] overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                {/* Table Header */}
-                <thead>
-                  <tr className="bg-[rgba(33,96,173,0.05)] border-b border-[rgba(0,0,0,0.1)]">
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('number')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        Vehicle Number
-                        {getSortIcon('number')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('name')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        Vehicle Name
-                        {getSortIcon('name')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <span className="font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950">Assigned Driver / MTO</span>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('type')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        Type
-                        {getSortIcon('type')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('servicingDate')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        Next Servicing Due Date
-                        {getSortIcon('servicingDate')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('coeExpiry')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        COE Expiry
-                        {getSortIcon('coeExpiry')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <button 
-                        onClick={() => handleSort('status')}
-                        className="flex items-center gap-1 font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950"
-                      >
-                        Status
-                        {getSortIcon('status')}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-left">
-                      <span className="font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
-
-                {/* Table Body */}
-                <tbody>
-                  {filteredVehicles.map((vehicle) => (
-                    <tr key={vehicle.id} className="border-b border-[rgba(0,0,0,0.1)] hover:bg-[rgba(33,96,173,0.02)]">
-                      {/* Vehicle Number */}
-                      <td className="px-4 py-3">
+          <Card className="rounded-xl border shadow-sm p-6">
+            <Table>
+              <TableHeader className="bg-gray-50">
+                <TableRow>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('number')}
+                      className="flex items-center gap-1"
+                    >
+                      Vehicle Number
+                      {getSortIcon('number')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('name')}
+                      className="flex items-center gap-1"
+                    >
+                      Vehicle Name
+                      {getSortIcon('name')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    Assigned Driver / MTO
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('type')}
+                      className="flex items-center gap-1"
+                    >
+                      Type
+                      {getSortIcon('type')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('servicingDate')}
+                      className="flex items-center gap-1"
+                    >
+                      Next Servicing Due Date
+                      {getSortIcon('servicingDate')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('coeExpiry')}
+                      className="flex items-center gap-1"
+                    >
+                      COE Expiry
+                      {getSortIcon('coeExpiry')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    <button 
+                      onClick={() => handleSort('status')}
+                      className="flex items-center gap-1"
+                    >
+                      Status
+                      {getSortIcon('status')}
+                    </button>
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredVehicles.map((vehicle) => (
+                  <TableRow key={vehicle.id} className="hover:bg-gray-50 transition">
+                    {/* Vehicle Number */}
+                    <TableCell className="py-4">
                         <div>
                           <p className="font-['Inter:Medium',sans-serif] text-[16px] text-[#2160ad]">{vehicle.number}</p>
                           <p className="font-['Lato:Regular',sans-serif] text-[12px] text-[#717182]">{vehicle.plate}</p>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Vehicle Name */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <div className="flex items-center gap-3">
                           <div className="bg-[#2160ad] rounded-full size-10 flex items-center justify-center flex-shrink-0">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
@@ -306,15 +318,15 @@ export default function VehiclesPage() {
                             <p className="font-['Lato:Regular',sans-serif] text-[12px] text-[#717182]">Mileage: {vehicle.mileage}</p>
                           </div>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Driver */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <p className="font-['Lato:Medium',sans-serif] text-[16px] text-neutral-950">{vehicle.driver}</p>
-                      </td>
+                      </TableCell>
 
                       {/* Type */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <span className={`px-2 py-1 rounded-lg text-[12px] font-['Lato:Medium',sans-serif] border ${
                           vehicle.type === 'EAS' 
                             ? 'bg-blue-50 text-[#1447e6] border-[#bedbff]' 
@@ -322,20 +334,20 @@ export default function VehiclesPage() {
                         }`}>
                           {vehicle.type}
                         </span>
-                      </td>
+                      </TableCell>
 
                       {/* Servicing Date */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <p className="font-['Lato:Regular',sans-serif] text-[16px] text-[#101828]">{vehicle.servicingDate}</p>
-                      </td>
+                      </TableCell>
 
                       {/* COE Expiry */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <p className="font-['Lato:Regular',sans-serif] text-[16px] text-[#101828]">{vehicle.coeExpiry}</p>
-                      </td>
+                      </TableCell>
 
                       {/* Status */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <span className={`px-2 py-1 rounded-lg text-[12px] font-['Lato:Medium',sans-serif] border ${
                           vehicle.status === 'Active' 
                             ? 'bg-emerald-50 text-[#007a55] border-[#a4f4cf]' 
@@ -343,26 +355,26 @@ export default function VehiclesPage() {
                         }`}>
                           {vehicle.status}
                         </span>
-                      </td>
+                      </TableCell>
 
                       {/* Actions */}
-                      <td className="px-4 py-3">
+                      <TableCell className="py-4">
                         <div className="flex items-center gap-2">
-                          <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                          <Button variant="ghost" size="icon">
                             <Eye className="w-4 h-4 stroke-[#155DFC]" />
-                          </button>
-                          <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                          </Button>
+                          <Button variant="ghost" size="icon">
                             <Pencil className="w-4 h-4 stroke-[#6A7282]" />
-                          </button>
-                          <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                          </Button>
+                          <Button variant="ghost" size="icon">
                             <Trash2 className="w-4 h-4 stroke-[#E7000B]" />
-                          </button>
+                          </Button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           </div>
 

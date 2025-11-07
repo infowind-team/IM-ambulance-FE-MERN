@@ -23,7 +23,10 @@ import {
 } from "@/components/ui/select";
 import FunctionalHeader from "@/layout/FunctionalHeader";
 import { Textarea } from "@/components/ui/textarea";
-import { InputBox } from "@/components/theme-ui/InputBox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { ServiceSearch } from "../ServiceSearch";
 
 const options = [
@@ -195,9 +198,9 @@ export default function CasesAddPage() {
         <div className="p-4 lg:p-6 space-y-6 w-full">
           {/* Status */}
           <div className="max-w-[300px]">
-            <label className="text-base font-medium text-base-optimized mb-2 block">
+            <Label className="text-base font-medium text-base-optimized mb-2 block">
               Status <span className="text-red-500">*</span>
-            </label>
+            </Label>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-full text-base-optimized">
                 <SelectValue />
@@ -213,18 +216,18 @@ export default function CasesAddPage() {
           </div>
 
           {/* Booking & Requestor Information */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <Phone className="w-5 h-5" />
                 Booking & Requestor Information
-              </h4>
-            </div>
-            <div className="p-6 space-y-4">
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
-                <label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label className="text-base font-medium text-base-optimized mb-2 block">
                   Mode of Intake <span className="text-red-500">*</span>
-                </label>
+                </Label>
                 <Select value={intake} onValueChange={setIntake}>
                   <SelectTrigger className="w-full text-base-optimized">
                     <SelectValue />
@@ -241,22 +244,23 @@ export default function CasesAddPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Booking Date <span className="text-red-500">*</span>
-                  </label>
-                  <button className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm transition-all border bg-white hover:bg-gray-50 h-9 px-4 py-2 w-full justify-start text-left">
+                  </Label>
+                  <Button variant="outline" className="w-full justify-start text-left">
                     <Calendar className="mr-2 h-4 w-4" />
                     Select booking date
-                  </button>
+                  </Button>
                 </div>
                 <div>
-                  <InputBox
-                    label="Booking Time"
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    Booking Time <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
                     type="time"
                     value={bookingTime}
                     onChange={(e) => setBookingTime(e.target.value)}
-                    placeholder=""
-                    required={true}
+                    className="w-full"
                   />
                 </div>
               </div>
@@ -264,31 +268,35 @@ export default function CasesAddPage() {
               <div className="bg-gray-200 h-px my-4"></div>
 
               <div>
-                <InputBox
+                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  Requestor Name <span className="text-red-500">*</span>
+                </Label>
+                <Input
                   placeholder="Enter requestor name"
-                  label="Requestor Name"
                   type="text"
                   value={requestorName}
                   onChange={(e) => setRequestorName(e.target.value)}
-                  required={true}
+                  className="w-full"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <InputBox
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    Requestor Contact <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
                     placeholder="Enter contact number"
-                    label="Requestor Contact"
                     type="text"
                     value={requestorContact}
                     onChange={(e) => setRequestorContact(e.target.value)}
-                    required={true}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Mode of Transport
-                  </label>
+                  </Label>
                   <Select value={transport} onValueChange={setTransport}>
                     <SelectTrigger className="w-full text-base-optimized">
                       <SelectValue />
@@ -312,64 +320,74 @@ export default function CasesAddPage() {
                   </Select>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Patient Information */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <User className="w-5 h-5" />
                 Patient Information
-              </h4>
-            </div>
-            <div className="p-6 space-y-4">
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <InputBox
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    Patient Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
                     placeholder="Enter patient name"
-                    label="Patient Name"
                     type="text"
                     value={patientName}
                     onChange={(e) => setPatientName(e.target.value)}
-                    required={true}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <InputBox
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    NRIC <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
                     placeholder="S****567Z"
-                    label="NRIC"
                     type="text"
                     value={patientNric}
                     onChange={(e) => setPatientNric(e.target.value)}
-                    required={true}
+                    className="w-full"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <InputBox
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    Age
+                  </Label>
+                  <Input
                     placeholder="65"
-                    label="Age"
                     type="number"
                     value={patientAge}
                     onChange={(e) => setPatientAge(e.target.value)}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <InputBox
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    Weight (KG)
+                  </Label>
+                  <Input
                     placeholder="70"
-                    label="Weight (KG)"
                     type="number"
                     value={patientWeight}
                     onChange={(e) => setPatientWeight(e.target.value)}
+                    className="w-full"
                   />
                 </div>
                 <div>
-                  <label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Gender
-                  </label>
+                  </Label>
                   <Select value={gender} onValueChange={setGender}>
                     <SelectTrigger className="w-full text-base-optimized">
                       <SelectValue />
@@ -386,20 +404,22 @@ export default function CasesAddPage() {
               </div>
 
               <div>
-                <InputBox
+                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  Patient Contact <span className="text-red-500">*</span>
+                </Label>
+                <Input
                   placeholder="+65 XXXX XXXX"
-                  label="Patient Contact"
                   type="text"
                   value={patientContact}
                   onChange={(e) => setPatientContact(e.target.value)}
-                  required
+                  className="w-full"
                 />
               </div>
 
               <div>
-                <label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label className="text-base font-medium text-base-optimized mb-2 block">
                   Patient's Condition | Chief Complaint
-                </label>
+                </Label>
                 <Textarea
                   placeholder="Describe patient's condition or chief complaint..."
                   value={patientCondition}
@@ -415,31 +435,35 @@ export default function CasesAddPage() {
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <InputBox
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      NOK Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
                       placeholder="Enter NOK name"
-                      label="NOK Name"
                       type="text"
                       value={nokName}
                       onChange={(e) => setNokName(e.target.value)}
-                      required
+                      className="w-full"
                     />
                   </div>
                   <div>
-                    <InputBox
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      NOK Contact <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
                       placeholder="+65 9123 4567"
-                      label="NOK Contact"
                       type="text"
                       value={nokContact}
                       onChange={(e) => setNokContact(e.target.value)}
-                      required
+                      className="w-full"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
                       Relationship
-                    </label>
+                    </Label>
                     <Select value={nokRelationship} onValueChange={setNokRelationship}>
                       <SelectTrigger className="w-full text-base-optimized">
                         <SelectValue />
@@ -456,32 +480,34 @@ export default function CasesAddPage() {
                     </Select>
                   </div>
                   <div>
-                    <InputBox
-                      label="Accompanying NOK"
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      Accompanying NOK <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
                       type="number"
                       value={nokAccompanying}
                       onChange={(e) => setNokAccompanying(e.target.value)}
-                      required
+                      className="w-full"
                     />
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Trip Details */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <Navigation className="w-5 h-5" />
                 Trip Details
-              </h4>
-            </div>
-            <div className="p-6 space-y-6">
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div>
-                <label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label className="text-base font-medium text-base-optimized mb-2 block">
                   Trip Type <span className="text-red-500">*</span>
-                </label>
+                </Label>
                 <div role="radiogroup" className="flex gap-4">
                   {(["one-way", "two-way", "three-way"] as const).map((type) => (
                     <div
@@ -499,9 +525,9 @@ export default function CasesAddPage() {
                           <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
                         )}
                       </button>
-                      <label className="font-medium text-base">
+                      <Label className="font-medium text-base">
                         {type.charAt(0).toUpperCase() + type.slice(1).replace("-", " ")}
-                      </label>
+                      </Label>
                     </div>
                   ))}
                 </div>
@@ -522,59 +548,86 @@ export default function CasesAddPage() {
                     {/* Pickup */}
                     <div className="space-y-4">
                       <div>
-                        <InputBox
+                        <Label className="text-base font-medium text-base-optimized mb-2 block">
+                          Pickup Location <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
                           placeholder="Search pickup location..."
-                          label="Pickup Location"
                           type="text"
                           value={trip.pickupLocation}
                           onChange={(e) => updateTrip(trip.id, "pickupLocation", e.target.value)}
-                          required={true}
+                          className="w-full"
                         />
                       </div>
                       <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <label className="text-base font-medium">Address Details</label>
+                          <Label className="text-base font-medium">Address Details</Label>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <InputBox
-                            placeholder="e.g., 123"
-                            label="Block Number"
-                            type="text"
-                            value={trip.pickupBlock}
-                            onChange={(e) => updateTrip(trip.id, "pickupBlock", e.target.value)}
-                          />
-                          <InputBox
-                            placeholder="e.g., #12-34"
-                            label="Unit Number"
-                            type="text"
-                            value={trip.pickupUnit}
-                            onChange={(e) => updateTrip(trip.id, "pickupUnit", e.target.value)}
-                          />
+                          <div>
+                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              Block Number
+                            </Label>
+                            <Input
+                              placeholder="e.g., 123"
+                              type="text"
+                              value={trip.pickupBlock}
+                              onChange={(e) => updateTrip(trip.id, "pickupBlock", e.target.value)}
+                              className="w-full"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              Unit Number
+                            </Label>
+                            <Input
+                              placeholder="e.g., #12-34"
+                              type="text"
+                              value={trip.pickupUnit}
+                              onChange={(e) => updateTrip(trip.id, "pickupUnit", e.target.value)}
+                              className="w-full"
+                            />
+                          </div>
                         </div>
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <InputBox
-                              placeholder="e.g., Ward A"
-                              label="Ward Details"
-                              type="text"
-                              value={trip.pickupWard}
-                              onChange={(e) => updateTrip(trip.id, "pickupWard", e.target.value)}
-                            />
-                            <InputBox
-                              placeholder="e.g., 101"
-                              label="Room Number"
-                              type="text"
-                              value={trip.pickupRoom}
-                              onChange={(e) => updateTrip(trip.id, "pickupRoom", e.target.value)}
-                            />
-                            <InputBox
-                              placeholder="e.g., A1"
-                              label="Bed Number"
-                              type="text"
-                              value={trip.pickupBed}
-                              onChange={(e) => updateTrip(trip.id, "pickupBed", e.target.value)}
-                            />
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Ward Details
+                              </Label>
+                              <Input
+                                placeholder="e.g., Ward A"
+                                type="text"
+                                value={trip.pickupWard}
+                                onChange={(e) => updateTrip(trip.id, "pickupWard", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Room Number
+                              </Label>
+                              <Input
+                                placeholder="e.g., 101"
+                                type="text"
+                                value={trip.pickupRoom}
+                                onChange={(e) => updateTrip(trip.id, "pickupRoom", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Bed Number
+                              </Label>
+                              <Input
+                                placeholder="e.g., A1"
+                                type="text"
+                                value={trip.pickupBed}
+                                onChange={(e) => updateTrip(trip.id, "pickupBed", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -583,59 +636,86 @@ export default function CasesAddPage() {
                     {/* Dropoff */}
                     <div className="space-y-4">
                       <div>
-                        <InputBox
+                        <Label className="text-base font-medium text-base-optimized mb-2 block">
+                          Dropoff Location <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
                           placeholder="Search dropoff location..."
-                          label="Dropoff Location"
                           type="text"
                           value={trip.dropoffLocation}
                           onChange={(e) => updateTrip(trip.id, "dropoffLocation", e.target.value)}
-                          required={true}
+                          className="w-full"
                         />
                       </div>
                       <div className="flex flex-col gap-6 rounded-xl border p-4 bg-gray-50/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <label className="text-base font-medium">Address Details</label>
+                          <Label className="text-base font-medium">Address Details</Label>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <InputBox
-                            placeholder="e.g., 123"
-                            label="Block Number"
-                            type="text"
-                            value={trip.dropoffBlock}
-                            onChange={(e) => updateTrip(trip.id, "dropoffBlock", e.target.value)}
-                          />
-                          <InputBox
-                            placeholder="e.g., #12-34"
-                            label="Unit Number"
-                            type="text"
-                            value={trip.dropoffUnit}
-                            onChange={(e) => updateTrip(trip.id, "dropoffUnit", e.target.value)}
-                          />
+                          <div>
+                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              Block Number
+                            </Label>
+                            <Input
+                              placeholder="e.g., 123"
+                              type="text"
+                              value={trip.dropoffBlock}
+                              onChange={(e) => updateTrip(trip.id, "dropoffBlock", e.target.value)}
+                              className="w-full"
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              Unit Number
+                            </Label>
+                            <Input
+                              placeholder="e.g., #12-34"
+                              type="text"
+                              value={trip.dropoffUnit}
+                              onChange={(e) => updateTrip(trip.id, "dropoffUnit", e.target.value)}
+                              className="w-full"
+                            />
+                          </div>
                         </div>
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <InputBox
-                              placeholder="e.g., Ward A"
-                              label="Ward Details"
-                              type="text"
-                              value={trip.dropoffWard}
-                              onChange={(e) => updateTrip(trip.id, "dropoffWard", e.target.value)}
-                            />
-                            <InputBox
-                              placeholder="e.g., 101"
-                              label="Room Number"
-                              type="text"
-                              value={trip.dropoffRoom}
-                              onChange={(e) => updateTrip(trip.id, "dropoffRoom", e.target.value)}
-                            />
-                            <InputBox
-                              placeholder="e.g., A1"
-                              label="Bed Number"
-                              type="text"
-                              value={trip.dropoffBed}
-                              onChange={(e) => updateTrip(trip.id, "dropoffBed", e.target.value)}
-                            />
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Ward Details
+                              </Label>
+                              <Input
+                                placeholder="e.g., Ward A"
+                                type="text"
+                                value={trip.dropoffWard}
+                                onChange={(e) => updateTrip(trip.id, "dropoffWard", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Room Number
+                              </Label>
+                              <Input
+                                placeholder="e.g., 101"
+                                type="text"
+                                value={trip.dropoffRoom}
+                                onChange={(e) => updateTrip(trip.id, "dropoffRoom", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                                Bed Number
+                              </Label>
+                              <Input
+                                placeholder="e.g., A1"
+                                type="text"
+                                value={trip.dropoffBed}
+                                onChange={(e) => updateTrip(trip.id, "dropoffBed", e.target.value)}
+                                className="w-full"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -644,11 +724,14 @@ export default function CasesAddPage() {
 
                   <div className="mt-4">
                     <div className="max-w-md">
-                      <InputBox
-                        label="Pick up - Scheduled Time"
+                      <Label className="text-base font-medium text-base-optimized mb-2 block">
+                        Pick up - Scheduled Time
+                      </Label>
+                      <Input
                         type="time"
                         value={trip.scheduledTime}
                         onChange={(e) => updateTrip(trip.id, "scheduledTime", e.target.value)}
+                        className="w-full"
                       />
                     </div>
                   </div>
@@ -668,9 +751,9 @@ export default function CasesAddPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
                       Vehicle Type
-                    </label>
+                    </Label>
                     <Select value={vehicleType} onValueChange={setVehicleType}>
                       <SelectTrigger className="w-full text-base-optimized">
                         <SelectValue />
@@ -687,9 +770,9 @@ export default function CasesAddPage() {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
                       Vehicle Number
-                    </label>
+                    </Label>
                     <Select value={vehicleNumber} onValueChange={setVehicleNumber}>
                       <SelectTrigger className="w-full text-base-optimized">
                         <SelectValue />
@@ -706,41 +789,56 @@ export default function CasesAddPage() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <InputBox
-                    placeholder="Medical Transport Officer"
-                    label="MTO"
-                    type="text"
-                    value={mto}
-                    onChange={(e) => setMto(e.target.value)}
-                  />
-                  <InputBox
-                    placeholder="Emergency Medical Technician"
-                    label="EMT / EN / PRM"
-                    type="text"
-                    value={emt}
-                    onChange={(e) => setEmt(e.target.value)}
-                  />
-                  <InputBox
-                    placeholder="Escort name"
-                    label="Escort (Person)"
-                    type="text"
-                    value={escort}
-                    onChange={(e) => setEscort(e.target.value)}
-                  />
+                  <div>
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      MTO
+                    </Label>
+                    <Input
+                      placeholder="Medical Transport Officer"
+                      type="text"
+                      value={mto}
+                      onChange={(e) => setMto(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      EMT / EN / PRM
+                    </Label>
+                    <Input
+                      placeholder="Emergency Medical Technician"
+                      type="text"
+                      value={emt}
+                      onChange={(e) => setEmt(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      Escort (Person)
+                    </Label>
+                    <Input
+                      placeholder="Escort name"
+                      type="text"
+                      value={escort}
+                      onChange={(e) => setEscort(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Services */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <Plus className="w-5 h-5" />
                 Services
-              </h4>
-            </div>
-            <div className="p-6 space-y-6">
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                   <ServiceSearch
@@ -750,20 +848,22 @@ export default function CasesAddPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Quick Add Services
-                  </label>
+                  </Label>
                   <div className="flex flex-wrap gap-2">
                     {["Oxygen Support", "Wheelchair Service", "Stretcher Service", "Medical Escort"].map(
                       (service) => (
-                        <button
+                        <Button
                           key={service}
                           onClick={() => setServiceSearch(service)}
-                          className="inline-flex items-center justify-center gap-1.5 rounded-md text-sm font-medium transition-all border bg-white hover:bg-[#2160AD]/10 h-8 px-3 border-[#2160AD]/30"
+                          variant="outline"
+                          size="sm"
+                          className="border-[#2160AD]/30 hover:bg-[#2160AD]/10"
                         >
                           <Plus className="w-3 h-3 mr-1" />
                           {service}
-                        </button>
+                        </Button>
                       )
                     )}
                   </div>
@@ -772,9 +872,9 @@ export default function CasesAddPage() {
 
               {selectedServices.length > 0 && (
                 <div>
-                  <label className="text-base-optimized font-medium mb-3 block">
+                  <Label className="text-base-optimized font-medium mb-3 block">
                     Added Services
-                  </label>
+                  </Label>
                   <div className="border rounded-lg overflow-hidden">
                     <div className="bg-gray-50 px-4 py-2 border-b">
                       <div className="grid grid-cols-6 gap-4 text-sm font-medium text-gray-700">
@@ -795,7 +895,7 @@ export default function CasesAddPage() {
                                 {svc.name}
                               </div>
                               <div>
-                                <input
+                                <Input
                                   type="number"
                                   min="0"
                                   value={svc.quantity}
@@ -807,22 +907,23 @@ export default function CasesAddPage() {
                                       )
                                     );
                                   }}
-                                  className="border rounded-md px-2 py-1 w-16 text-sm"
+                                  className="w-16 h-8 text-sm"
                                 />
                               </div>
                               <div className="text-gray-600">{svc.unit}</div>
                               <div className="font-medium">{formatPrice(total)}</div>
                               <div>
-                                <button
+                                <Button
                                   onClick={() =>
                                     setSelectedServices((prev) =>
                                       prev.filter((s) => s.id !== svc.id)
                                     )
                                   }
+                                  variant="ghost"
                                   className="text-red-500 hover:text-red-700"
                                 >
                                   Remove
-                                </button>
+                                </Button>
                               </div>
                             </div>
                           </div>
@@ -832,18 +933,18 @@ export default function CasesAddPage() {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Billing Summary */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <Car className="w-5 h-5" />
                 Billing Summary
-              </h4>
-            </div>
-            <div className="p-6">
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="bg-gray-50 p-6 rounded-lg border">
                 <div className="font-semibold mb-4 text-[#2160AD] text-lg">
                   Billing Summary
@@ -884,35 +985,37 @@ export default function CasesAddPage() {
                   <span>{formatPrice(servicesTotal)}</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Additional Remarks */}
-          <div className="bg-white text-gray-900 flex flex-col gap-6 rounded-xl border border-[#2160AD]/20 w-full">
-            <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 header-bg-soft">
-              <h4 className="leading-none text-base flex items-center gap-2">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 Additional Remarks
-              </h4>
-            </div>
-            <div className="p-6">
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
               <Textarea
                 placeholder="Add any additional remarks or special instructions..."
                 value={patientCondition}
                 onChange={(e) => setPatientCondition(e.target.value)}
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t">
-            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all border bg-white hover:bg-gray-50 h-9 py-2 px-6 lg:px-8 hover-lift">
-              Cancel
-            </button>
-            <button className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-all bg-[#2160AD] hover:bg-[#1d5497] h-9 py-2 px-6 lg:px-8 hover-lift text-white">
-              Create Case
-            </button>
-          </div>
+          <Card className="w-full">
+            <CardFooter className="justify-end gap-3">
+              <Button variant="outline" className="px-6 lg:px-8">
+                Cancel
+              </Button>
+              <Button className="px-6 lg:px-8 bg-[#2160AD] hover:bg-[#1d5497]">
+                Create Case
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </>

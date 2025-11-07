@@ -20,7 +20,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import FunctionalHeader from "@/layout/FunctionalHeader";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
 // === MAIN PAGE ===
@@ -135,35 +145,35 @@ export default function CasesPage() {
         <div className="space-y-6 p-4 lg:p-6 w-full">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-xl border border-[#2160AD]/20 p-4 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
+            <Card>
+              <CardContent className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Today's Cases</p>
                   <p className="text-2xl font-semibold text-[#2160AD]">1</p>
                 </div>
                 <Clock className="w-8 h-8 text-[#2160AD]/60" />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white rounded-xl border border-[#2160AD]/20 p-4 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
+            <Card>
+              <CardContent className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Completed</p>
                   <p className="text-2xl font-semibold text-green-600">0</p>
                 </div>
                 <Briefcase className="w-8 h-8 text-green-600/60" />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white rounded-xl border border-[#2160AD]/20 p-4 flex flex-col gap-6">
-              <div className="flex items-center justify-between">
+            <Card>
+              <CardContent className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Dispatched</p>
                   <p className="text-2xl font-semibold text-orange-600">0</p>
                 </div>
                 <MapPin className="w-8 h-8 text-orange-600/60" />
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Search + Filters + New Case */}
@@ -212,41 +222,40 @@ export default function CasesPage() {
           </div>
 
           {/* Table Card */}
-          <div className="bg-white rounded-xl border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-base">
-                <thead className="border-b bg-gray-50 sticky top-0 z-10">
-                  <tr>
-                    <th className="text-left p-4 font-medium">Case ID</th>
-                    <th className="text-left p-4 font-medium">
-                      Patient Details
-                    </th>
-                    <th className="text-left p-4 font-medium">Vehicle</th>
-                    <th className="text-left p-4 font-medium">
-                      Booking Date | Time
-                    </th>
-                    <th className="text-left p-4 font-medium">
-                      Pickup Location
-                    </th>
-                    <th className="text-left p-4 font-medium">Status</th>
-                    <th className="text-left p-4 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredCases.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="border-b hover:bg-gray-50 transition-colors"
-                    >
-                      {/* Case ID */}
-                      <td className="p-4">
+          <Card className="rounded-xl border shadow-sm p-6">
+            <Table>
+              <TableHeader className="bg-gray-50">
+                <TableRow>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Case ID</TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    Patient Details
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Vehicle</TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    Booking Date | Time
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">
+                    Pickup Location
+                  </TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Status</TableHead>
+                  <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredCases.map((item) => (
+                  <TableRow
+                    key={item.id}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    {/* Case ID */}
+                    <TableCell className="py-4">
                         <div className="font-mono font-medium text-[#2160AD]">
                           {item.caseId}
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Patient Details */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
                             {item.patientInitials}
@@ -264,34 +273,34 @@ export default function CasesPage() {
                             </div>
                           </div>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Vehicle */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div className="font-medium">{item.vehicle}</div>
-                      </td>
+                      </TableCell>
 
                       {/* Date & Time */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div className="font-medium">{item.date}</div>
                         <div className="flex items-center gap-1 text-sm text-gray-600">
                           <Clock className="w-3 h-3" />
                           {item.time}
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Pickup Location */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div className="flex items-start gap-2">
                           <MapPin className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
                           <span className="leading-relaxed">
                             {item.location}
                           </span>
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Status Badge */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div
                           className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-sm font-medium ${
                             item.status === "Pending for Dispatch"
@@ -303,51 +312,56 @@ export default function CasesPage() {
                         >
                           {item.status}
                         </div>
-                      </td>
+                      </TableCell>
 
                       {/* Actions */}
-                      <td className="p-4">
+                      <TableCell className="py-4">
                         <div className="flex gap-2">
-                          <button
-                            className="p-2 rounded-md hover:bg-gray-100 hover-lift transition-colors"
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover-lift"
                             title="View Case"
                           >
                             <Eye className="h-4 w-4 text-blue-600" />
-                          </button>
-                          <button
-                            className="p-2 rounded-md hover:bg-gray-100 hover-lift transition-colors"
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover-lift"
                             title="Edit Case"
                           >
                             <SquarePen className="h-4 w-4 text-gray-500" />
-                          </button>
-                          <button
-                            className="p-2 rounded-md hover:bg-gray-100 hover-lift transition-colors text-red-600 hover:text-red-800"
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="hover-lift text-red-600 hover:text-red-800"
                             title="Delete Case"
                           >
                             <Trash2 className="h-4 w-4" />
-                          </button>
+                          </Button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </TableBody>
+              </Table>
 
-            {filteredCases.length <= 0 && (
-              <div className="text-center py-12">
-                <div className="text-gray-500">
-                  <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                  <p className="text-base font-medium text-gray-700">
-                    No cases found
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Try adjusting your search or filter criteria
-                  </p>
+              {filteredCases.length <= 0 && (
+                <div className="text-center py-12">
+                  <div className="text-gray-500">
+                    <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                    <p className="text-base font-medium text-gray-700">
+                      No cases found
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Try adjusting your search or filter criteria
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+          </Card>
 
           {/* Footer */}
           <div className="flex justify-between items-center text-sm text-gray-600">

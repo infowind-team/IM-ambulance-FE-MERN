@@ -9,7 +9,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
 import { TriangleAlert, Save, X } from "lucide-react";
 import { TabsContent } from "@/components/ui/tabs";
 
@@ -191,35 +200,35 @@ export default function OfficeHoursTab() {
       </div>
 
       {/* Scrollable Table */}
-      <div className="w-full overflow-x-auto rounded-lg border border-gray-200">
-        <table className="w-full min-w-[1800px] border-collapse">
-          <thead>
-            <tr>
-              <th
-                className="border-b-2 border-[#2160AD] bg-[#2160AD]/5 p-2 text-left font-medium text-[#2160AD] sticky left-0 z-10"
+      <Card className="rounded-xl border shadow-sm p-6 overflow-x-auto">
+        <Table className="w-full min-w-[1800px] border-collapse">
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead
+                className="text-gray-700 font-semibold px-4 py-3 text-left sticky left-0 z-10"
                 style={{ fontSize: "16px", minWidth: "120px" }}
               >
                 Staff
-              </th>
+              </TableHead>
               {dates.map((d, idx) => (
-                <th
+                <TableHead
                   key={idx}
-                  className="border-b-2 border-[#2160AD] bg-[#2160AD]/5 p-2 text-center font-medium text-[#2160AD]"
+                  className="text-gray-700 font-semibold px-4 py-3 text-center"
                   style={{ fontSize: "12px", minWidth: "60px" }}
                 >
                   <div>{d.day}</div>
                   <div>{d.date}</div>
-                </th>
+                </TableHead>
               ))}
-            </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {staff.map((member) => (
-              <tr
+              <TableRow
                 key={member.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
+                className="hover:bg-gray-50 transition"
               >
-                <td className="p-3 border-r border-gray-200 bg-white sticky left-0 z-10">
+                <TableCell className="py-4 border-r border-gray-200 bg-white sticky left-0 z-10">
                   <div>
                     <div
                       className="font-medium text-[#2160AD]"
@@ -229,11 +238,11 @@ export default function OfficeHoursTab() {
                     </div>
                     <div className="text-gray-500 text-xs">{member.role}</div>
                   </div>
-                </td>
+                </TableCell>
                 {member.shifts.map((shift, idx) => (
-                  <td
+                  <TableCell
                     key={idx}
-                    className="p-1 text-center border-r border-gray-100"
+                    className="py-4 text-center border-r border-gray-100"
                   >
                     {isEditing ? (
                       <Select
@@ -263,13 +272,13 @@ export default function OfficeHoursTab() {
                         {shift.shift}
                       </span>
                     )}
-                  </td>
+                  </TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </Card>
     </div>
   );
 }

@@ -214,30 +214,28 @@ export default function PayrollManagement() {
       </div>
 
       {/* Payroll Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b">
-                  <TableHead className="p-4">Employee</TableHead>
-                  <TableHead className="p-4">Company</TableHead>
-                  <TableHead className="p-4">Base Pay</TableHead>
-                  <TableHead className="p-4">Incentives</TableHead>
-                  <TableHead className="p-4">Allowances</TableHead>
-                  <TableHead className="p-4">Deductions</TableHead>
-                  <TableHead className="p-4">CPF</TableHead>
-                  <TableHead className="p-4">Net Pay</TableHead>
-                  <TableHead className="p-4">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredData.map((entry) => (
-                  <TableRow
-                    key={entry.id}
-                    className="border-b hover:bg-muted/30"
-                  >
-                    <TableCell className="p-4">
+      <Card className="rounded-xl border shadow-sm p-6">
+        <Table>
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Employee</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Company</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Base Pay</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Incentives</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Allowances</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Deductions</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">CPF</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Net Pay</TableHead>
+              <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredData.map((entry) => (
+              <TableRow
+                key={entry.id}
+                className="hover:bg-gray-50 transition"
+              >
+                <TableCell className="py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-[#2160AD] rounded-full flex items-center justify-center text-white text-sm font-medium">
                           {entry.name
@@ -253,26 +251,26 @@ export default function PayrollManagement() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="p-4">{entry.company}</TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4">{entry.company}</TableCell>
+                    <TableCell className="py-4 font-mono">
                       {entry.basePay.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4 font-mono">
                       {entry.incentives.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4 font-mono">
                       {entry.allowances.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4 font-mono">
                       {entry.deductions.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4 font-mono">
                       {entry.cpf.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4 font-mono">
+                    <TableCell className="py-4 font-mono">
                       {entry.netPay.toFixed(2)}
                     </TableCell>
-                    <TableCell className="p-4">
+                    <TableCell className="py-4">
                       <div className="flex gap-2">
                         <Button size="icon" variant="ghost" className="h-8 w-8">
                           <Eye className="h-4 w-4" />
@@ -286,9 +284,7 @@ export default function PayrollManagement() {
                 ))}
               </TableBody>
             </Table>
-          </div>
-        </CardContent>
-      </Card>
+          </Card>
 
       {/* Pagination */}
       <div className="flex justify-between items-center text-sm text-muted-foreground">

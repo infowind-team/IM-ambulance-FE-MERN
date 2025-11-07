@@ -5,6 +5,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Building, Briefcase, UserCheck, Calculator, Pencil, Check, X, Plus, Upload, Image } from 'lucide-react';
 
 interface Row {
@@ -233,38 +241,37 @@ export default function HRConfigurationTab() {
 
             {/* Table */}
             <div className="px-6 pb-6">
-              <div className="relative w-full overflow-x-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead>
-                    <tr className="border-b transition-colors hover:bg-muted/50">
-                      {table.columns.map((col) => (
-                        <th
-                          key={col.key}
-                          className="h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-base"
-                        >
-                          {col.header}
-                        </th>
-                      ))}
-                      <th className="h-10 px-2 text-left align-middle font-medium whitespace-nowrap w-20 text-base">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {table.data.map((row) => {
-                      const isEditing = isEditingThisTable && editing.rowId === row.id;
-                      const isNew = row.id.startsWith('new-');
+              <Table>
+                <TableHeader className="bg-gray-50">
+                  <TableRow>
+                    {table.columns.map((col) => (
+                      <TableHead
+                        key={col.key}
+                        className="text-gray-700 font-semibold px-4 py-3"
+                      >
+                        {col.header}
+                      </TableHead>
+                    ))}
+                    <TableHead className="text-gray-700 font-semibold px-4 py-3 w-20">
+                      Actions
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {table.data.map((row) => {
+                    const isEditing = isEditingThisTable && editing.rowId === row.id;
+                    const isNew = row.id.startsWith('new-');
 
-                      return (
-                        <tr
-                          key={row.id}
-                          className="border-b transition-colors hover:bg-muted/50"
-                        >
-                          {table.columns.map((col) => (
-                            <td
-                              key={col.key}
-                              className="p-2 align-middle whitespace-nowrap"
-                            >
+                    return (
+                      <TableRow
+                        key={row.id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        {table.columns.map((col) => (
+                          <TableCell
+                            key={col.key}
+                            className="py-4 align-middle whitespace-nowrap"
+                          >
                               {col.type === 'image' && !isEditing ? (
                                 <div className="flex items-center gap-2">
                                   <div className="w-12 h-12 flex items-center justify-center border rounded bg-gray-50">
@@ -310,9 +317,9 @@ export default function HRConfigurationTab() {
                                   {row[col.key] === '' || row[col.key] == null ? '-' : row[col.key]}
                                 </span>
                               )}
-                            </td>
+                            </TableCell>
                           ))}
-                          <td className="p-2 align-middle whitespace-nowrap">
+                          <TableCell className="py-4 align-middle whitespace-nowrap">
                             {isEditing ? (
                               <div className="flex items-center gap-2">
                                 <Button size="icon" variant="ghost" onClick={handleSave}>
@@ -331,13 +338,12 @@ export default function HRConfigurationTab() {
                                 <Pencil className="h-4 w-4" />
                               </Button>
                             )}
-                          </td>
-                        </tr>
+                          </TableCell>
+                        </TableRow>
                       );
                     })}
-                  </tbody>
-                </table>
-              </div>
+                  </TableBody>
+                </Table>
             </div>
           </div>
         );

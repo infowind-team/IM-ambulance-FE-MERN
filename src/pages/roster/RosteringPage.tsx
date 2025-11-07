@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar, Download, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import svgPaths from "../imports/svg-zt0450461j";
 import imgFrame1171275132 from "figma:asset/366d22b376904052a04d70c3c539386a40689990.png";
 import CaseDetailsPanel from '../components/CaseDetailsPanel';
@@ -322,15 +324,18 @@ function CaseCard({ caseData, onClick }: { caseData: CaseData; onClick: () => vo
   const config = statusConfig[caseData.status];
 
   return (
-    <div 
+    <Card 
       onClick={onClick}
-      className="bg-white rounded-[16px] border-2 border-[rgba(33,96,173,0.2)] shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] p-[22px] cursor-pointer hover:border-[rgba(33,96,173,0.4)] transition-colors"
+      className="cursor-pointer hover:border-[rgba(33,96,173,0.4)] transition-colors"
     >
-      <div className={`${config.bg} h-[40px] rounded-[10px] px-[12px] flex items-center mb-[16px] inline-block`}>
-        <span className="font-['Lato:SemiBold',sans-serif] text-[16px] text-white tracking-[0.4px]">{config.label}</span>
-      </div>
-
-      <div className="space-y-[12px]">
+      <CardHeader>
+        <div className={`${config.bg} h-[40px] rounded-[10px] px-[12px] flex items-center inline-block`}>
+          <CardTitle className="font-['Lato:SemiBold',sans-serif] text-[16px] text-white tracking-[0.4px] m-0">
+            {config.label}
+          </CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-[12px]">
         <p className="font-['Lato:Bold',sans-serif] text-[16px] text-[#2160ad]">{caseData.id}</p>
         
         <div className="space-y-[10px]">
@@ -363,8 +368,8 @@ function CaseCard({ caseData, onClick }: { caseData: CaseData; onClick: () => vo
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -425,30 +430,32 @@ export default function RosteringPage() {
         <div className="border-b border-gray-200 px-[24px] py-[12px]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-[8px]">
-              <button onClick={handlePreviousDay} className="size-[32px] flex items-center justify-center rounded-[8px] hover:bg-gray-100">
+              <Button onClick={handlePreviousDay} variant="ghost" size="icon" className="size-[32px]">
                 <ChevronLeft className="w-[16px] h-[16px] text-[#2160ad]" />
-              </button>
+              </Button>
               
-              <button 
+              <Button 
                 onClick={() => setShowCalendar(!showCalendar)}
-                className="h-[36px] px-[13px] flex items-center gap-[8px] rounded-[8px] hover:bg-gray-50 relative"
+                variant="outline"
+                className="h-[36px] px-[13px] gap-[8px]"
               >
                 <Calendar className="w-[16px] h-[16px] text-[#2160ad]" />
                 <span className="font-['Lato:Medium',sans-serif] text-[16px] text-[#2160ad]">{formatDate(currentDate)}</span>
-              </button>
+              </Button>
 
-              <button onClick={handleNextDay} className="size-[32px] flex items-center justify-center rounded-[8px] hover:bg-gray-100">
+              <Button onClick={handleNextDay} variant="ghost" size="icon" className="size-[32px]">
                 <ChevronRight className="w-[16px] h-[16px] text-[#2160ad]" />
-              </button>
+              </Button>
             </div>
 
-            <button 
+            <Button 
               onClick={handleExport}
-              className="bg-white h-[32px] px-[16px] rounded-[8px] border border-[rgba(33,96,173,0.2)] flex items-center gap-[8px] hover:bg-gray-50"
+              variant="outline"
+              className="h-[32px] px-[16px] border-[rgba(33,96,173,0.2)]"
             >
               <Download className="w-[16px] h-[16px] text-[#2160ad]" />
               <span className="font-['Lato:Medium',sans-serif] text-[16px] text-[#2160ad]">Export</span>
-            </button>
+            </Button>
           </div>
         </div>
 
