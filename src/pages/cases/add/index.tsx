@@ -192,6 +192,7 @@ export default function CasesAddPage() {
     setServiceSearch("");
   };
 
+
   return (
     <>
       <FunctionalHeader
@@ -562,13 +563,26 @@ export default function CasesAddPage() {
                         <Label className="text-base font-medium text-base-optimized mb-2 block">
                           Pickup Location <span className="text-red-500">*</span>
                         </Label>
-                        <Input
-                          placeholder="Search pickup location..."
-                          type="text"
-                          value={trip.pickupLocation}
-                          onChange={(e) => updateTrip(trip.id, "pickupLocation", e.target.value)}
-                          className="w-full"
-                        />
+                        <div className="relative">
+                          <Input
+                            placeholder="Search pickup location..."
+                            type="text"
+                            value={trip.pickupLocation}
+                            onChange={(e) => updateTrip(trip.id, "pickupLocation", e.target.value)}
+                            className="w-full"
+                          />
+                          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className="h-6 w-6 p-0 hover:bg-gray-100 text-[#2160AD]"
+                              title="Use current location"
+                            >
+                              <MapPin className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                       <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
@@ -650,13 +664,26 @@ export default function CasesAddPage() {
                         <Label className="text-base font-medium text-base-optimized mb-2 block">
                           Dropoff Location <span className="text-red-500">*</span>
                         </Label>
-                        <Input
-                          placeholder="Search dropoff location..."
-                          type="text"
-                          value={trip.dropoffLocation}
-                          onChange={(e) => updateTrip(trip.id, "dropoffLocation", e.target.value)}
-                          className="w-full"
-                        />
+                        <div className="relative">
+                          <Input
+                            id="dropoff"
+                            placeholder="Search dropoff location..."
+                            value={trip.dropoffLocation}
+                            onChange={(e) => updateTrip(trip.id, "dropoffLocation", e.target.value)}
+                            className="pr-20 form-input-height"
+                          />
+                          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className="h-6 w-6 p-0 hover:bg-gray-100 text-[#2160AD]"
+                              title="Use current location"
+                            >
+                              <MapPin className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                       <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
@@ -851,12 +878,13 @@ export default function CasesAddPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
+                <div className="flex gap-2 items-end">
                   <ServiceSearch
                     value={serviceSearch}
                     onChange={setServiceSearch}
                     onSelect={handleServiceSelect}
                   />
+                  <Button size='icon' variant='outline'><Plus className="w-5 h-5" /></Button>
                 </div>
                 <div>
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
@@ -1017,16 +1045,14 @@ export default function CasesAddPage() {
           </Card>
 
           {/* Action Buttons */}
-          <Card className="w-full">
-            <CardFooter className="justify-end gap-3">
-              <Button variant="outline" className="px-6 lg:px-8">
-                Cancel
-              </Button>
-              <Button className="px-6 lg:px-8 bg-[#2160AD] hover:bg-[#1d5497]">
-                Create Case
-              </Button>
-            </CardFooter>
-          </Card>
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t">
+            <Button variant="outline" className="px-6 lg:px-8">
+              Cancel
+            </Button>
+            <Button className="px-6 lg:px-8 bg-[#2160AD] hover:bg-[#1d5497]">
+              Create Case
+            </Button>
+          </div>
         </div>
       </div>
     </>

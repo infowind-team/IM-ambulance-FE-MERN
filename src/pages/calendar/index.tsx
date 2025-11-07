@@ -169,7 +169,7 @@ export default function CalendarPage() {
     setSelectedStatuses(new Set());
     setSelectedTypes(new Set());
   };
-
+  
   return (
     <>
       <FunctionalHeader

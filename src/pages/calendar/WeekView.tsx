@@ -44,11 +44,11 @@ export default function WeekView({ date, events }: WeekViewProps) {
   const weekStart = startOfWeek(date, { weekStartsOn: 0 }); // Sunday
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
-  // 6 AM to 10 PM (17 hours)
+  // 00:00 – 23:00 (24 rows)
   const hours = eachHourOfInterval({
     start: startOfDay(weekDays[0]),
     end: endOfDay(weekDays[0]),
-  }).filter((_, i) => i >= 6 && i <= 22);
+  });
 
   const getEventsForSlot = (day: Date, hour: number): Event[] => {
     const dateStr = format(day, 'yyyy-MM-dd');
@@ -86,12 +86,12 @@ export default function WeekView({ date, events }: WeekViewProps) {
       {/* Timeline */}
       <div className="relative">
         {hours.map((hourDate, hourIdx) => {
-          const hour = hourDate.getHours();
+          const hour = hourDate.getHours() + 1;
           return (
-            <div key={hour} className="grid grid-cols-8 border-b border-gray-100 min-h-20">
+            <div key={hourIdx} className="grid grid-cols-8 border-b border-gray-100 min-h-20">
               {/* Time Label */}
-              <div className="p-3 text-right text-gray-500 header-bg-soft border-r border-[#2160AD]/20 text-sm font-medium">
-                {hour.toString().padStart(2, '0')}:00
+              <div className="p-3 text-right text-gray-500 bg-gray-50 border-r border-[#2160AD]/20 text-sm font-medium">
+                {hour == 24 ? '00' : hour.toString().padStart(2, '0')}:00
               </div>
 
               {/* Day Columns */}
@@ -100,7 +100,7 @@ export default function WeekView({ date, events }: WeekViewProps) {
                 return (
                   <div
                     key={dayIdx}
-                    className="border-l border-gray-100 p-1 relative hover:header-bg-soft transition-colors cursor-pointer"
+                    className="border-l border-gray-100 p-1 relative hover:bg-gray-50 transition-colors cursor-pointer"
                   >
                     <div className="space-y-1">
                       {dayEvents.map((event) => (

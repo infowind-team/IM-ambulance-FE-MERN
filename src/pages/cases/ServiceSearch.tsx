@@ -22,6 +22,7 @@ const ALL_SERVICES: Service[] = [
   { value: "A&E Transfer", label: "A&E Transfer", price: "$80" },
   { value: "Dialysis Transport", label: "Dialysis Transport", price: "$45" },
   { value: "IV Therapy Support", label: "IV Therapy Support", price: "$65" },
+  { value: "Emergency Equipment", label: "Emergency Equipment", price: "$65" },
 ];
 
 interface ServiceSearchProps {
