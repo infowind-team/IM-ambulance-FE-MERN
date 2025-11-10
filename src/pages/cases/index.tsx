@@ -1,6 +1,6 @@
 // app/cases/page.tsx
 "use client";
-
+import { useEffect } from "react";
 import React, { useState, useMemo } from "react";
 import {
   Clock,
@@ -49,82 +49,136 @@ interface Case {
   status: string;
 }
 
-const CASES_DATA: Case[] = [
-  {
-    id: "1",
-    caseId: "C20251105001",
-    patientName: "Sample Patient",
-    patientInitials: "SP",
-    phone: "+65 9000 0000",
-    type: "One-way",
-    vehicle: "Unassigned",
-    date: "05/11/2025",
-    time: "09:00",
-    location: "Sample Location",
-    status: "Pending for Dispatch",
-  },
-  {
-    id: "2",
-    caseId: "#2026031009",
-    patientName: "Emily Lim",
-    patientInitials: "EL",
-    phone: "+65 9456 7890",
-    type: "One-way",
-    vehicle: "AMB003",
-    date: "02/06/2025",
-    time: "09:00",
-    location: "Blk 789 Bedok North Ave 2",
-    status: "Pending for Dispatch",
-  },
-  {
-    id: "3",
-    caseId: "#2026031006",
-    patientName: "Francis Wilson",
-    patientInitials: "FW",
-    phone: "+65 9123 4567",
-    type: "One-way",
-    vehicle: "AMB001",
-    date: "01/06/2025",
-    time: "08:30",
-    location: "175 Made Street, Central",
-    status: "Dispatched",
-  },
-  {
-    id: "4",
-    caseId: "#2026031007",
-    patientName: "Sarah Tan",
-    patientInitials: "ST",
-    phone: "+65 9234 5678",
-    type: "Round-trip",
-    vehicle: "AMB002",
-    date: "01/06/2025",
-    time: "10:15",
-    location: "Blk 456 Ang Mo Kio Ave 3",
-    status: "Pending for Dispatch",
-  },
-  {
-    id: "5",
-    caseId: "#2026031008",
-    patientName: "Robert Chen",
-    patientInitials: "RC",
-    phone: "+65 9345 6789",
-    type: "One-way",
-    vehicle: "ICU001",
-    date: "01/06/2025",
-    time: "13:00",
-    location: "Mount Elizabeth Hospital",
-    status: "Dispatched",
-  },
-];
+interface BackendCase { _id: string; 
+  intakeMode: string; 
+  bookingDate: string; 
+  requestorName: string; 
+  requestorContact: string; 
+  transportMode: string; 
+  patientName: string; 
+  nric: string; 
+  age: number;
+   weight: number; 
+   gender: string; 
+   patientContact: 
+   string; 
+   patientCondition: string; 
+   status: string; 
+   nokName: string; 
+   nokContact: string; 
+   nokRelation: string; 
+   nokAccompany: number; 
+   vehicleType: string; 
+   vehicleNumber: string; 
+   mtoName: string; 
+   staffName: string; 
+   escortName: string; 
+   servicesRequired: string[]; 
+   createdAt: string; 
+   tripDetails: any[]; }
 
 export default function CasesPage() {
   const router = useRouter();
 
-  const [cases, setCases] = useState<Case[]>(CASES_DATA);
+  const [cases, setCases] = useState<Case[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
+  const [stats, setStats] = useState({ totalCases: 0, completedCases: 0, dispatchedCases: 0 });
 
-  const filteredCases = useMemo(() => {
+  const fetchCases = async () => {
+    try {
+      setLoading(true);
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      const res = await fetch(`/api/cases/get-cases?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(searchQuery)}&selectedStatus=${encodeURIComponent(selectedStatus)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      });
+  
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch cases");
+      }
+
+      const data = await res.json();
+      console.log("API response:", data);
+
+      const caseList = Array.isArray(data?.data?.list) ? data.data.list : [];
+      const formattedCases = caseList.map((item: BackendCase) => ({
+        id: item._id,
+        caseId: item._id,
+        patientName: item.patientName,
+        patientInitials: item.patientName
+          ? item.patientName
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+          : "",
+        phone: item.patientContact,
+        vehicle: `${item.vehicleType} (${item.vehicleNumber})`,
+        date: new Date(item.bookingDate).toLocaleDateString(),
+        time: new Date(item.bookingDate).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        location: item.transportMode,
+        status: item.status,
+        type: item.transportMode || "N/A",
+      }));
+
+      setCases(formattedCases);
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCases();
+  }, [page, pageSize, searchQuery, selectedStatus]);
+
+  const fetchCurrentDayStats = async () => {
+    try {
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+      const res = await fetch("/api/cases/current-day-stats", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch current day stats");
+
+      const data = await res.json();
+      console.log(data)
+      setStats({
+        totalCases: data?.data?.totalCases || 0,
+        completedCases: data?.data?.completedCases || 0,
+        dispatchedCases: data?.data?.dispatchedCases || 0,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentDayStats();
+  }, []);
+
+  
+    const filteredCases = useMemo(() => {
     return cases.filter((item) => {
       const matchesSearch =
         searchQuery === "" ||
@@ -165,7 +219,7 @@ export default function CasesPage() {
               <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Today's Cases</p>
-                  <p className="text-2xl font-semibold text-[#2160AD]">1</p>
+                  <p className="text-2xl font-semibold text-[#2160AD]">{stats.totalCases}</p>
                 </div>
                 <Clock className="w-8 h-8 text-[#2160AD]/60" />
               </CardContent>
@@ -175,7 +229,7 @@ export default function CasesPage() {
               <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Completed</p>
-                  <p className="text-2xl font-semibold text-green-600">0</p>
+                  <p className="text-2xl font-semibold text-green-600">{stats.completedCases}</p>
                 </div>
                 <Briefcase className="w-8 h-8 text-green-600/60" />
               </CardContent>
@@ -185,7 +239,7 @@ export default function CasesPage() {
               <CardContent className="flex items-center justify-between p-4 pb-6">
                 <div>
                   <p className="text-sm text-gray-600">Dispatched</p>
-                  <p className="text-2xl font-semibold text-orange-600">0</p>
+                  <p className="text-2xl font-semibold text-orange-600">{stats.dispatchedCases}</p>
                 </div>
                 <MapPin className="w-8 h-8 text-orange-600/60" />
               </CardContent>
@@ -214,6 +268,8 @@ export default function CasesPage() {
                     <SelectItem value="All Status">All Status</SelectItem>
                     <SelectItem value="Pending for Dispatch">Pending for Dispatch</SelectItem>
                     <SelectItem value="Dispatched">Dispatched</SelectItem>
+                    <SelectItem value="Completed">Completed</SelectItem>
+
                   </SelectContent>
                 </Select>
               </div>
@@ -319,13 +375,12 @@ export default function CasesPage() {
                     </TableCell>
                     <TableCell className="p-4">
                       <div
-                        className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-base font-medium ${
-                          item.status === "Pending for Dispatch"
+                        className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-base font-medium ${item.status === "Pending for Dispatch"
                             ? "bg-[#EEA61F] text-white"
                             : item.status === "Dispatched"
-                            ? "bg-[#E2CC3B] text-black"
-                            : "bg-gray-200 text-gray-700"
-                        }`}
+                              ? "bg-[#E2CC3B] text-black"
+                              : "bg-gray-200 text-gray-700"
+                          }`}
                       >
                         {item.status}
                       </div>
