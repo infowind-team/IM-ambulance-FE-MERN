@@ -126,8 +126,8 @@ export default function ServiceManagementPage() {
   );
 
   const ContractCard = ({ contract }: { contract: Contract }) => (
-    <Card className="border-[#2160AD]/20 bg-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
-      <CardHeader className="border-b border-[#2160AD]/10 pb-4">
+    <Card className="border-[#2160AD]/20 bg-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer hover-lift overflow-hidden">
+      <CardHeader className="border-b border-[#2160AD]/10 pb-4 header-bg-soft">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h4 className="text-base font-semibold mb-1">
@@ -159,29 +159,29 @@ export default function ServiceManagementPage() {
         </div>
       </CardHeader>
 
-      <CardContent className="pt-4">
+      <CardContent>
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Trip Services:</span>
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-base text-gray-600">Trip Services:</span>
+            <span className="text-base font-medium text-gray-900">
               {contract.tripServices}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Support Services:</span>
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-base text-gray-600">Support Services:</span>
+            <span className="text-base font-medium text-gray-900">
               {contract.supportServices}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Add-on Services:</span>
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-base text-gray-600">Add-on Services:</span>
+            <span className="text-base font-medium text-gray-900">
               {contract.addOnServices}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">Additional Charges:</span>
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-base text-gray-600">Additional Charges:</span>
+            <span className="text-base font-medium text-gray-900">
               {contract.additionalCharges}
             </span>
           </div>
@@ -192,7 +192,10 @@ export default function ServiceManagementPage() {
 
   return (
     <>
-      <FunctionalHeader title="Service Management" />
+      <FunctionalHeader
+        title="Service Management"
+        breadcrumb={[{ label: "Management" }, { label: "Services" }]}
+      />
       <div className="flex-1 overflow-hidden flex flex-col">
         <Tabs
           value={activeTab}

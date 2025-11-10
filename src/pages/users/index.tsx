@@ -129,7 +129,10 @@ export default function UsersPage() {
 
   return (
     <>
-      <FunctionalHeader title="Users" />
+      <FunctionalHeader title="System" breadcrumb={[
+          { label: "System" },
+          { label: "Users" },
+        ]} />
       <div className="flex-1 overflow-auto flex flex-col p-6 space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -243,21 +246,21 @@ export default function UsersPage() {
         </div>
 
         {/* Users Table */}
-        <Card className="rounded-xl border shadow-sm p-6">
+        <Card className="overflow-hidden">
           <Table>
-            <TableHeader className="bg-gray-50">
+            <TableHeader className="header-bg-soft">
               <TableRow>
-                <TableHead className="text-gray-700 font-semibold px-4 py-3">User</TableHead>
-                <TableHead className="text-gray-700 font-semibold px-4 py-3">Staff ID</TableHead>
-                <TableHead className="text-gray-700 font-semibold px-4 py-3">Permission</TableHead>
-                <TableHead className="text-gray-700 font-semibold px-4 py-3 text-center">Actions</TableHead>
+                <TableHead className="font-semibold p-4">User</TableHead>
+                <TableHead className="font-semibold p-4">Staff ID</TableHead>
+                <TableHead className="font-semibold p-4">Permission</TableHead>
+                <TableHead className="font-semibold p-4 text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredUsers.map((user) => (
                 <TableRow
                   key={user.id}
-                  className="hover:bg-gray-50 transition"
+                  className="hover:header-bg-soft transition"
                 >
                   <TableCell className="py-4">
                     <div className="flex items-center gap-3">

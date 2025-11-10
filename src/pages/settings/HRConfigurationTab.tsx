@@ -242,7 +242,7 @@ export default function HRConfigurationTab() {
             {/* Table */}
             <div className="px-6 pb-6">
               <Table>
-                <TableHeader className="bg-gray-50">
+                <TableHeader className="header-bg-soft">
                   <TableRow>
                     {table.columns.map((col) => (
                       <TableHead
@@ -265,7 +265,7 @@ export default function HRConfigurationTab() {
                     return (
                       <TableRow
                         key={row.id}
-                        className="hover:bg-gray-50 transition"
+                        className="hover:header-bg-soft transition"
                       >
                         {table.columns.map((col) => (
                           <TableCell
@@ -274,7 +274,7 @@ export default function HRConfigurationTab() {
                           >
                               {col.type === 'image' && !isEditing ? (
                                 <div className="flex items-center gap-2">
-                                  <div className="w-12 h-12 flex items-center justify-center border rounded bg-gray-50">
+                                  <div className="w-12 h-12 flex items-center justify-center border rounded header-bg-soft">
                                     <Image className="w-6 h-6 text-gray-400" />
                                   </div>
                                   {isNew && (

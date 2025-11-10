@@ -27,8 +27,8 @@ export default function EmployeeForm() {
   return (
     <div className="space-y-6">
       {/* Company Information */}
-      <Card>
-        <CardHeader>
+      <Card className='overflow-hidden'>
+        <CardHeader className='header-bg-soft pb-6'>
           <CardTitle>Company Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -114,8 +114,8 @@ export default function EmployeeForm() {
       </Card>
 
       {/* Employment Details */}
-      <Card>
-        <CardHeader>
+      <Card className='overflow-hidden'>
+        <CardHeader className='header-bg-soft pb-6'>
           <CardTitle>Employment Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -194,8 +194,8 @@ export default function EmployeeForm() {
       </Card>
 
       {/* OED Classifications */}
-      <Card>
-        <CardHeader>
+      <Card className='overflow-hidden'>
+        <CardHeader className='header-bg-soft pb-6'>
           <CardTitle>OED Classifications</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -116,69 +116,65 @@ export default function EntitlementTab() {
       </div>
 
       {/* Table */}
-      <Card className="border-[#2160AD]/20">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b">
-                  <TableHead className="p-4 text-left font-medium">
-                    Employee Name / ID
-                  </TableHead>
-                  <TableHead className="p-4 text-left font-medium">
-                    Leave Schemes
-                  </TableHead>
-                  <TableHead className="p-4 text-left font-medium">
-                    Actions
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredData.map((emp) => (
-                  <TableRow key={emp.id} className="border-b hover:bg-muted/30">
-                    <TableCell className="p-4">
-                      <div>
-                        <p className="font-medium text-gray-900">{emp.name}</p>
-                        <p className="text-sm text-gray-600">{emp.employeeId}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell className="p-4">
-                      <div className="flex flex-wrap gap-1">
-                        {emp.schemes.map((scheme) => (
-                          <Badge
-                            key={scheme}
-                            className="text-xs bg-[#2160AD]/10 text-[#2160AD] border-[#2160AD]/30 hover:bg-[#2160AD]/20"
-                          >
-                            {scheme}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="p-4">
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-8 px-3 text-[#2160AD] border-[#2160AD] hover:bg-[#2160AD]/10"
-                        >
-                          <Info className="w-3 h-3 mr-1" />
-                          Info
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="h-8 px-3 bg-[#2160AD] text-white hover:bg-[#1a4d8a]"
-                        >
-                          <PenLine className="w-3 h-3 mr-1" />
-                          Adjust
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader className="header-bg-soft">
+            <TableRow className="border-b">
+              <TableHead className="p-4 font-semibold">
+                Employee Name / ID
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Leave Schemes
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Actions
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredData.map((emp) => (
+              <TableRow key={emp.id} className="border-b hover:bg-muted/30">
+                <TableCell className="p-4">
+                  <div>
+                    <p className="font-medium text-gray-900">{emp.name}</p>
+                    <p className="text-sm text-gray-600">{emp.employeeId}</p>
+                  </div>
+                </TableCell>
+                <TableCell className="p-4">
+                  <div className="flex flex-wrap gap-1">
+                    {emp.schemes.map((scheme) => (
+                      <Badge
+                        key={scheme}
+                        className="text-xs bg-[#2160AD]/10 text-[#2160AD] border-[#2160AD]/30 hover:bg-[#2160AD]/20"
+                      >
+                        {scheme}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="p-4">
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 px-3 text-[#2160AD] border-[#2160AD] hover:bg-[#2160AD]/10"
+                    >
+                      <Info className="w-3 h-3 mr-1" />
+                      Info
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="h-8 px-3 bg-[#2160AD] text-white hover:bg-[#1a4d8a]"
+                    >
+                      <PenLine className="w-3 h-3 mr-1" />
+                      Adjust
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Card>
 
       {/* Empty State */}

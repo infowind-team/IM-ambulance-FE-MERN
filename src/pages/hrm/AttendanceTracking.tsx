@@ -21,9 +21,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-function cn(...classes: Array<string | boolean | null | undefined>): string {
-  return classes.filter(Boolean).join(" ");
-}
+import { cn } from "@/components/ui/utils";
 
 import {
   Table,
@@ -226,24 +224,24 @@ export default function AttendanceTracking() {
       )}
 
       {/* Table */}
-      <Card className="rounded-xl border shadow-sm p-6">
+      <Card className="overflow-hidden">
         <Table>
-          <TableHeader className="bg-gray-50">
+          <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Employee</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Status</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock In</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock Out</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Late</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Overtime</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+              <TableHead className="font-semibold p-4">Employee</TableHead>
+              <TableHead className="font-semibold p-4">Status</TableHead>
+              <TableHead className="font-semibold p-4">Clock In</TableHead>
+              <TableHead className="font-semibold p-4">Clock Out</TableHead>
+              <TableHead className="font-semibold p-4">Late</TableHead>
+              <TableHead className="font-semibold p-4">Overtime</TableHead>
+              <TableHead className="font-semibold p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredData.map((entry) => (
               <TableRow
                 key={entry.id}
-                className="hover:bg-gray-50 transition"
+                className="hover:header-bg-soft transition"
               >
                 {/* Employee */}
                 <TableCell className="py-4">

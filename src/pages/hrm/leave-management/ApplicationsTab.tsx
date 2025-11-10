@@ -90,105 +90,103 @@ export default function ApplicationsTab() {
       </div>
 
       {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b">
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Employee
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Leave Type
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    End Date
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Days
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Recommendation
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Status
-                  </TableHead>
-                  <TableHead className="p-4 text-[#2160AD] font-semibold">
-                    Actions
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {applications.map((app) => (
-                  <TableRow key={app.id} className="border-b hover:bg-gray-50">
-                    <TableCell className="p-4">
-                      <div>
-                        <div className="font-medium">{app.employee}</div>
-                        <div className="text-gray-600 text-sm">{app.department}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="p-4">{app.leaveType}</TableCell>
-                    <TableCell className="p-4">{app.endDate}</TableCell>
-                    <TableCell className="p-4">{app.days}</TableCell>
-                    <TableCell className="p-4">{app.recommendation}</TableCell>
-                    <TableCell className="p-4">
-                      <Badge
-                        variant={app.status === "pending" ? "secondary" : "default"}
-                        className={
-                          app.status === "approved"
-                            ? "bg-primary text-white"
-                            : app.status === "pending"
-                            ? ""
-                            : "bg-destructive text-white"
-                        }
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader className="header-bg-soft">
+            <TableRow className="border-b">
+              <TableHead className="p-4 font-semibold">
+                Employee
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Leave Type
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                End Date
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Days
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Recommendation
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Status
+              </TableHead>
+              <TableHead className="p-4 font-semibold">
+                Actions
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {applications.map((app) => (
+              <TableRow key={app.id} className="border-b hover:header-bg-soft">
+                <TableCell className="p-4">
+                  <div>
+                    <div className="font-medium">{app.employee}</div>
+                    <div className="text-gray-600 text-sm">
+                      {app.department}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="p-4">{app.leaveType}</TableCell>
+                <TableCell className="p-4">{app.endDate}</TableCell>
+                <TableCell className="p-4">{app.days}</TableCell>
+                <TableCell className="p-4">{app.recommendation}</TableCell>
+                <TableCell className="p-4">
+                  <Badge
+                    variant={app.status === "pending" ? "secondary" : "default"}
+                    className={
+                      app.status === "approved"
+                        ? "bg-primary text-white"
+                        : app.status === "pending"
+                        ? ""
+                        : "bg-destructive text-white"
+                    }
+                  >
+                    {app.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="p-4">
+                  <div className="flex items-center gap-2">
+                    {/* View Details */}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-[#2160AD] hover:bg-[#2160AD]/10"
+                      title="View details"
+                    >
+                      <InfoIcon />
+                    </Button>
+
+                    {/* Approve (only show if pending) */}
+                    {app.status === "pending" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 text-green-600 hover:bg-green-50"
+                        title="Approve"
                       >
-                        {app.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="p-4">
-                      <div className="flex items-center gap-2">
-                        {/* View Details */}
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-8 w-8 p-0 text-[#2160AD] hover:bg-[#2160AD]/10"
-                          title="View details"
-                        >
-                          <InfoIcon />
-                        </Button>
+                        <CircleCheckBig className="h-4 w-4" />
+                      </Button>
+                    )}
 
-                        {/* Approve (only show if pending) */}
-                        {app.status === "pending" && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 w-8 p-0 text-green-600 hover:bg-green-50"
-                            title="Approve"
-                          >
-                            <CircleCheckBig className="h-4 w-4" />
-                          </Button>
-                        )}
-
-                        {/* Reject (only show if pending) */}
-                        {app.status === "pending" && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
-                            title="Reject"
-                          >
-                            <CircleX className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
+                    {/* Reject (only show if pending) */}
+                    {app.status === "pending" && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
+                        title="Reject"
+                      >
+                        <CircleX className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Card>
 
       {/* Empty State */}

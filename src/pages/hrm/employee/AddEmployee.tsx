@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import { cn } from "@/components/ui/utils";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,9 +30,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import EmployeeForm from "./EmployeeForm";
 import DocumentsSection from "./DocumentsSection";
-
-// Utility: cn
-const cn = (...inputs: any[]) => twMerge(clsx(inputs));
 
 // Zod Schema
 const formSchema = z.object({
@@ -170,7 +168,7 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-80 border-r bg-gray-50 flex flex-col">
+        <div className="w-80 border-r header-bg-soft flex flex-col">
           <div className="p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Employee Setup</h3>
             <div className="space-y-2">
@@ -244,8 +242,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
             {currentStep === 1 && (
               <div className="">
                 <div className="space-y-6">
-                  <Card>
-                    <CardHeader>
+                  <Card className="overflow-hidden">
+                    <CardHeader className="header-bg-soft pb-6">
                       <CardTitle>Personal Details</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -328,8 +326,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card>
-                    <CardHeader>
+                  <Card className="overflow-hidden">
+                    <CardHeader className="header-bg-soft pb-6">
                       <CardTitle>Address Information</CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -355,8 +353,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between pb-3">
+                  <Card className="overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between header-bg-soft pb-6">
                       <CardTitle>Family Members</CardTitle>
                       <Button
                         type="button"

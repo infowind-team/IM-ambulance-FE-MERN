@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { format } from "date-fns";
+import {
+  format,
+  eachHourOfInterval,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 
 const statusColors: Record<string, string> = {
   Open: "#008FD6",
@@ -38,12 +43,12 @@ export default function DayView({ date, events }: DayViewProps) {
   const dayEvents = events.filter((e) => e.date === currentDateStr);
   const totalCases = dayEvents.length;
 
-  // Generate time slots from 6 AM to 10 PM
-  const timeSlots = Array.from({ length: 17 }, (_, i) => {
-    const hour = i + 6;
-    return `${hour.toString().padStart(2, "0")}:00`;
+  // Generate 24 hours: 00:00 to 23:00
+  const hours = eachHourOfInterval({
+    start: startOfDay(date),
+    end: endOfDay(date),
   });
-
+  
   const getEventsForHour = (hour: number): Event[] => {
     return dayEvents.filter((e) => {
       const [eventHour] = e.time.split(":").map(Number);
@@ -62,24 +67,23 @@ export default function DayView({ date, events }: DayViewProps) {
           {format(date, "EEEE, MMMM d, yyyy")}
         </p>
         <p className="text-gray-500 text-sm mt-1">
-          {totalCases} cases scheduled
+          {totalCases} case{totalCases !== 1 ? 's' : ''} scheduled
         </p>
       </div>
 
       {/* Timeline */}
       <div className="space-y-0">
-        {timeSlots.map((time, index) => {
-          const hour = index + 6;
+        {hours.map((hourDate, hourIdx) => {
+          const hour = hourDate.getHours() + 1;
           const hourEvents = getEventsForHour(hour);
-
           return (
             <div
-              key={time}
+              key={hourIdx}
               className="grid grid-cols-[100px_1fr] border-b border-gray-100 min-h-20"
             >
               {/* Time Label */}
               <div className="p-3 text-right text-[#2160AD] bg-[#2160AD]/5 border-r border-[#2160AD]/20 flex items-center justify-end text-base font-medium">
-                {time}
+              {hour == 24 ? '00' : hour.toString().padStart(2, '0')}:00
               </div>
 
               {/* Events */}

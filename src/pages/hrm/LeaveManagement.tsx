@@ -187,107 +187,99 @@ export default function LeaveManagement() {
               </div>
 
               {/* Table */}
-              <Card>
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="border-b">
-                          <TableHead className="p-4 text-base">
-                            Scheme Details
-                          </TableHead>
-                          <TableHead className="p-4 text-base">
-                            Leave Types
-                          </TableHead>
-                          <TableHead className="p-4 text-base">
-                            Service Years
-                          </TableHead>
-                          <TableHead className="p-4 text-base">
-                            Eligible
-                          </TableHead>
-                          <TableHead className="p-4 text-base">
-                            Actions
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredSchemes.map((scheme) => (
-                          <TableRow
-                            key={scheme.id}
-                            className="border-b hover:bg-gray-50"
-                          >
-                            <TableCell className="p-4">
-                              <div>
-                                <div className="font-medium text-[#2160AD] text-base">
-                                  {scheme.name}
-                                </div>
-                                <div className="text-base text-gray-500 mt-1">
-                                  {scheme.description}
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell className="p-4">
-                              <div className="flex flex-wrap gap-1.5">
-                                {scheme.leaveTypes.map((type) => (
-                                  <Badge
-                                    key={type}
-                                    variant="outline"
-                                    className="text-base border-[#2160AD]/30"
-                                  >
-                                    {type}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </TableCell>
-                            <TableCell className="p-4">
-                              <Badge variant="secondary" className="text-xs">
-                                {scheme.serviceYears}
+              <Card className="overflow-hidden">
+                <Table>
+                  <TableHeader className="header-bg-soft">
+                    <TableRow className="border-b">
+                      <TableHead className="p-4 font-semibold">
+                        Scheme Details
+                      </TableHead>
+                      <TableHead className="p-4 font-semibold">
+                        Leave Types
+                      </TableHead>
+                      <TableHead className="p-4 font-semibold">
+                        Service Years
+                      </TableHead>
+                      <TableHead className="p-4 font-semibold">Eligible</TableHead>
+                      <TableHead className="p-4 font-semibold">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredSchemes.map((scheme) => (
+                      <TableRow
+                        key={scheme.id}
+                        className="border-b hover:header-bg-soft"
+                      >
+                        <TableCell className="p-4">
+                          <div>
+                            <div className="font-medium text-[#2160AD] text-base">
+                              {scheme.name}
+                            </div>
+                            <div className="text-base text-gray-500 mt-1">
+                              {scheme.description}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-4">
+                          <div className="flex flex-wrap gap-1.5">
+                            {scheme.leaveTypes.map((type) => (
+                              <Badge
+                                key={type}
+                                variant="outline"
+                                className="text-base border-[#2160AD]/30"
+                              >
+                                {type}
                               </Badge>
-                            </TableCell>
-                            <TableCell className="p-4">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">
-                                  {scheme.eligibleCount}
-                                </span>
-                                <span className="text-base text-gray-500">
-                                  employees
-                                </span>
-                              </div>
-                            </TableCell>
-                            <TableCell className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="h-8 w-8 p-0 hover:bg-[#2160AD]/10"
-                                  title="View scheme details"
-                                >
-                                  <InfoIcon />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="h-8 w-8 p-0"
-                                  title="Edit scheme"
-                                >
-                                  <PenLine className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                                  title="Delete scheme"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-4">
+                          <Badge variant="secondary" className="text-xs">
+                            {scheme.serviceYears}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">
+                              {scheme.eligibleCount}
+                            </span>
+                            <span className="text-base text-gray-500">
+                              employees
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-4">
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 w-8 p-0 hover:bg-[#2160AD]/10"
+                              title="View scheme details"
+                            >
+                              <InfoIcon />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 w-8 p-0"
+                              title="Edit scheme"
+                            >
+                              <PenLine className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              title="Delete scheme"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </Card>
 
               {/* Optional: Empty State */}
@@ -316,7 +308,6 @@ export default function LeaveManagement() {
           >
             <MassAdjustmentTab />
           </TabsContent>
-          
         </Tabs>
       </div>
     </>

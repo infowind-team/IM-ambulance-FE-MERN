@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Calendar, Check } from 'lucide-react';
-import { format, addDays, subDays } from 'date-fns';
+import { Check } from 'lucide-react';
 import FunctionalHeader from '@/layout/FunctionalHeader';
 import DayView from './DayView';
 import WeekView from './WeekView';
 import MonthView from './MonthView';
-import { Button } from '@/components/ui/button';
+import { SharedDatePicker } from '@/components/ui/shared-date-picker';
 
 // === CONFIG ===
 const STATUS_CONFIG = {
@@ -38,20 +37,20 @@ const SERVICE_TYPE_TO_TRIP_PATTERN: Record<string, RegExp> = {
 type ViewMode = 'day' | 'week' | 'month';
 type StatusKey = keyof typeof STATUS_CONFIG;
 
-// === EVENT TYPE (Shared across all views) ===
+// === EVENT TYPE ===
 export interface Event {
   id: string;
   time: string;
   caseId: string;
   trip: string;
   route: string;
-  patient?: string; // Optional (not in MonthView)
+  patient?: string;
   tags: string[];
   status: StatusKey;
-  date: string; // "2025-11-04"
+  date: string;
 }
 
-// === SAMPLE DATA (Nov 4, 2025) ===
+// === SAMPLE DATA ===
 const SAMPLE_EVENTS: Event[] = [
   {
     id: '1',
@@ -137,14 +136,12 @@ export default function CalendarPage() {
   const filteredEvents = useMemo(() => {
     return SAMPLE_EVENTS.filter((event) => {
       const matchesStatus = selectedStatuses.size === 0 || selectedStatuses.has(event.status);
-
       const matchesServiceType =
         selectedTypes.size === 0 ||
         Array.from(selectedTypes).some((type) => {
           const pattern = SERVICE_TYPE_TO_TRIP_PATTERN[type];
           return pattern?.test(event.trip) ?? false;
         });
-
       return matchesStatus && matchesServiceType;
     });
   }, [selectedStatuses, selectedTypes]);
@@ -172,184 +169,146 @@ export default function CalendarPage() {
     setSelectedStatuses(new Set());
     setSelectedTypes(new Set());
   };
-
-  const goPrev = () =>
-    setCurrentDate((prev) =>
-      subDays(prev, activeTab === 'day' ? 1 : activeTab === 'week' ? 7 : 0),
-    );
-
-  const goNext = () =>
-    setCurrentDate((prev) =>
-      addDays(prev, activeTab === 'day' ? 1 : activeTab === 'week' ? 7 : 0),
-    );
-
+  
   return (
     <>
-      <FunctionalHeader title="Calendar" />
+      <FunctionalHeader
+        title="Calendar"
+        breadcrumb={[
+          { label: 'Operations' },
+          { label: 'Calendar' },
+        ]}
+      />
 
-      <div className='flex-1 flex w-full overflow-auto'>
- 
-          {/* Sidebar Filters */}
-          <aside className="w-64 bg-white border-r border-[#2160AD]/10 p-4 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-medium text-[#2160AD]">
-                Filters {totalFilters > 0 && `(${totalFilters})`}
-              </h3>
-              {totalFilters > 0 && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-[#2160AD] hover:bg-[#2160AD]/10 px-2 h-6 rounded-md transition-colors"
-                >
-                  Clear All
-                </button>
-              )}
-            </div>
+      <div className="flex-1 flex w-full overflow-auto">
+        {/* Sidebar Filters */}
+        <aside className="w-64 bg-white border-r border-[#2160AD]/10 p-4 flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-medium text-[#2160AD]">
+              Filters {totalFilters > 0 && `(${totalFilters})`}
+            </h3>
+            {totalFilters > 0 && (
+              <button
+                onClick={clearFilters}
+                className="text-sm text-[#2160AD] hover:bg-[#2160AD]/10 px-2 h-6 rounded-md transition-colors"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
 
-            <div className="space-y-6 overflow-y-auto flex-1">
-              {/* Status Filter */}
-              <section>
-                <h4 className="text-sm text-gray-600 mb-3">
-                  Status ({selectedStatuses.size})
-                </h4>
-                <div className="space-y-2">
-                  {Object.entries(STATUS_CONFIG).map(([status, { color }]) => (
-                    <label
-                      key={status}
-                      className="flex items-center space-x-2 cursor-pointer select-none"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleStatus(status as StatusKey)}
-                        className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                          selectedStatuses.has(status as StatusKey)
-                            ? 'bg-[#2160AD] border-[#2160AD]'
-                            : 'border-[#2160AD]/30'
-                        }`}
-                        aria-label={`Toggle ${status}`}
-                      >
-                        {selectedStatuses.has(status as StatusKey) && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </button>
-                      <div
-                        className="w-3 h-3 rounded-full border"
-                        style={{ backgroundColor: color, borderColor: color }}
-                      />
-                      <span className="text-sm flex-1">{status}</span>
-                    </label>
-                  ))}
-                </div>
-              </section>
-
-              {/* Service Type Filter */}
-              <section>
-                <h4 className="text-sm text-gray-600 mb-3">
-                  Service Type ({selectedTypes.size})
-                </h4>
-                <div className="space-y-2">
-                  {SERVICE_TYPES.map((type) => (
-                    <label
-                      key={type}
-                      className="flex items-center space-x-2 cursor-pointer select-none"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleType(type)}
-                        className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-                          selectedTypes.has(type)
-                            ? 'bg-[#2160AD] border-[#2160AD]'
-                            : 'border-[#2160AD]/30'
-                        }`}
-                        aria-label={`Toggle ${type}`}
-                      >
-                        {selectedTypes.has(type) && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </button>
-                      <span className="text-sm">{type}</span>
-                    </label>
-                  ))}
-                </div>
-              </section>
-            </div>
-          </aside>
-
-          {/* Main Content */}
-          <main className="flex-1 flex flex-col">
-            {/* View Controls */}
-            <header className="border-b border-gray-200 px-6 py-3 bg-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {/* View Tabs */}
-                  <div className="flex gap-1">
-                    {(['Day', 'Week', 'Month'] as const).map((mode) => {
-                      const key = mode.toLowerCase() as ViewMode;
-                      const isActive = activeTab === key;
-                      return (
-                        <button
-                          key={mode}
-                          type="button"
-                          onClick={() => setActiveTab(key)}
-                          className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${
-                            isActive
-                              ? 'bg-[#2160AD] text-white'
-                              : 'border border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10'
-                          }`}
-                        >
-                          {mode}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Date Navigation */}
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={goPrev}
-                      className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
-                      aria-label="Previous"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </Button>
-
+          <div className="space-y-6 overflow-y-auto flex-1">
+            {/* Status Filter */}
+            <section>
+              <h4 className="text-sm text-gray-600 mb-3">
+                Status ({selectedStatuses.size})
+              </h4>
+              <div className="space-y-2">
+                {Object.entries(STATUS_CONFIG).map(([status, { color }]) => (
+                  <label
+                    key={status}
+                    className="flex items-center space-x-2 cursor-pointer select-none"
+                  >
                     <button
                       type="button"
-                      className="flex items-center gap-2 h-9 px-4 py-2 rounded-md text-[#2160AD] min-w-[180px] hover:bg-[#2160AD]/10 text-sm font-medium transition-colors"
+                      onClick={() => toggleStatus(status as StatusKey)}
+                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${selectedStatuses.has(status as StatusKey)
+                          ? 'bg-[#2160AD] border-[#2160AD]'
+                          : 'border-[#2160AD]/30'
+                        }`}
+                      aria-label={`Toggle ${status}`}
                     >
-                      <Calendar className="w-4 h-4" />
-                      {format(currentDate, 'EEEE, MMMM d, yyyy')}
+                      {selectedStatuses.has(status as StatusKey) && (
+                        <Check className="w-3 h-3 text-white" />
+                      )}
                     </button>
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-[#2160AD] hover:bg-[#2160AD]/10"
-                      onClick={goNext}
-                      aria-label="Next"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
+                    <div
+                      className="w-3 h-3 rounded-full border"
+                      style={{ backgroundColor: color, borderColor: color }}
+                    />
+                    <span className="text-sm flex-1">{status}</span>
+                  </label>
+                ))}
               </div>
-            </header>
-
-            {/* View Content */}
-            <section className="flex-1 overflow-hidden bg-white">
-              {activeTab === 'day' && (
-                <DayView date={currentDate} events={filteredEvents} />
-              )}
-              {activeTab === 'week' && (
-                <WeekView date={currentDate} events={filteredEvents} />
-              )}
-              {activeTab === 'month' && (
-                <MonthView date={currentDate} events={filteredEvents} />
-              )}
             </section>
-          </main> 
 
+            {/* Service Type Filter */}
+            <section>
+              <h4 className="text-sm text-gray-600 mb-3">
+                Service Type ({selectedTypes.size})
+              </h4>
+              <div className="space-y-2">
+                {SERVICE_TYPES.map((type) => (
+                  <label
+                    key={type}
+                    className="flex items-center space-x-2 cursor-pointer select-none"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleType(type)}
+                      className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${selectedTypes.has(type)
+                          ? 'bg-[#2160AD] border-[#2160AD]'
+                          : 'border-[#2160AD]/30'
+                        }`}
+                      aria-label={`Toggle ${type}`}
+                    >
+                      {selectedTypes.has(type) && (
+                        <Check className="w-3 h-3 text-white" />
+                      )}
+                    </button>
+                    <span className="text-sm">{type}</span>
+                  </label>
+                ))}
+              </div>
+            </section>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col">
+          {/* View Controls */}
+          <header className="border-b border-gray-200 px-6 py-3 bg-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* View Tabs */}
+                <div className="flex gap-1">
+                  {(['Day', 'Week', 'Month'] as const).map((mode) => {
+                    const key = mode.toLowerCase() as ViewMode;
+                    const isActive = activeTab === key;
+                    return (
+                      <button
+                        key={mode}
+                        type="button"
+                        onClick={() => setActiveTab(key)}
+                        className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${isActive
+                            ? 'bg-[#2160AD] text-white'
+                            : 'border border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10'
+                          }`}
+                      >
+                        {mode}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Shared DatePicker */}
+                <SharedDatePicker
+                  date={currentDate}
+                  onDateChange={setCurrentDate}
+                  mode={activeTab}
+                  showWeekRange={activeTab === 'week'}
+                />
+              </div>
+            </div>
+          </header>
+
+          {/* View Content */}
+          <section className="flex-1 overflow-hidden bg-white">
+            {activeTab === 'day' && <DayView date={currentDate} events={filteredEvents} />}
+            {activeTab === 'week' && <WeekView date={currentDate} events={filteredEvents} />}
+            {activeTab === 'month' && <MonthView date={currentDate} events={filteredEvents} />}
+          </section>
+        </main>
       </div>
     </>
   );

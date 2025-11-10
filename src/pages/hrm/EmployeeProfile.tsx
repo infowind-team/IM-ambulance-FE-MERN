@@ -13,12 +13,7 @@ import {
   Trash2,
   Plus,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,7 +97,8 @@ export default function EmployeeProfile() {
       emp.email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesDept =
-      departmentFilter === "All Departments" || emp.department === departmentFilter;
+      departmentFilter === "All Departments" ||
+      emp.department === departmentFilter;
 
     const matchesStatus =
       statusFilter === "All Status" || emp.status === statusFilter;
@@ -118,11 +114,7 @@ export default function EmployeeProfile() {
 
   // If Add Employee is open
   if (showAddEmployee) {
-    return (
-      <AddEmployee
-        onBack={() => setShowAddEmployee(false)}
-      />
-    );
+    return <AddEmployee onBack={() => setShowAddEmployee(false)} />;
   }
 
   // Main Employee List View
@@ -132,34 +124,48 @@ export default function EmployeeProfile() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-base font-medium">Total Employees</CardTitle>
+            <CardTitle className="text-base font-medium">
+              Total Employees
+            </CardTitle>
             <Users className="h-5 w-5 text-[#2160AD]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#2160AD]">{totalEmployees}</div>
+            <div className="text-3xl font-bold text-[#2160AD]">
+              {totalEmployees}
+            </div>
             <p className="text-sm text-muted-foreground">All staff members</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-base font-medium">Active Employees</CardTitle>
+            <CardTitle className="text-base font-medium">
+              Active Employees
+            </CardTitle>
             <UserCheck className="h-5 w-5 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-600">{activeEmployees}</div>
+            <div className="text-3xl font-bold text-green-600">
+              {activeEmployees}
+            </div>
             <p className="text-sm text-muted-foreground">Currently working</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-base font-medium">Inactive Employees</CardTitle>
+            <CardTitle className="text-base font-medium">
+              Inactive Employees
+            </CardTitle>
             <UserX className="h-5 w-5 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-red-600">{inactiveEmployees}</div>
-            <p className="text-sm text-muted-foreground">On leave or inactive</p>
+            <div className="text-3xl font-bold text-red-600">
+              {inactiveEmployees}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              On leave or inactive
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -213,87 +219,85 @@ export default function EmployeeProfile() {
       </div>
 
       {/* Employee Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b">
-                  <TableHead className="p-4">Employee</TableHead>
-                  <TableHead className="p-4">Staff ID</TableHead>
-                  <TableHead className="p-4">Email</TableHead>
-                  <TableHead className="p-4">Department</TableHead>
-                  <TableHead className="p-4">Position</TableHead>
-                  <TableHead className="p-4">Status</TableHead>
-                  <TableHead className="p-4">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredEmployees.map((emp) => (
-                  <TableRow key={emp.id} className="border-b hover:bg-muted/30">
-                    <TableCell className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
-                          {emp.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </div>
-                        <div className="font-medium">{emp.name}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="p-4 font-mono text-muted-foreground">
-                      {emp.staffId}
-                    </TableCell>
-                    <TableCell className="p-4">{emp.email}</TableCell>
-                    <TableCell className="p-4">{emp.department}</TableCell>
-                    <TableCell className="p-4">
-                      <div className="flex flex-wrap gap-1">
-                        {emp.positions.map((pos) => (
-                          <Badge
-                            key={pos}
-                            className="bg-[#2160AD]/10 text-[#2160AD] border-[#2160AD]/30"
-                          >
-                            {pos}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="p-4">
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader className="header-bg-soft">
+            <TableRow className="border-b">
+              <TableHead className="font-semibold p-4">Employee</TableHead>
+              <TableHead className="font-semibold p-4">Staff ID</TableHead>
+              <TableHead className="font-semibold p-4">Email</TableHead>
+              <TableHead className="font-semibold p-4">Department</TableHead>
+              <TableHead className="font-semibold p-4">Position</TableHead>
+              <TableHead className="font-semibold p-4">Status</TableHead>
+              <TableHead className="font-semibold p-4">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredEmployees.map((emp) => (
+              <TableRow key={emp.id} className="border-b hover:bg-muted/30">
+                <TableCell className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
+                      {emp.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </div>
+                    <div className="font-medium">{emp.name}</div>
+                  </div>
+                </TableCell>
+                <TableCell className="p-4 font-mono text-muted-foreground">
+                  {emp.staffId}
+                </TableCell>
+                <TableCell className="p-4">{emp.email}</TableCell>
+                <TableCell className="p-4">{emp.department}</TableCell>
+                <TableCell className="p-4">
+                  <div className="flex flex-wrap gap-1">
+                    {emp.positions.map((pos) => (
                       <Badge
-                        className={
-                          emp.status === "Active"
-                            ? "bg-green-50 text-green-700 border-green-200"
-                            : "bg-red-50 text-red-700 border-red-200"
-                        }
+                        key={pos}
+                        className="bg-[#2160AD]/10 text-[#2160AD] border-[#2160AD]/30"
                       >
-                        {emp.status}
+                        {pos}
                       </Badge>
-                    </TableCell>
-                    <TableCell className="p-4">
-                      <div className="flex gap-2">
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
-                          <Eye className="h-4 w-4 text-blue-600" />
-                        </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
-                          <SquarePen className="h-4 w-4 text-[#2160AD]" />
-                        </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8">
-                          <Trash2 className="h-4 w-4 text-red-600" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="p-4">
+                  <Badge
+                    className={
+                      emp.status === "Active"
+                        ? "bg-green-50 text-green-700 border-green-200"
+                        : "bg-red-50 text-red-700 border-red-200"
+                    }
+                  >
+                    {emp.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="p-4">
+                  <div className="flex gap-2">
+                    <Button size="icon" variant="ghost" className="h-8 w-8">
+                      <Eye className="h-4 w-4 text-blue-600" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8">
+                      <SquarePen className="h-4 w-4 text-[#2160AD]" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="h-8 w-8">
+                      <Trash2 className="h-4 w-4 text-red-600" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Card>
 
       {/* Pagination */}
       <div className="flex justify-between items-center text-sm text-muted-foreground">
-        <span>Showing {filteredEmployees.length} of {employees.length} employees</span>
+        <span>
+          Showing {filteredEmployees.length} of {employees.length} employees
+        </span>
       </div>
     </div>
   );

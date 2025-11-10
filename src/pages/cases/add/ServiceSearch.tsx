@@ -4,16 +4,18 @@
 import * as React from "react";
 import { Command } from "cmdk";
 import * as Popover from "@radix-ui/react-popover";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-interface Service {
+export interface Service {
   value: string;
   label: string;
   price: string;
 }
 
-const ALL_SERVICES: Service[] = [
+export const ALL_SERVICES: Service[] = [
   { value: "Oxygen Support", label: "Oxygen Support", price: "$50" },
   { value: "Wheelchair Service", label: "Wheelchair Service", price: "$25" },
   { value: "Stretcher Service", label: "Stretcher Service", price: "$35" },
@@ -45,7 +47,6 @@ export function ServiceSearch({
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
 
-  // Filter services while the user types
   const filtered = React.useMemo(() => {
     if (!search) return ALL_SERVICES;
     const lower = search.toLowerCase();
@@ -56,7 +57,6 @@ export function ServiceSearch({
     );
   }, [search]);
 
-  // When the input changes we also update the parent state
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setSearch(val);
@@ -73,9 +73,15 @@ export function ServiceSearch({
 
   const handleCustomAdd = () => {
     if (search.trim() && !ALL_SERVICES.some((s) => s.label === search)) {
-      onSelect?.(null); // custom entry
+      onSelect?.(null);
       setOpen(false);
     }
+  };
+  
+  const handleClear = () => {
+    setSearch("");
+    onChange("");
+    setOpen(false);
   };
 
   return (
@@ -89,13 +95,27 @@ export function ServiceSearch({
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <div className="relative">
-            <input
+            <Input
               type="text"
               value={search}
               onChange={handleInputChange}
               placeholder={placeholder}
-              className="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-10 w-full rounded-md border bg-input-background px-3 py-1 text-base-optimized transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive form-input-height"
+              className="w-full pr-10" // padding-right for clear button
             />
+
+            {/* Clear Button */}
+            {search && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:text-gray-700"
+                onClick={handleClear}
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Clear search</span>
+              </Button>
+            )}
           </div>
         </Popover.Trigger>
 

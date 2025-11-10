@@ -58,8 +58,8 @@ function DocumentSection({ title, icon, documents, onAdd, onDelete }: SectionPro
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className='overflow-hidden'>
+      <CardHeader className='header-bg-soft pb-6'>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {icon}
@@ -133,7 +133,7 @@ function DocumentSection({ title, icon, documents, onAdd, onDelete }: SectionPro
                           <p className="text-sm text-gray-600 mt-1 italic">{doc.description}</p>
                         )}
                       </div>
-                      <div className="text-right text-sm text-gray-500 flex-shrink-0">
+                      <div className="text-right text-sm text-gray-500 shrink-0">
                         <div>Uploaded: {format(new Date(doc.uploadedAt), 'dd/MM/yyyy')}</div>
                         {doc.expiresAt && (
                           <div className="mt-1">

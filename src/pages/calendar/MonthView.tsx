@@ -111,7 +111,7 @@ export default function MonthView({ date, events }: MonthViewProps) {
               key={idx}
               className={`
                 border border-gray-200 min-h-[120px] p-2 cursor-pointer relative
-                ${isCurrentMonth ? 'bg-white hover:bg-gray-50' : 'bg-gray-50 text-gray-400'}
+                ${isCurrentMonth ? 'bg-white hover:header-bg-soft' : 'header-bg-soft text-gray-400'}
                 ${isTodayDate ? 'ring-2 ring-[#2160AD] bg-blue-50' : ''}
                 transition-colors
               `}

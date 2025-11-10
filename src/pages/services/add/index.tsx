@@ -13,6 +13,7 @@ import {
   Copy,
   Clock,
   ChevronDown,
+  ChevronLeft,
 } from "lucide-react";
 import {
   Card,
@@ -33,7 +34,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import FunctionalHeader from "@/layout/FunctionalHeader";
-import { useWatch } from "react-hook-form";
 import router from "next/router";
 
 // Zod schema
@@ -210,10 +210,10 @@ export default function CreateContractPage() {
 
   return (
     <>
-      <FunctionalHeader title="Add New Contract" />
+      <FunctionalHeader title="Add New Contract" breadcrumb={[{ label: "Management" }, { label: "Services" }, { label: "Add New Contract" }]} />
       <div className="flex-1 w-full overflow-auto">
         <div className="px-6 pt-4 pb-2 flex items-center justify-between">
-          <Button variant="outline" onClick={() => router.push("/services")}>Back to Services</Button>
+          <Button variant="outline" onClick={() => router.push("/services")}><ChevronLeft className="w-5 h-5" /> Back to Services</Button>
         </div>
 
         <div className="p-6 space-y-6">
@@ -683,7 +683,7 @@ export default function CreateContractPage() {
                           {ruleFields.map((rule, ruleIndex) => (
                             <div
                               key={rule.id}
-                              className="grid grid-cols-5 gap-4 p-3 bg-gray-50 rounded-lg items-center"
+                              className="grid grid-cols-5 gap-4 p-3 header-bg-soft rounded-lg items-center"
                             >
                               <Select defaultValue="First (Fixed cost for initial units)">
                                 <SelectTrigger>
