@@ -11,6 +11,7 @@ import {
   Key,
   Camera,
   SquarePen,
+  Save,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -87,7 +88,10 @@ export default function MyProfilePage() {
 
   return (
     <>
-      <FunctionalHeader title="My Profile" />
+      <FunctionalHeader
+        title="My Profile"
+        breadcrumb={[{ label: "My Account" }]}
+      />
       <div className="flex-1 overflow-auto flex flex-col p-6 space-y-6">
         {/* Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -174,19 +178,19 @@ export default function MyProfilePage() {
                     )}
                   </h2>
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge className="bg-blue-50 text-blue-700 border-blue-200">
-                      {isEditing ? (
-                        <Input
-                          value={editData.role}
-                          onChange={(e) =>
-                            handleInputChange("role", e.target.value)
-                          }
-                          className="h-7 text-xs"
-                        />
-                      ) : (
+                    {isEditing ? (
+                      <Input
+                        value={editData.role}
+                        onChange={(e) =>
+                          handleInputChange("role", e.target.value)
+                        }
+                        className="h-7 text-xs max-w-50"
+                      />
+                    ) : (
+                      <Badge className="bg-blue-50 text-blue-700 border-blue-200">
                         profile.role
-                      )}
-                    </Badge>
+                      </Badge>
+                    )}
                     <span className="text-sm text-muted-foreground">
                       Staff ID: {profile.employeeId}
                     </span>
@@ -200,10 +204,10 @@ export default function MyProfilePage() {
                   <>
                     <Button
                       onClick={handleSave}
-                      className="bg-[#2160AD] hover:bg-[#1d5497]"
+                      className="rounded-md px-3 gap-2 bg-green-600 text-white hover:bg-green-700"
                     >
-                      <SquarePen className="w-4 h-4 mr-2" />
-                      Save
+                      <Save className="w-4 h-4" />
+                      Save Changes
                     </Button>
                     <Button variant="outline" onClick={handleCancel}>
                       Cancel
@@ -348,31 +352,31 @@ export default function MyProfilePage() {
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-600">Employee ID</Label>
+                  <Label className="">Employee ID</Label>
                   <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base font-mono">{profile.employeeId}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-600">Employment Status</Label>
+                  <Label className="">Employment Status</Label>
                   <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base capitalize">{profile.status}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-600">Department</Label>
+                  <Label className="">Department</Label>
                   <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.department}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-gray-600">Role</Label>
+                  <Label className="">Role</Label>
                   <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.role}</p>
                   </div>
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <Label className="text-gray-600">Join Date</Label>
+                  <Label className="">Join Date</Label>
                   <div className="p-3 header-bg-soft rounded-lg mt-1">
                     <p className="text-base">{profile.joinDate}</p>
                   </div>

@@ -1,5 +1,5 @@
 // app/cases/page.tsx
-'use client';
+"use client";
 
 import React, { useState, useMemo } from "react";
 import {
@@ -7,7 +7,6 @@ import {
   Briefcase,
   MapPin,
   Search,
-  ChevronDown,
   Plus,
   Phone,
   Eye,
@@ -33,9 +32,9 @@ import FunctionalHeader from "@/layout/FunctionalHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation"; // ← fixed: useRouter → useNavigation
+import { useRouter } from "next/navigation";
+import { useSortableTable } from "@/hooks/useSortableTable";
 
-// === MAIN PAGE ===
 interface Case {
   id: string;
   caseId: string;
@@ -121,12 +120,10 @@ const CASES_DATA: Case[] = [
 export default function CasesPage() {
   const router = useRouter();
 
-  // --- STATE ---
-  const [cases, setCases] = useState<Case[]>(CASES_DATA); // ← now mutable
+  const [cases, setCases] = useState<Case[]>(CASES_DATA);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
 
-  // --- FILTER LOGIC ---
   const filteredCases = useMemo(() => {
     return cases.filter((item) => {
       const matchesSearch =
@@ -142,7 +139,9 @@ export default function CasesPage() {
     });
   }, [cases, searchQuery, selectedStatus]);
 
-  // --- DELETE HANDLER ---
+  const { sortedData: sortedCases, requestSort, getSortIcon } =
+    useSortableTable(filteredCases, "date", "desc");
+
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this case?")) {
       setCases((prev) => prev.filter((c) => c.id !== id));
@@ -154,15 +153,13 @@ export default function CasesPage() {
       <FunctionalHeader
         title="Case Management"
         breadcrumb={[
-          { label: 'Operations' },
-          { label: 'Cases' },
+          { label: "Operations" },
+          { label: "Cases" },
         ]}
       />
 
       <div className="flex-1 w-full overflow-auto">
         <div className="space-y-6 p-4 lg:p-6 w-full">
-          {/* ... Stats Cards ... */}
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <Card>
               <CardContent className="flex items-center justify-between p-4 pb-6">
@@ -195,7 +192,6 @@ export default function CasesPage() {
             </Card>
           </div>
 
-          {/* Search + Filters + New Case */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
@@ -216,47 +212,80 @@ export default function CasesPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="All Status">All Status</SelectItem>
-                    <SelectItem value="Open">Open</SelectItem>
                     <SelectItem value="Pending for Dispatch">Pending for Dispatch</SelectItem>
                     <SelectItem value="Dispatched">Dispatched</SelectItem>
-                    <SelectItem value="Pending Confirmation">Pending Confirmation</SelectItem>
-                    <SelectItem value="Pending for Payment">Pending for Payment</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                    <SelectItem value="Cancelled">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <Button onClick={() => router.push('/cases/add')}>
+            <Button onClick={() => router.push("/cases/add")}>
               <Plus className="w-4 h-4" />
               New Case
             </Button>
           </div>
 
-          {/* Table */}
           <Card className="overflow-hidden">
             <Table>
               <TableHeader className="header-bg-soft">
                 <TableRow>
-                  <TableHead className="text-gray-700 font-semibold p-4">Case ID</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Patient Details</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Vehicle</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Booking Date | Time</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Pickup Location</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Status</TableHead>
-                  <TableHead className="text-gray-700 font-semibold p-4">Actions</TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("caseId")}
+                    >
+                      Case ID {getSortIcon("caseId")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("patientName")}
+                    >
+                      Patient Details {getSortIcon("patientName")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("vehicle")}
+                    >
+                      Vehicle {getSortIcon("vehicle")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("date")}
+                    >
+                      Booking Date | Time {getSortIcon("date")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("location")}
+                    >
+                      Pickup Location {getSortIcon("location")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">
+                    <button
+                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      onClick={() => requestSort("status")}
+                    >
+                      Status {getSortIcon("status")}
+                    </button>
+                  </TableHead>
+                  <TableHead className="p-4">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCases.map((item) => (
+                {sortedCases.map((item) => (
                   <TableRow key={item.id} className="hover:header-bg-soft transition">
-                    {/* Case ID */}
                     <TableCell className="p-4">
                       <div className="font-mono font-medium text-[#2160AD]">{item.caseId}</div>
                     </TableCell>
-
-                    {/* Patient Details */}
                     <TableCell className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-[#2160AD] flex items-center justify-center text-white font-medium text-sm">
@@ -272,13 +301,9 @@ export default function CasesPage() {
                         </div>
                       </div>
                     </TableCell>
-
-                    {/* Vehicle */}
                     <TableCell className="p-4">
                       <div className="font-medium">{item.vehicle}</div>
                     </TableCell>
-
-                    {/* Date & Time */}
                     <TableCell className="p-4">
                       <div className="font-medium">{item.date}</div>
                       <div className="flex items-center gap-1 text-sm text-gray-600">
@@ -286,46 +311,39 @@ export default function CasesPage() {
                         {item.time}
                       </div>
                     </TableCell>
-
-                    {/* Pickup Location */}
                     <TableCell className="p-4">
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
                         <span className="leading-relaxed">{item.location}</span>
                       </div>
                     </TableCell>
-
-                    {/* Status */}
                     <TableCell className="p-4">
                       <div
-                        className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-base font-medium ${item.status === "Pending for Dispatch"
+                        className={`inline-flex items-center justify-center px-3 py-0.5 rounded-full text-base font-medium ${
+                          item.status === "Pending for Dispatch"
                             ? "bg-[#EEA61F] text-white"
                             : item.status === "Dispatched"
-                              ? "bg-[#E2CC3B] text-black"
-                              : "bg-gray-200 text-gray-700"
-                          }`}
+                            ? "bg-[#E2CC3B] text-black"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
                       >
                         {item.status}
                       </div>
                     </TableCell>
-
-                    {/* Actions */}
                     <TableCell className="p-4">
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" className="" title="View Case">
+                        <Button variant="ghost" size="icon" title="View Case">
                           <Eye className="h-4 w-4 text-blue-600" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="" title="Edit Case">
+                        <Button variant="ghost" size="icon" title="Edit Case">
                           <SquarePen className="h-4 w-4 text-gray-500" />
                         </Button>
-
-                        {/* DELETE BUTTON – NOW WORKS */}
                         <Button
                           variant="ghost"
                           size="icon"
                           className="text-red-600 hover:text-red-800"
                           title="Delete Case"
-                          onClick={() => handleDelete(item.id)} // ← removes this row
+                          onClick={() => handleDelete(item.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -336,7 +354,7 @@ export default function CasesPage() {
               </TableBody>
             </Table>
 
-            {filteredCases.length === 0 && (
+            {sortedCases.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-gray-500">
                   <Briefcase className="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -349,15 +367,11 @@ export default function CasesPage() {
             )}
           </Card>
 
-          {/* Footer */}
           <div className="flex justify-between items-center text-sm text-gray-600">
-            <span>
-              Showing {filteredCases.length} of {cases.length} cases
-            </span>
+            <span>Showing {sortedCases.length} of {cases.length} cases</span>
           </div>
         </div>
       </div>
     </>
   );
 }
-

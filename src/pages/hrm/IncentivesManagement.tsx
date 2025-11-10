@@ -146,8 +146,19 @@ const incentiveData: IncentiveEntry[] = [
 
 const summaryCards = [
   { label: "Total Employees", value: 8, icon: Users, color: "blue" },
-  { label: "Total Incentives", value: 4646.79, icon: DollarSign, color: "blue" },
-  { label: "Total OT Hours", value: 68.0, unit: "h", icon: Clock, color: "blue" },
+  {
+    label: "Total Incentives",
+    value: 4646.79,
+    icon: DollarSign,
+    color: "blue",
+  },
+  {
+    label: "Total OT Hours",
+    value: 68.0,
+    unit: "h",
+    icon: Clock,
+    color: "blue",
+  },
   { label: "Avg Per Employee", value: 580.85, icon: Calculator, color: "blue" },
   { label: "Total Cases", value: 322, icon: FileText, color: "blue" },
 ];
@@ -167,8 +178,12 @@ export default function IncentivesManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-2xl font-medium text-black">Employee Incentive Overview</h1>
-          <p className="text-[#717182]">Monitor employee incentive tiers and performance metrics</p>
+          <h1 className="text-2xl font-medium text-black">
+            Employee Incentive Overview
+          </h1>
+          <p className="text-[#717182]">
+            Monitor employee incentive tiers and performance metrics
+          </p>
         </div>
         <Button variant="outline" className="gap-2">
           <Settings className="w-4 h-4" />
@@ -189,7 +204,11 @@ export default function IncentivesManagement() {
                   <p className="text-sm text-[#717182]">{card.label}</p>
                   <p className="text-lg font-medium text-black">
                     {card.value}
-                    {card.unit && <span className="text-sm font-normal text-[#717182] ml-1">{card.unit}</span>}
+                    {card.unit && (
+                      <span className="text-sm font-normal text-[#717182] ml-1">
+                        {card.unit}
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -221,32 +240,57 @@ export default function IncentivesManagement() {
       {/* Incentives Table */}
       <Card className="overflow-hidden">
         <CardHeader className="bg-[#2160AD]/5 border-b border-[#2160AD]/20 px-6 pt-6 pb-4">
-          <h4 className="text-[#2160AD] font-medium">Employee Incentive Details</h4>
+          <h4 className="text-[#2160AD] font-semibold ">
+            Employee Incentive Details
+          </h4>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader>
-                <TableRow className="bg-[#2160AD]/5 border-b-2 border-[#2160AD]/20">
-                  <TableHead className="text-left text-[#2160AD] px-6 py-3">Employee Details</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Cases</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Case Incentives</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Overtime</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Other Incentives</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Net Incentive</TableHead>
-                  <TableHead className="text-center text-[#2160AD] px-4 py-3">Action</TableHead>
+              <TableHeader className="header-bg-soft">
+                <TableRow>
+                  <TableHead className="p-4 font-semibold">
+                    Employee Details
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Cases
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Case Incentives
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Overtime
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Other Incentives
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Net Incentive
+                  </TableHead>
+                  <TableHead className="p-4 font-semibold">
+                    Action
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredData.map((entry) => (
-                  <TableRow key={entry.id} className="border-b border-gray-100 hover:bg-[#2160AD]/[0.02]">
+                  <TableRow
+                    key={entry.id}
+                    className="border-b border-gray-100 hover:bg-[#2160AD]/[0.02]"
+                  >
                     <TableCell className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="font-medium">{entry.name}</div>
-                        <div className="text-sm text-[#717182]">ID: {entry.employeeId}</div>
+                        <div className="text-sm text-[#717182]">
+                          ID: {entry.employeeId}
+                        </div>
                         <div className="text-sm text-[#717182] flex items-center gap-1">
-                          <span className="text-xs">${entry.annualSalary.toFixed(2)}/yr</span>
-                          <span className="text-[#2160AD] text-xs">(${entry.hourlyRate.toFixed(2)}/hr)</span>
+                          <span className="text-xs">
+                            ${entry.annualSalary.toFixed(2)}/yr
+                          </span>
+                          <span className="text-[#2160AD] text-xs">
+                            (${entry.hourlyRate.toFixed(2)}/hr)
+                          </span>
                         </div>
                       </div>
                     </TableCell>
@@ -291,12 +335,16 @@ export default function IncentivesManagement() {
 
       {/* Optional: Pagination (if needed later) */}
       <div className="flex justify-between items-center text-sm text-muted-foreground">
-        <span>Showing {filteredData.length} of {incentiveData.length} records</span>
+        <span>
+          Showing {filteredData.length} of {incentiveData.length} records
+        </span>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" disabled>
             Previous
           </Button>
-          <Button variant="outline" size="sm">1</Button>
+          <Button variant="outline" size="sm">
+            1
+          </Button>
           <Button variant="outline" size="sm" disabled>
             Next
           </Button>

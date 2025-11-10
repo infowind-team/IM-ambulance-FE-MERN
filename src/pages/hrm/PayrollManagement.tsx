@@ -214,19 +214,19 @@ export default function PayrollManagement() {
       </div>
 
       {/* Payroll Table */}
-      <Card className="rounded-xl border shadow-sm p-6">
+      <Card className="overflow-hidden">
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Employee</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Company</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Base Pay</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Incentives</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Allowances</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Deductions</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">CPF</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Net Pay</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+              <TableHead className="font-semibold p-4">Employee</TableHead>
+              <TableHead className="font-semibold p-4">Company</TableHead>
+              <TableHead className="font-semibold p-4">Base Pay</TableHead>
+              <TableHead className="font-semibold p-4">Incentives</TableHead>
+              <TableHead className="font-semibold p-4">Allowances</TableHead>
+              <TableHead className="font-semibold p-4">Deductions</TableHead>
+              <TableHead className="font-semibold p-4">CPF</TableHead>
+              <TableHead className="font-semibold p-4">Net Pay</TableHead>
+              <TableHead className="font-semibold p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -242,8 +242,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
             {currentStep === 1 && (
               <div className="">
                 <div className="space-y-6">
-                  <Card>
-                    <CardHeader>
+                  <Card className="overflow-hidden">
+                    <CardHeader className="header-bg-soft pb-6">
                       <CardTitle>Personal Details</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -326,8 +326,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card>
-                    <CardHeader>
+                  <Card className="overflow-hidden">
+                    <CardHeader className="header-bg-soft pb-6">
                       <CardTitle>Address Information</CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -353,8 +353,8 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                       </div>
                     </CardContent>
                   </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between pb-3">
+                  <Card className="overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between header-bg-soft pb-6">
                       <CardTitle>Family Members</CardTitle>
                       <Button
                         type="button"

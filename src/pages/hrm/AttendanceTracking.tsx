@@ -224,17 +224,17 @@ export default function AttendanceTracking() {
       )}
 
       {/* Table */}
-      <Card className="rounded-xl border shadow-sm p-6">
+      <Card className="overflow-hidden">
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Employee</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Status</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock In</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Clock Out</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Late</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Overtime</TableHead>
-              <TableHead className="text-gray-700 font-semibold px-4 py-3">Actions</TableHead>
+              <TableHead className="font-semibold p-4">Employee</TableHead>
+              <TableHead className="font-semibold p-4">Status</TableHead>
+              <TableHead className="font-semibold p-4">Clock In</TableHead>
+              <TableHead className="font-semibold p-4">Clock Out</TableHead>
+              <TableHead className="font-semibold p-4">Late</TableHead>
+              <TableHead className="font-semibold p-4">Overtime</TableHead>
+              <TableHead className="font-semibold p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -168,7 +168,7 @@ export default function OperationsTab() {
           <div className="flex gap-2">
             <Button
               onClick={handleSave}
-              className="h-8 rounded-md px-3 gap-2 bg-green-600 text-white hover:bg-green-700"
+              className="rounded-md px-3 gap-2 bg-green-600 text-white hover:bg-green-700"
               style={{ fontSize: "16px" }}
             >
               <Save className="w-4 h-4" />
@@ -188,20 +188,20 @@ export default function OperationsTab() {
       </div>
 
       {/* Scrollable Table */}
-      <Card className="rounded-xl border shadow-sm p-6 overflow-x-auto">
-        <Table className="w-full min-w-[1800px] border-collapse">
+      <Card className="overflow-hidden">
+        <Table>
           <TableHeader className="header-bg-soft">
             <TableRow>
               <TableHead
-                className="text-gray-700 font-semibold px-4 py-3 text-left sticky left-0 z-10"
-                style={{ fontSize: "16px", minWidth: "120px" }}
+                className="text-[#2160AD] font-semibold p-2 border-b-2 border-[#2160AD] text-left sticky left-0 z-10"
+                style={{ fontSize: "16px", minWidth: "130px" }}
               >
                 Staff
               </TableHead>
               {dates.map((d, idx) => (
                 <TableHead
                   key={idx}
-                  className="text-gray-700 font-semibold px-4 py-3 text-center"
+                 className="text-[#2160AD] font-semibold p-2 border-b-2 border-[#2160AD] text-center"
                   style={{ fontSize: "12px", minWidth: "60px" }}
                 >
                   <div>{d.day}</div>

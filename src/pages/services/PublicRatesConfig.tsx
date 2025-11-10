@@ -12,13 +12,9 @@ import {
   Trash2,
   Clock,
   SquarePen,
+  Save,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -30,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ConfigureHoursDialog from "./public-rates/ConfigureHoursDialog";
 
 type Service = {
   id: string;
@@ -121,6 +118,8 @@ type FormData = z.infer<typeof schema>;
 
 export default function PublicRatesConfig() {
   const [isEditing, setIsEditing] = useState(false);
+  const [openHoursDialog, setOpenHoursDialog] = useState(false);
+  const [officeHours, setOfficeHours] = useState<any>(null);
 
   const {
     register,
@@ -132,17 +131,71 @@ export default function PublicRatesConfig() {
     resolver: zodResolver(schema) as Resolver<FormData>,
     defaultValues: {
       tripServices: [
-        { name: "Basic Transfer", office: 120, nonOffice: 150, weekend: 180, active: true },
-        { name: "Long Distance Transfer", office: 150, nonOffice: 180, weekend: 210, active: true },
-        { name: "Multiple Destination", office: 180, nonOffice: 210, weekend: 240, active: true },
-        { name: "Standby Service", office: 120, nonOffice: 150, weekend: 180, active: true },
-        { name: "Emergency Response", office: 220, nonOffice: 280, weekend: 320, active: true },
+        {
+          name: "Basic Transfer",
+          office: 120,
+          nonOffice: 150,
+          weekend: 180,
+          active: true,
+        },
+        {
+          name: "Long Distance Transfer",
+          office: 150,
+          nonOffice: 180,
+          weekend: 210,
+          active: true,
+        },
+        {
+          name: "Multiple Destination",
+          office: 180,
+          nonOffice: 210,
+          weekend: 240,
+          active: true,
+        },
+        {
+          name: "Standby Service",
+          office: 120,
+          nonOffice: 150,
+          weekend: 180,
+          active: true,
+        },
+        {
+          name: "Emergency Response",
+          office: 220,
+          nonOffice: 280,
+          weekend: 320,
+          active: true,
+        },
       ],
       supportServices: [
-        { name: "Medical Escort", office: 30, nonOffice: 40, weekend: 60, active: true },
-        { name: "Terminal Discharge", office: 140, nonOffice: 160, weekend: 250, active: true },
-        { name: "Stretcher Bearer", office: 25, nonOffice: 35, weekend: 50, active: true },
-        { name: "Basic Life Support", office: 45, nonOffice: 60, weekend: 85, active: true },
+        {
+          name: "Medical Escort",
+          office: 30,
+          nonOffice: 40,
+          weekend: 60,
+          active: true,
+        },
+        {
+          name: "Terminal Discharge",
+          office: 140,
+          nonOffice: 160,
+          weekend: 250,
+          active: true,
+        },
+        {
+          name: "Stretcher Bearer",
+          office: 25,
+          nonOffice: 35,
+          weekend: 50,
+          active: true,
+        },
+        {
+          name: "Basic Life Support",
+          office: 45,
+          nonOffice: 60,
+          weekend: 85,
+          active: true,
+        },
       ],
       addOnServices: [
         {
@@ -150,9 +203,24 @@ export default function PublicRatesConfig() {
           unit: "Litre",
           active: true,
           pricingRules: [
-            { rule: "First (Fixed cost for initial units)", units: 5, amount: 15, currency: "SGD" },
-            { rule: "Next (Fixed cost for following units)", units: 10, amount: 12, currency: "SGD" },
-            { rule: "Every (Cost Per Unit)", units: 1, amount: 3, currency: "SGD" },
+            {
+              rule: "First (Fixed cost for initial units)",
+              units: 5,
+              amount: 15,
+              currency: "SGD",
+            },
+            {
+              rule: "Next (Fixed cost for following units)",
+              units: 10,
+              amount: 12,
+              currency: "SGD",
+            },
+            {
+              rule: "Every (Cost Per Unit)",
+              units: 1,
+              amount: 3,
+              currency: "SGD",
+            },
           ],
         },
         {
@@ -160,8 +228,18 @@ export default function PublicRatesConfig() {
           unit: "Trip",
           active: true,
           pricingRules: [
-            { rule: "First (Fixed cost for initial units)", units: 1, amount: 25, currency: "SGD" },
-            { rule: "Every (Cost Per Unit)", units: 1, amount: 20, currency: "SGD" },
+            {
+              rule: "First (Fixed cost for initial units)",
+              units: 1,
+              amount: 25,
+              currency: "SGD",
+            },
+            {
+              rule: "Every (Cost Per Unit)",
+              units: 1,
+              amount: 20,
+              currency: "SGD",
+            },
           ],
         },
       ],
@@ -172,9 +250,24 @@ export default function PublicRatesConfig() {
           active: true,
           isFixed: true,
           pricingRules: [
-            { rule: "First (Fixed cost for initial units)", units: 1, amount: 50, currency: "SGD" },
-            { rule: "Next (Fixed cost for following units)", units: 2, amount: 40, currency: "SGD" },
-            { rule: "Every (Cost Per Unit)", units: 1, amount: 30, currency: "SGD" },
+            {
+              rule: "First (Fixed cost for initial units)",
+              units: 1,
+              amount: 50,
+              currency: "SGD",
+            },
+            {
+              rule: "Next (Fixed cost for following units)",
+              units: 2,
+              amount: 40,
+              currency: "SGD",
+            },
+            {
+              rule: "Every (Cost Per Unit)",
+              units: 1,
+              amount: 30,
+              currency: "SGD",
+            },
           ],
         },
         {
@@ -183,7 +276,12 @@ export default function PublicRatesConfig() {
           active: true,
           isFixed: true,
           pricingRules: [
-            { rule: "Every (Cost Per Unit)", units: 1, amount: 45, currency: "SGD" },
+            {
+              rule: "Every (Cost Per Unit)",
+              units: 1,
+              amount: 45,
+              currency: "SGD",
+            },
           ],
         },
         {
@@ -192,7 +290,12 @@ export default function PublicRatesConfig() {
           active: true,
           isFixed: false,
           pricingRules: [
-            { rule: "First (Fixed cost for initial units)", units: 10, amount: 0, currency: "SGD" },
+            {
+              rule: "First (Fixed cost for initial units)",
+              units: 10,
+              amount: 0,
+              currency: "SGD",
+            },
             { rule: "Greater than", units: 10, amount: 2.5, currency: "SGD" },
           ],
         },
@@ -201,20 +304,42 @@ export default function PublicRatesConfig() {
   });
 
   // ---- Trip Services -------------------------------------------------
-  const { fields: tripFields, append: appendTrip, remove: removeTrip } = useFieldArray({ control, name: "tripServices" });
+  const {
+    fields: tripFields,
+    append: appendTrip,
+    remove: removeTrip,
+  } = useFieldArray({ control, name: "tripServices" });
 
   // ---- Support Services -----------------------------------------------
-  const { fields: supportFields, append: appendSupport, remove: removeSupport } = useFieldArray({ control, name: "supportServices" });
+  const {
+    fields: supportFields,
+    append: appendSupport,
+    remove: removeSupport,
+  } = useFieldArray({ control, name: "supportServices" });
 
   // ---- Add-on Services ------------------------------------------------
-  const { fields: addOnFields, append: appendAddOn, remove: removeAddOn } = useFieldArray({ control, name: "addOnServices" });
+  const {
+    fields: addOnFields,
+    append: appendAddOn,
+    remove: removeAddOn,
+  } = useFieldArray({ control, name: "addOnServices" });
 
   // ---- Additional Charges ---------------------------------------------
-  const { fields: chargeFields, append: appendCharge, remove: removeCharge } = useFieldArray({ control, name: "additionalCharges" });
+  const {
+    fields: chargeFields,
+    append: appendCharge,
+    remove: removeCharge,
+  } = useFieldArray({ control, name: "additionalCharges" });
 
   const onSubmit = (data: FormData) => {
     console.log("Submitted:", data);
     setIsEditing(false);
+  };
+
+  const handleHoursSave = (data: any) => {
+    setOfficeHours(data);
+    console.log("Office Hours Saved:", data);
+    // Optionally save to form or API
   };
 
   // ------------------------------------------------------------------------
@@ -234,12 +359,16 @@ export default function PublicRatesConfig() {
       />
       {["office", "nonOffice", "weekend"].map((key) => (
         <div key={key} className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+            $
+          </span>
           <Input
             type="number"
             step="0.01"
             min="0"
-            {...register(`${type}.${index}.${key}` as Path<FormData>, { valueAsNumber: true })}
+            {...register(`${type}.${index}.${key}` as Path<FormData>, {
+              valueAsNumber: true,
+            })}
             disabled={!isEditing}
             className="pl-8 bg-white"
           />
@@ -253,7 +382,9 @@ export default function PublicRatesConfig() {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => (type === "tripServices" ? removeTrip(index) : removeSupport(index))}
+        onClick={() =>
+          type === "tripServices" ? removeTrip(index) : removeSupport(index)
+        }
         disabled={!isEditing}
         className="text-red-500 hover:text-red-700"
       >
@@ -276,19 +407,37 @@ export default function PublicRatesConfig() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="border-[#2160AD] text-[#2160AD]">
+          <Button variant="outline" className="border-[#2160AD] text-[#2160AD]" onClick={() => setOpenHoursDialog(true)}>
             <Clock className="w-4 h-4 mr-2" />
             Configure Hours
           </Button>
           <Button
-            onClick={() => (isEditing ? handleSubmit(onSubmit)() : setIsEditing(true))}
+            onClick={() =>
+              isEditing ? handleSubmit(onSubmit)() : setIsEditing(true)
+            }
             className="bg-[#2160AD] hover:bg-[#1a4d8c] text-white"
           >
-            <SquarePen className="w-4 h-4 mr-2" />
-            {isEditing ? "Save Rates" : "Edit Rates"}
+            {isEditing ? (
+              <>
+                <Save className="w-4 h-4 mr-2" />
+                Save Changes
+              </>
+            ) : (
+              <>
+                <SquarePen className="w-4 h-4 mr-2" />
+                Edit Rates
+              </>
+            )}
           </Button>
         </div>
       </div>
+
+      {/* Office Hours Dialog */}
+      <ConfigureHoursDialog
+        open={openHoursDialog}
+        onOpenChange={setOpenHoursDialog}
+        onSave={handleHoursSave}
+      />
 
       {/* ==== Trip Types ==== */}
       <Card>
@@ -318,13 +467,18 @@ export default function PublicRatesConfig() {
         <CardContent>
           <div className="bg-[rgba(61,61,61,0.03)] rounded-lg border border-gray-100 p-4">
             <div className="grid grid-cols-6 gap-4 pb-4 mb-4 border-b border-gray-200">
-              {["Service", "Office Hours", "Non-Office Hours", "Weekend & PH", "Active", "Actions"].map(
-                (h) => (
-                  <div key={h} className="font-semibold text-[#29384d] text-base">
-                    {h}
-                  </div>
-                )
-              )}
+              {[
+                "Service",
+                "Office Hours",
+                "Non-Office Hours",
+                "Weekend & PH",
+                "Active",
+                "Actions",
+              ].map((h) => (
+                <div key={h} className="font-semibold text-[#29384d] text-base">
+                  {h}
+                </div>
+              ))}
             </div>
             <div className="space-y-4">
               {tripFields.map((_, i) => (
@@ -363,17 +517,26 @@ export default function PublicRatesConfig() {
         <CardContent>
           <div className="bg-[#fcfcfc] rounded-lg border border-gray-100 p-4">
             <div className="grid grid-cols-6 gap-4 pb-4 mb-4 border-b border-gray-200">
-              {["Service", "Office Hours", "Non-Office Hours", "Weekend & PH", "Active", "Actions"].map(
-                (h) => (
-                  <div key={h} className="font-semibold text-[#29384d] text-base">
-                    {h}
-                  </div>
-                )
-              )}
+              {[
+                "Service",
+                "Office Hours",
+                "Non-Office Hours",
+                "Weekend & PH",
+                "Active",
+                "Actions",
+              ].map((h) => (
+                <div key={h} className="font-semibold text-[#29384d] text-base">
+                  {h}
+                </div>
+              ))}
             </div>
             <div className="space-y-4">
               {supportFields.map((_, i) => (
-                <RateRow key={supportFields[i].id} index={i} type="supportServices" />
+                <RateRow
+                  key={supportFields[i].id}
+                  index={i}
+                  type="supportServices"
+                />
               ))}
             </div>
           </div>
@@ -477,7 +640,9 @@ export default function PublicRatesConfig() {
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base font-semibold">Pricing Rules</Label>
+                    <Label className="text-base font-semibold">
+                      Pricing Rules
+                    </Label>
                     <Button
                       type="button"
                       variant="outline"
@@ -499,11 +664,21 @@ export default function PublicRatesConfig() {
 
                   <div className="bg-[#f7f7f8] p-4 rounded-lg space-y-3">
                     <div className="grid grid-cols-5 gap-4 pb-2 border-b border-gray-300">
-                      <div className="text-sm font-semibold text-[#29384d]">Pricing Rule</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Unit ({unit})</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Amount Per Unit</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Currency</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Actions</div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Pricing Rule
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Unit ({unit})
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Amount Per Unit
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Currency
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Actions
+                      </div>
                     </div>
 
                     {ruleFields.map((rule, ruleIdx) => (
@@ -512,7 +687,9 @@ export default function PublicRatesConfig() {
                         className="grid grid-cols-5 gap-4 items-center"
                       >
                         <Select
-                          value={watch(`addOnServices.${addOnIdx}.pricingRules.${ruleIdx}.rule`)}
+                          value={watch(
+                            `addOnServices.${addOnIdx}.pricingRules.${ruleIdx}.rule`
+                          )}
                           onValueChange={(v) => {}}
                           disabled={!isEditing}
                         >
@@ -544,7 +721,9 @@ export default function PublicRatesConfig() {
                         />
 
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                            $
+                          </span>
                           <Input
                             type="number"
                             step="0.01"
@@ -560,7 +739,9 @@ export default function PublicRatesConfig() {
                         </div>
 
                         <Select
-                          value={watch(`addOnServices.${addOnIdx}.pricingRules.${ruleIdx}.currency`)}
+                          value={watch(
+                            `addOnServices.${addOnIdx}.pricingRules.${ruleIdx}.currency`
+                          )}
                           disabled={!isEditing}
                         >
                           <SelectTrigger className="w-20">
@@ -644,7 +825,9 @@ export default function PublicRatesConfig() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[#2160AD] font-semibold">
-                    {isFixed ? charge.name + " (Mandatory)" : `Additional Charge ${chargeIdx + 1}`}
+                    {isFixed
+                      ? charge.name + " (Mandatory)"
+                      : `Additional Charge ${chargeIdx + 1}`}
                   </h3>
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
@@ -670,7 +853,9 @@ export default function PublicRatesConfig() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>{isFixed ? "Charge Name (Fixed)" : "Charge Name"}</Label>
+                    <Label>
+                      {isFixed ? "Charge Name (Fixed)" : "Charge Name"}
+                    </Label>
                     <Input
                       placeholder="e.g., Waiting Fee"
                       {...register(`additionalCharges.${chargeIdx}.name`)}
@@ -691,7 +876,9 @@ export default function PublicRatesConfig() {
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label className="text-base font-semibold">Pricing Rules</Label>
+                    <Label className="text-base font-semibold">
+                      Pricing Rules
+                    </Label>
                     <Button
                       type="button"
                       variant="outline"
@@ -713,11 +900,21 @@ export default function PublicRatesConfig() {
 
                   <div className="bg-[#f7f7f8] p-4 rounded-lg space-y-3">
                     <div className="grid grid-cols-5 gap-4 pb-2 border-b border-gray-300">
-                      <div className="text-sm font-semibold text-[#29384d]">Rule</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Unit ({unit})</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Amount</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Type</div>
-                      <div className="text-sm font-semibold text-[#29384d]">Actions</div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Rule
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Unit ({unit})
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Amount
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Type
+                      </div>
+                      <div className="text-sm font-semibold text-[#29384d]">
+                        Actions
+                      </div>
                     </div>
 
                     {ruleFields.map((rule, ruleIdx) => (
@@ -726,7 +923,9 @@ export default function PublicRatesConfig() {
                         className="grid grid-cols-5 gap-4 items-center"
                       >
                         <Select
-                          value={watch(`additionalCharges.${chargeIdx}.pricingRules.${ruleIdx}.rule`)}
+                          value={watch(
+                            `additionalCharges.${chargeIdx}.pricingRules.${ruleIdx}.rule`
+                          )}
                           onValueChange={() => {}}
                           disabled={!isEditing}
                         >
@@ -761,7 +960,9 @@ export default function PublicRatesConfig() {
                         />
 
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                            $
+                          </span>
                           <Input
                             type="number"
                             step="0.01"
@@ -777,7 +978,9 @@ export default function PublicRatesConfig() {
                         </div>
 
                         <Select
-                          value={watch(`additionalCharges.${chargeIdx}.pricingRules.${ruleIdx}.currency`)}
+                          value={watch(
+                            `additionalCharges.${chargeIdx}.pricingRules.${ruleIdx}.currency`
+                          )}
                           disabled={!isEditing}
                         >
                           <SelectTrigger className="w-20">

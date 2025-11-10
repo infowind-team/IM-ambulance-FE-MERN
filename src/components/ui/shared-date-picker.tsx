@@ -51,7 +51,7 @@ export function SharedDatePicker({
       const sameYear = start.getFullYear() === end.getFullYear();
 
       const formatStart = sameMonth ? format(start, 'MMM d') : format(start, 'MMM d, yyyy');
-      const formatEnd = sameYear ? format(end, 'd, yyyy') : format(end, 'MMM d, yyyy');
+      const formatEnd = sameYear ? format(end, 'MMM d, yyyy') : format(end, 'MMM d, yyyy');
 
       return `${formatStart} - ${formatEnd}`;
     }

@@ -102,8 +102,8 @@ export default function MassAdjustmentTab() {
   return (
     <div className="space-y-5">
       {/* Mass Leave Adjustment */}
-      <Card className="border-gray-100">
-        <CardHeader className="px-5 py-4 bg-[#2160AD]/5 border-b border-gray-100">
+      <Card className="">
+        <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Mass Leave Adjustment</h4>
         </CardHeader>
         <CardContent className="p-5 space-y-6">
@@ -227,8 +227,8 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Filter by Roles */}
-      <Card className="border-gray-100">
-        <CardHeader className="px-5 py-4 bg-[#2160AD]/5 border-b border-gray-100">
+      <Card className="">
+        <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Filter by Roles (Optional)</h4>
         </CardHeader>
         <CardContent className="p-5">
@@ -254,15 +254,15 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Staff Selection List */}
-      <Card className="border-gray-100">
-        <CardHeader className="px-5 py-4 bg-[#2160AD]/5 border-b border-gray-100">
+      <Card className="">
+        <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Staff Selection List</h4>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="header-bg-soft border-b border-gray-100">
+                <TableRow className="header-bg-soft border-b ">
                   <TableHead className="w-12 p-2">
                     <Checkbox
                       checked={selectedStaff.length === filteredStaff.length && filteredStaff.length > 0}
@@ -312,15 +312,15 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Audit Trail */}
-      <Card className="border-gray-100">
-        <CardHeader className="px-5 py-4 bg-[#2160AD]/5 border-b border-gray-100">
+      <Card className="">
+        <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Past Mass Adjustments - Audit Trail</h4>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="header-bg-soft border-b border-gray-100">
+                <TableRow className="header-bg-soft border-b ">
                   <TableHead className="p-2">Adjustment ID</TableHead>
                   <TableHead className="p-2">Leave Type</TableHead>
                   <TableHead className="p-2">Reason</TableHead>
