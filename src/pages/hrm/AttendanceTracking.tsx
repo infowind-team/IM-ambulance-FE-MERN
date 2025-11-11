@@ -206,7 +206,7 @@ export default function AttendanceTracking() {
       {lateCount > 0 && (
         <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-br-lg rounded-tr-lg">
           <div className="flex items-center">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-4 h-4 bg-red-400 rounded-sm flex items-center justify-center">
                 <TriangleAlert className="w-3 h-3 text-white" />
               </div>

@@ -1122,7 +1122,7 @@ export default function CasesAddPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="header-bg-soft p-6 rounded-lg border">
+              <div className="bg-gray-50 p-6 rounded-lg border">
                 <div className="font-semibold mb-4 text-[#2160AD] text-lg">
                   Billing Summary
                 </div>
@@ -1137,7 +1137,7 @@ export default function CasesAddPage() {
                           (t) => t.pickupLocation && t.dropoffLocation
                         )
                           ? "Calculated from route"
-                          : "No pickup/dropoff selected"}
+                          : "No pickup location selected"}
                       </div>
                     </div>
                     <span className="text-base font-semibold ml-4">$0.00</span>
@@ -1165,6 +1165,9 @@ export default function CasesAddPage() {
                     <div className="text-center py-4 text-gray-500">
                       <div className="text-base">
                         No additional services selected
+                      </div>
+                      <div className="text-sm mt-1">
+                        Add services above to see breakdown
                       </div>
                     </div>
                   )}
