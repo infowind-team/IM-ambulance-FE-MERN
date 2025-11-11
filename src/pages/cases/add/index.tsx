@@ -79,8 +79,8 @@ interface Trip {
 /* -------------------------------------------------------------------------- */
 export default function CasesAddPage() {
   const [status, setStatus] = useState("Open");
-  const [intake, setIntake] = useState("Phone Call");
-  const [transport, setTransport] = useState("Select transport mode");
+  const [intakeMode, setIntake] = useState("Phone Call");
+  const [transportMode, setTransport] = useState("Select transport mode");
   const [gender, setGender] = useState("Male");
 
   const [tripType, setTripType] = useState<"one-way" | "two-way" | "three-way">(
@@ -96,26 +96,26 @@ export default function CasesAddPage() {
 
   /* Patient */
   const [patientName, setPatientName] = useState("");
-  const [patientNric, setPatientNric] = useState("");
-  const [patientAge, setPatientAge] = useState("");
-  const [patientWeight, setPatientWeight] = useState("");
+  const [nric, setPatientNric] = useState("");
+  const [age, setPatientAge] = useState("");
+  const [weight, setPatientWeight] = useState("");
   const [patientContact, setPatientContact] = useState("");
   const [patientCondition, setPatientCondition] = useState("");
 
   /* Next of Kin */
   const [nokName, setNokName] = useState("");
   const [nokContact, setNokContact] = useState("");
-  const [nokRelationship, setNokRelationship] = useState("Parent");
-  const [nokAccompanying, setNokAccompanying] = useState("0");
+  const [nokRelation, setNokRelationship] = useState("Parent");
+  const [nokAccompany, setNokAccompanying] = useState("0");
 
   /* Times */
   const [bookingTime, setBookingTime] = useState("");
   const [bookingDate, setBookingDate] = useState("");
 
   /* Vehicle assignment */
-  const [mto, setMto] = useState("");
-  const [emt, setEmt] = useState("");
-  const [escort, setEscort] = useState("");
+  const [mtoName, setMto] = useState("");
+  const [staffName, setEmt] = useState("");
+  const [escortName, setEscort] = useState("");
 
   /* Services */
   const [serviceSearch, setServiceSearch] = useState("");
@@ -212,6 +212,62 @@ export default function CasesAddPage() {
     setTimeout(() => setServiceSearch(""), 300);
   };
 
+  const handleCreateCase = async () => {
+    const payload = {
+      status,
+      intakeMode,
+      transportMode,
+      gender,
+      tripType,
+      vehicleType,
+      vehicleNumber,
+      requestorName,
+      requestorContact,
+      patientName,
+      nric,
+      age,
+      weight,
+      patientContact,
+      patientCondition,
+      nokName,
+      nokContact,
+      nokRelation,
+      nokAccompany,
+      bookingTime,
+      bookingDate,
+      mtoName,
+      staffName,
+      escortName,
+      trips,
+      selectedServices,
+    };
+    const access_token =
+      typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+    try {
+      const res = await fetch('/api/cases/create-case', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+         },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Case created successfully!');
+        console.log('Created case:', data);
+      } else {
+        alert(`Error: ${data.message || 'Failed to create case'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong!');
+    }
+  };
+
+
   return (
     <>
       <FunctionalHeader
@@ -256,7 +312,7 @@ export default function CasesAddPage() {
                 <Label className="text-base font-medium text-base-optimized mb-2 block">
                   Mode of Intake <span className="text-red-500">*</span>
                 </Label>
-                <Select value={intake} onValueChange={setIntake}>
+                <Select value={intakeMode} onValueChange={setIntake}>
                   <SelectTrigger className="w-full text-base-optimized">
                     <SelectValue />
                   </SelectTrigger>
@@ -330,7 +386,7 @@ export default function CasesAddPage() {
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Mode of Transport
                   </Label>
-                  <Select value={transport} onValueChange={setTransport}>
+                  <Select value={transportMode} onValueChange={setTransport}>
                     <SelectTrigger className="w-full text-base-optimized">
                       <SelectValue />
                     </SelectTrigger>
@@ -385,7 +441,7 @@ export default function CasesAddPage() {
                   <Input
                     placeholder="S****567Z"
                     type="text"
-                    value={patientNric}
+                    value={nric}
                     onChange={(e) => setPatientNric(e.target.value)}
                     className="w-full"
                   />
@@ -400,7 +456,7 @@ export default function CasesAddPage() {
                   <Input
                     placeholder="65"
                     type="number"
-                    value={patientAge}
+                    value={age}
                     onChange={(e) => setPatientAge(e.target.value)}
                     className="w-full"
                   />
@@ -412,7 +468,7 @@ export default function CasesAddPage() {
                   <Input
                     placeholder="70"
                     type="number"
-                    value={patientWeight}
+                    value={weight}
                     onChange={(e) => setPatientWeight(e.target.value)}
                     className="w-full"
                   />
@@ -498,7 +554,7 @@ export default function CasesAddPage() {
                       Relationship
                     </Label>
                     <Select
-                      value={nokRelationship}
+                      value={nokRelation}
                       onValueChange={setNokRelationship}
                     >
                       <SelectTrigger className="w-full text-base-optimized">
@@ -526,7 +582,7 @@ export default function CasesAddPage() {
                     </Label>
                     <Input
                       type="number"
-                      value={nokAccompanying}
+                      value={nokAccompany}
                       onChange={(e) => setNokAccompanying(e.target.value)}
                       className="w-full"
                     />
@@ -954,7 +1010,7 @@ export default function CasesAddPage() {
                     <Input
                       placeholder="Medical Transport Officer"
                       type="text"
-                      value={mto}
+                      value={mtoName}
                       onChange={(e) => setMto(e.target.value)}
                       className="w-full"
                     />
@@ -966,7 +1022,7 @@ export default function CasesAddPage() {
                     <Input
                       placeholder="Emergency Medical Technician"
                       type="text"
-                      value={emt}
+                      value={staffName}
                       onChange={(e) => setEmt(e.target.value)}
                       className="w-full"
                     />
@@ -978,7 +1034,7 @@ export default function CasesAddPage() {
                     <Input
                       placeholder="Escort name"
                       type="text"
-                      value={escort}
+                      value={escortName}
                       onChange={(e) => setEscort(e.target.value)}
                       className="w-full"
                     />
@@ -1200,7 +1256,7 @@ export default function CasesAddPage() {
             <Button variant="outline" className="px-6 lg:px-8">
               Cancel
             </Button>
-            <Button className="px-6 lg:px-8">Create Case</Button>
+            <Button className="px-6 lg:px-8"  onClick={handleCreateCase}>Create Case</Button>
           </div>
         </div>
       </div>

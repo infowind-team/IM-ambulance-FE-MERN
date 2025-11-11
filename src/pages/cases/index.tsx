@@ -92,7 +92,7 @@ export default function CasesPage() {
     try {
       setLoading(true);
       const access_token =
-        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+       typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
       const res = await fetch(`/api/cases/get-cases?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(searchQuery)}&selectedStatus=${encodeURIComponent(selectedStatus)}`, {
         method: "GET",
         headers: {
