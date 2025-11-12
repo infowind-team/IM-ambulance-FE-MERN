@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import DownloadLeaveEntitlementDialog from "./entitlement/DownloadLeaveEntitlementDialog";
 
 interface EmployeeEntitlement {
   id: string;
@@ -63,6 +64,7 @@ const departments = ["All Departments", "Operations", "HR", "Medical", "Admin"];
 export default function EntitlementTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDept, setSelectedDept] = useState("All Departments");
+  const [openEntitlement, setOpenEntitlement] = useState(false);
 
   const filteredData = entitlementData.filter((emp) => {
     const matchesSearch =
@@ -71,6 +73,11 @@ export default function EntitlementTab() {
     const matchesDept = selectedDept === "All Departments" || true; // Extend with real dept later
     return matchesSearch && matchesDept;
   });
+
+  const handleDownload = (employeeId: string) => {
+    console.log('Downloading for employee ID:', employeeId);
+    // Trigger PDF/CSV download
+  };
 
   return (
     <div className="space-y-6">
@@ -84,11 +91,17 @@ export default function EntitlementTab() {
             View and manage leave balances and entitlements for all employees
           </p>
         </div>
-        <Button className="bg-[#2160AD] hover:bg-[#1a4d8a] border-[#2160AD] text-white">
+        <Button onClick={() => setOpenEntitlement(true)}>
           <Download className="w-4 h-4 mr-2" />
           Download
         </Button>
       </div>
+
+      <DownloadLeaveEntitlementDialog
+        open={openEntitlement}
+        onOpenChange={setOpenEntitlement}
+        onDownload={handleDownload}
+      />
 
       {/* Filters */}
       <div className="flex gap-4 flex-wrap">

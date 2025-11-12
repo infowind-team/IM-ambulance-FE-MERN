@@ -29,21 +29,21 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout>
-        <Card className="w-full max-w-md bg-white p-6 shadow-lg">
+      <Card className="w-full max-w-md">
         <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-[#2160AD]">Forgot Password?</h1>
+          <h1 className="text-3xl font-semibold text-[#2160AD]">Forgot Password?</h1>
         </div>
 
         {showSuccess && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
             <CheckCircle className="w-10 h-10 text-green-600 mx-auto mb-2" />
             <p className="text-green-800 font-medium">Reset link sent!</p>
             <p className="text-green-600 text-sm">Redirecting to login...</p>
-            </div>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-            <TextField
+          <TextField
             label="Enter your email"
             type="email"
             value={email}
@@ -51,29 +51,29 @@ export default function ForgotPasswordPage() {
             placeholder="you@example.com"
             disabled={showSuccess}
             required
-            />
+          />
 
-            <div className="text-center">
+          <div className="text-center">
             <p className="text-sm text-gray-600">
-                Remember your password?{' '}
-                <Link
+              Remember your password?{' '}
+              <Link
                 href="/login"
-                className="text-[#2160AD] hover:text-[#2160AD]/80 font-medium transition-colors"
-                >
+                className="text-[#2160AD] hover:text-[#2160AD]/80 font-medium transition-colors text-base"
+              >
                 Log In
-                </Link>
+              </Link>
             </p>
-            </div>
+          </div>
 
-            <Button
+          <Button
             type={showSuccess ? 'button' : 'submit'}
             disabled={showSuccess}
             className="w-full bg-[#2160AD] text-white hover:bg-[#1e55a0] disabled:opacity-60"
-            >
-            {showSuccess ? 'Reset link sent! Redirecting…' : 'Send Reset Link'}
-            </Button>
+          >
+            {showSuccess ? 'Reset link sent! Redirecting…' : 'Verify'}
+          </Button>
         </form>
-        </Card>
+      </Card>
     </AuthLayout>
   );
 }

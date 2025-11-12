@@ -58,14 +58,14 @@ export default function LoginPage() {
           <div className="text-center">
             <Link
               href="/forgot-password"
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-base text-gray-500 hover:text-gray-700 transition-colors"
             >
-              Forgot Password?
+              Forgot Password
             </Link>
           </div>
 
           {/* Sign Up Link */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
               <Link
@@ -75,7 +75,7 @@ export default function LoginPage() {
                 Sign up
               </Link>
             </p>
-          </div>
+          </div> */}
         </form>
       </Card>
     </AuthLayout>

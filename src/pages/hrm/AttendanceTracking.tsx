@@ -11,6 +11,7 @@ import {
   SquarePen,
   TriangleAlert,
 } from "lucide-react";
+import { format, subDays, addDays } from "date-fns";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import { DatePicker } from "@/components/ui/date-picker";
 import { cn } from "@/components/ui/utils";
 
 import {
@@ -31,6 +33,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AttendanceRecordDialog from "./attendance-tracking/AttendanceRecordDialog";
+import EditAttendanceDialog from "./attendance-tracking/EditAttendanceDialog";
 
 interface AttendanceEntry {
   id: string;
@@ -145,13 +149,10 @@ const placeholderImg =
 
 export default function AttendanceTracking() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-  );
+  const [attInfoOpen, setAttInfoOpen] = useState(false);
+  const [attEditOpen, setAttEditOpen] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const filteredData = attendanceData.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -159,6 +160,11 @@ export default function AttendanceTracking() {
 
   // Count late-comers for the warning banner
   const lateCount = filteredData.filter((e) => e.lateFlag).length;
+
+  const handleSave = (data: any) => {
+    console.log('Saved:', data);
+    // Call API here
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -177,26 +183,35 @@ export default function AttendanceTracking() {
 
         {/* Date navigation */}
         <div className="flex items-center gap-3">
-          <Button size="icon" variant="outline">
+          <Button 
+            size="icon" 
+            variant="outline"
+            onClick={() => setSelectedDate(subDays(selectedDate, 1))}
+          >
             <ChevronLeft className="w-4 h-4" />
           </Button>
-
+ 
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="min-w-[140px] gap-2">
                 <Calendar className="w-4 h-4" />
-                {selectedDate}
+                {format(selectedDate, "dd MMM yyyy")}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="center">
-              {/* You can plug in a real date picker here */}
-              <div className="p-3 text-sm">
-                (Date picker placeholder – click to change)
-              </div>
+            <PopoverContent className="w-auto p-0" align="center"> 
+              <DatePicker
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => date && setSelectedDate(date)}
+              />
             </PopoverContent>
           </Popover>
 
-          <Button size="icon" variant="outline">
+          <Button 
+            size="icon" 
+            variant="outline"
+            onClick={() => setSelectedDate(addDays(selectedDate, 1))}
+          >
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
@@ -261,15 +276,15 @@ export default function AttendanceTracking() {
                     className={cn(
                       "border bg-transparent",
                       entry.status === "Active" &&
-                        "border-[#23cf65] text-[#212143]",
+                      "border-[#23cf65] text-[#212143]",
                       entry.status === "On Leave" &&
-                        "border-[#e71b1b] text-[#212143]",
+                      "border-[#e71b1b] text-[#212143]",
                       entry.status === "Probation" &&
-                        "border-[#eea51f] text-[#212143]",
+                      "border-[#eea51f] text-[#212143]",
                       entry.status === "Inactive" &&
-                        "border-[silver] text-[#212143]",
+                      "border-[silver] text-[#212143]",
                       entry.status === "Suspended" &&
-                        "border-[silver] text-[#212143]"
+                      "border-[silver] text-[#212143]"
                     )}
                   >
                     {entry.status}
@@ -303,30 +318,35 @@ export default function AttendanceTracking() {
 
                 {/* Actions */}
                 <TableCell className="py-4">
-                      <div className="flex gap-2">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-8 w-8"
-                          title="View History"
-                        >
-                          <Info className="h-4 w-4 text-blue-600" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="h-8 w-8"
-                          title="Edit Attendance"
-                        >
-                          <SquarePen className="h-4 w-4 text-blue-600" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+                  <div className="flex gap-2">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8"
+                      title="View History"
+                      onClick={() => setAttInfoOpen(true)}
+                    >
+                      <Info className="h-4 w-4 text-blue-600" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8"
+                      title="Edit Attendance"
+                      onClick={() => setAttEditOpen(true)}
+                    >
+                      <SquarePen className="h-4 w-4 text-blue-600" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
+
+      <AttendanceRecordDialog open={attInfoOpen} onOpenChange={setAttInfoOpen} />
+      <EditAttendanceDialog open={attEditOpen} onOpenChange={setAttEditOpen} onSave={handleSave} />
 
       {/* Pagination (static for demo) */}
       <div className="flex justify-end items-center gap-5 py-4">

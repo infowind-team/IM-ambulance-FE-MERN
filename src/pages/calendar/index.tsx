@@ -7,6 +7,7 @@ import DayView from './DayView';
 import WeekView from './WeekView';
 import MonthView from './MonthView';
 import { SharedDatePicker } from '@/components/ui/shared-date-picker';
+import { Button } from '@/components/ui/button';
 
 // === CONFIG ===
 const STATUS_CONFIG = {
@@ -188,12 +189,13 @@ export default function CalendarPage() {
               Filters {totalFilters > 0 && `(${totalFilters})`}
             </h3>
             {totalFilters > 0 && (
-              <button
+              <Button
                 onClick={clearFilters}
-                className="text-sm text-[#2160AD] hover:bg-[#2160AD]/10 px-2 h-6 rounded-md transition-colors"
+                variant='ghost'
+                className="text-[#2160AD] hover:bg-[#2160AD]/10 px-2 h-6"
               >
                 Clear All
-              </button>
+              </Button>
             )}
           </div>
 
@@ -276,17 +278,19 @@ export default function CalendarPage() {
                     const key = mode.toLowerCase() as ViewMode;
                     const isActive = activeTab === key;
                     return (
-                      <button
+                      <Button
                         key={mode}
                         type="button"
+                        variant={isActive ? 'default' : 'outline'}
+                        size='sm'
                         onClick={() => setActiveTab(key)}
-                        className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${isActive
-                            ? 'bg-[#2160AD] text-white'
-                            : 'border border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10'
-                          }`}
+                        // className={`h-8 px-3 rounded-md text-sm font-medium transition-all ${isActive
+                        //     ? 'bg-[#2160AD] text-white'
+                        //     : 'border border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10'
+                        //   }`}
                       >
                         {mode}
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
