@@ -124,24 +124,7 @@ export default function VehiclesPage() {
   };
 
   const handleView = async(id:string) =>{
-    try{
-      const accessToken = localStorage.getItem("accessToken");
-
-    const response = await fetch(`/api/vehicles/get-by-id/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    
-    if (!response.ok) throw new Error(data.message || "Failed to fetch vehicle details");
-    }catch (error) {
-    console.error("Error fetching vehicle details:", error);
-    alert("Failed to load vehicle details.");
-  }
+   router.push(`/vehicles/add?id=${id}`);
     
   }
 

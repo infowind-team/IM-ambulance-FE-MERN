@@ -1,6 +1,6 @@
 "use client";
-
-import { useState, useRef } from "react";
+import { useRouter} from "next/router";
+import { useState, useRef, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -64,32 +64,16 @@ type CertificateRecord = {
 };
 
 export default function VehiclesAddPage() {
+  const router = useRouter();
+  const { id } = router.query; // when you come via /vehicles/add?id=XYZ
+  const vehicleId = Array.isArray(id) ? id[0] : id
+  const [isEditable, setIsEditable] = useState(!id); // not editable if we have id
+  const [loading, setLoading] = useState(false);
+  
   // ---------- State ----------
-  const [maintenanceRecords, setMaintenanceRecords] = useState<MaintenanceRecord[]>([
-    // {
-    //   id: 1,
-    //   lastService: "2024-01-15",
-    //   nextDue: "2024-07-15",
-    //   odometer: "45,230",
-    //   files: 1,
-    // },
-    // {
-    //   id: 2,
-    //   lastService: "2024-02-28",
-    //   nextDue: "2024-08-28",
-    //   odometer: "46,850",
-    //   files: 1,
-    // },
-    // {
-    //   id: 3,
-    //   lastService: "2024-03-10",
-    //   nextDue: "2024-09-10",
-    //   odometer: "47,200",
-    //   files: 0,
-    // },
-  ]);
+  const [maintenance, setMaintenanceRecords] = useState<MaintenanceRecord[]>([]);
 
-  const [certificateRecords, setCertificateRecords] = useState<CertificateRecord[]>([
+  const [certificates, setCertificateRecords] = useState<CertificateRecord[]>([
     {
       id: 1,
       type: "Vehicle Inspection Certificate (LTA)",
@@ -167,6 +151,64 @@ export default function VehiclesAddPage() {
     nextServiceDate:""
   });
 
+  useEffect(() => {
+    if (!router.isReady) return;
+    setIsEditable(!id); 
+  }, [router.isReady, id]);
+
+  useEffect(() => {
+    if (id) fetchVehicleById(id as string);
+  }, [id]);
+
+  const fetchVehicleById = async (vehicleId: string) => {
+    try {
+      setLoading(true);
+      const accessToken = localStorage.getItem("accessToken");
+      const res = await fetch(`/api/vehicles/get-by-id/${vehicleId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      setForm((prev) => ({
+        ...prev,
+        vehicleNumber: data.data.vehicleNumber || "",
+        chassisNumber: data.data.chassisNumber || "",
+        type: data.data.type || "",
+        scheme: data.data.scheme || "",
+        makeModel: data.data.make || "",
+        year: data.data.year?.toString() || "",
+        propellant: data.data.propellant || "Diesel",
+        status: data.data.status || "Active",
+        ownerName: data.data.owner?.ownerName || "",
+        registrationDate: data.data.owner?.registrationDate?.split("T")[0] || "",
+      }));
+
+      if (data.data.vehicleCertificates) {
+        setCertificateRecords(
+          data.data.vehicleCertificates.map((c: any, index: number) => ({
+            id: index + 1,
+            type: c.certificateType,
+            number: c.certificateNumber,
+            issued: c.issuedDate?.split("T")[0] || "",
+            expiry: c.expiryDate?.split("T")[0] || "",
+            file: c.documentUrl || "",
+            remarks: c.remarks || "",
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Error fetching vehicle:", err);
+      alert("Failed to load vehicle details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   // ---------- Refs ----------
   const maintenanceFileInputRef = useRef<HTMLInputElement>(null);
   const certificateFileInputRef = useRef<HTMLInputElement>(null);
@@ -179,7 +221,7 @@ export default function VehiclesAddPage() {
 
   // --- Maintenance ---
   const handleAddMaintenance = () => {
-    const newId = Math.max(...maintenanceRecords.map((r) => r.id), 0) + 1;
+    const newId = Math.max(...maintenance.map((r) => r.id), 0) + 1;
     setMaintenanceRecords((prev) => [
       ...prev,
       {
@@ -243,7 +285,7 @@ export default function VehiclesAddPage() {
   };
 
   const cancelMaintenance = (id: number) => {
-    const record = maintenanceRecords.find((r) => r.id === id);
+    const record = maintenance.find((r) => r.id === id);
     if (
       record &&
       record.files === 0 &&
@@ -265,7 +307,7 @@ export default function VehiclesAddPage() {
 
   // --- Certificates ---
   const handleAddCertificate = () => {
-    const newId = Math.max(...certificateRecords.map((r) => r.id), 0) + 1;
+    const newId = Math.max(...certificates.map((r) => r.id), 0) + 1;
     setCertificateRecords((prev) => [
       ...prev,
       {
@@ -321,7 +363,7 @@ export default function VehiclesAddPage() {
   };
 
   const cancelCertificate = (id: number) => {
-    const cert = certificateRecords.find((r) => r.id === id);
+    const cert = certificates.find((r) => r.id === id);
     if (
       cert &&
       !cert.type &&
@@ -445,19 +487,32 @@ export default function VehiclesAddPage() {
     }
   };
 
+  const handleUpdateVehicle = async() =>{};
 
 
 
   return (
     <>
       <FunctionalHeader
-        title="Add New Vehicle"
+        title={
+          id
+            ? `${isEditable ? "Editing" : "Viewing"} - ${form.vehicleNumber || id}`
+            : "Add New Vehicle"
+        }
+        
         breadcrumb={[
           { label: "Operations" },
           { label: "Vehicle" },
-          { label: "Add New Vehicle" },
+          { label: vehicleId ? form.vehicleNumber || vehicleId : "Add New Vehicle" },
         ]}
       />
+      {vehicleId && (
+        <div className="flex justify-end p-4">
+          <Button variant="outline" onClick={() => setIsEditable((prev) => !prev)}>
+            {isEditable ? "Cancel Edit" : "Edit Vehicle"}
+          </Button>
+        </div>
+      )}
 
       <div className="flex-1 w-full overflow-auto">
         <div className="space-y-6 p-4 lg:p-6 w-full">
@@ -494,7 +549,8 @@ export default function VehiclesAddPage() {
                     Vehicle Number <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    required
+                    required 
+                    disabled={!isEditable}
                     value={form.vehicleNumber}
                     onChange={(e) => updateFormField("vehicleNumber", e.target.value)}
                     placeholder="e.g., SAZ1234A"
@@ -505,7 +561,8 @@ export default function VehiclesAddPage() {
                     Chassis No. <span className="text-red-500">*</span>
                   </Label>
                   <Input
-                    required
+                    required 
+                    disabled={!isEditable}
                     value={form.chassisNumber}
                     onChange={(e) => updateFormField("chassisNumber", e.target.value)}
                     placeholder="e.g., JTFST22P200040240"
@@ -549,6 +606,7 @@ export default function VehiclesAddPage() {
                   </Label>
                   <Input
                     required
+                    disabled={!isEditable}
                     value={form.makeModel}
                     onChange={(e) => updateFormField("makeModel", e.target.value)}
                     placeholder="e.g., Mercedes-Benz Sprinter"
@@ -558,6 +616,7 @@ export default function VehiclesAddPage() {
                   <Label>Year</Label>
                   <Input
                     value={form.year}
+                    disabled={!isEditable}
                     onChange={(e) => updateFormField("year", e.target.value)}
                     placeholder="e.g., 2023"
                   />
@@ -657,6 +716,7 @@ export default function VehiclesAddPage() {
                   </Label>
                   <Input
                     required
+                    disabled={!isEditable}
                     value={form.ownerName}
                     onChange={(e) => updateFormField("ownerName", e.target.value)}
                   />
@@ -668,6 +728,7 @@ export default function VehiclesAddPage() {
                   </Label>
                   <Input
                     required
+                    disabled={!isEditable}
                     value={form.ownerId}
                     onChange={(e) => updateFormField("ownerId", e.target.value)}
                   />
@@ -677,6 +738,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Registered Address</Label>
                   <Input
+                    disabled={!isEditable}
                     value={form.registeredAddress}
                     onChange={(e) => updateFormField("registeredAddress", e.target.value)}
                   />
@@ -684,6 +746,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Mailing Address</Label>
                   <Input
+                    disabled={!isEditable}
                     value={form.mailingAddress}
                     onChange={(e) => updateFormField("mailingAddress", e.target.value)}
                   />
@@ -693,6 +756,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Owner's ID Type</Label>
                   <Select
+                    disabled={!isEditable}
                     value={form.ownerIdType}
                     onValueChange={(v) => updateFormField("ownerIdType", v)}
                   >
@@ -711,6 +775,7 @@ export default function VehiclesAddPage() {
                   <Label>Registration Date</Label>
                   <Input
                     type="date"
+                     disabled={!isEditable}
                     value={form.registrationDate}
                     onChange={(e) => updateFormField("registrationDate", e.target.value)}
                   />
@@ -733,6 +798,7 @@ export default function VehiclesAddPage() {
                   <Label>Previous Vehicle No.</Label>
                   <Input
                     value={form.previousVehicleNo}
+                     disabled={!isEditable}
                     onChange={(e) => updateFormField("previousVehicleNo", e.target.value)}
                   // defaultValue="-"
                   />
@@ -741,6 +807,7 @@ export default function VehiclesAddPage() {
                   <Label>Effective Date of Ownership</Label>
                   <Input
                     type="date"
+                     disabled={!isEditable}
                     value={form.effectiveOwnershipDate}
                     onChange={(e) => updateFormField("effectiveOwnershipDate", e.target.value)}
                   />
@@ -749,6 +816,7 @@ export default function VehiclesAddPage() {
                   <Label>Original Registration Date</Label>
                   <Input
                     type="date"
+                     disabled={!isEditable}
                     value={form.originalRegistrationDate}
                     onChange={(e) => updateFormField("originalRegistrationDate", e.target.value)}
                   />
@@ -758,6 +826,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>No. of Transfers</Label>
                   <Input
+                     disabled={!isEditable}
                     value={form.noOfTransfers}
                     onChange={(e) => updateFormField("noOfTransfers", e.target.value)}
                   />
@@ -765,6 +834,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>IU Label No.</Label>
                   <Input
+                     disabled={!isEditable}
                     value={form.iuLabelNo}
                     onChange={(e) => updateFormField("iuLabelNo", e.target.value)}
                     placeholder="e.g., 40057623"
@@ -787,6 +857,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Engine No.</Label>
                   <Input
+                     disabled={!isEditable}
                     value={form.engineNo}
                     onChange={(e) => updateFormField("engineNo", e.target.value)}
                     placeholder="e.g., 1KDB045665"
@@ -795,6 +866,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Engine Type</Label>
                   <Select
+                    disabled={!isEditable}
                     value={form.engineType}
                     onValueChange={(v) => updateFormField("engineType", v)}
                   >
@@ -809,6 +881,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Maximum Unladen Weight (kg)</Label>
                   <Input
+                    disabled={!isEditable}
                     value={form.maxUnladenWeight}
                     onChange={(e) => updateFormField("maxUnladenWeight", e.target.value)}
                   />
@@ -816,6 +889,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Maximum Laden Weight (kg)</Label>
                   <Input
+                     disabled={!isEditable}
                     value={form.maxLadenWeight}
                     onChange={(e) => updateFormField("maxLadenWeight", e.target.value)}
                   />
@@ -825,6 +899,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Engine Capacity (cc)</Label>
                   <Input
+                    disabled={!isEditable}
                     value={form.engineCapacity}
                     onChange={(e) => updateFormField("engineCapacity", e.target.value)}
                   />
@@ -832,6 +907,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Maximum Power Output (kW)</Label>
                   <Input
+                     disabled={!isEditable}
                     value={form.maxPowerOutput}
                     onChange={(e) => updateFormField("maxPowerOutput", e.target.value)}
                   />
@@ -839,6 +915,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Primary Color</Label>
                   <Select
+                    disabled={!isEditable}
                     value={form.primaryColor}
                     onValueChange={(v) => updateFormField("primaryColor", v)}
                   >
@@ -853,6 +930,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Secondary Color</Label>
                   <Select
+                    disabled={!isEditable}
                     value={form.secondaryColor}
                     onValueChange={(v) => updateFormField("secondaryColor", v)}
                   >
@@ -869,6 +947,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Passenger Capacity</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.passengerCapacity}
                     onChange={(e) => updateFormField("passengerCapacity", e.target.value)}
                   />
@@ -876,6 +955,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Wheelchair Accessible</Label>
                   <RadioGroup
+                    disabled={!isEditable}
                     value={form.wheelchairAccessible}
                     onValueChange={(v) => updateFormField("wheelchairAccessible", v)}
                     className="flex gap-4"
@@ -893,6 +973,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Lifter</Label>
                   <RadioGroup
+                    disabled={!isEditable}
                     value={form.lifter}
                     onValueChange={(v) => updateFormField("lifter", v)}
                     className="flex gap-4"
@@ -910,6 +991,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Stretcher Compatible</Label>
                   <RadioGroup
+                    disabled={!isEditable}
                     value={form.stretcherCompatible}
                     onValueChange={(v) => updateFormField("stretcherCompatible", v)}
                     className="flex gap-4"
@@ -941,6 +1023,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Open Market Value (S$)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.omv}
                     onChange={(e) => updateFormField("omv", e.target.value)}
                   />
@@ -948,6 +1031,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Additional Registration Fee Rate (%)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.arfRate}
                     onChange={(e) => updateFormField("arfRate", e.target.value)}
                   />
@@ -955,6 +1039,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Actual ARF Paid (S$)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.actualArfPaid}
                     onChange={(e) => updateFormField("actualArfPaid", e.target.value)}
                   />
@@ -962,6 +1047,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>COE Expiry Date</Label>
                   <Input
+                   disabled={!isEditable}
                     type="date"
                     value={form.coeExpiryDate}
                     onChange={(e) => updateFormField("coeExpiryDate", e.target.value)}
@@ -972,6 +1058,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>OPC Cash Rebate Eligibility</Label>
                   <Select
+                    disabled={!isEditable}
                     value={form.opcCashRebate}
                     onValueChange={(v) => updateFormField("opcCashRebate", v)}
                   >
@@ -987,6 +1074,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>QP during COE Bidding Exercise</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.qpDuringCoe}
                     onChange={(e) => updateFormField("qpDuringCoe", e.target.value)}
                   // defaultValue="-"
@@ -995,6 +1083,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>COE No.</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.coeNo}
                     onChange={(e) => updateFormField("coeNo", e.target.value)}
                     placeholder="e.g., COE123456789"
@@ -1017,6 +1106,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>PARF Eligibility (S$)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.parfEligibility}
                     onChange={(e) => updateFormField("parfEligibility", e.target.value)}
                   />
@@ -1024,6 +1114,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>PARF Eligibility Expiry Date</Label>
                   <Input
+                   disabled={!isEditable}
                     type="date"
                     value={form.parfExpiryDate}
                     onChange={(e) => updateFormField("parfExpiryDate", e.target.value)}
@@ -1032,6 +1123,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>Min PARF Benefit (S$)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.minParfBenefit}
                     onChange={(e) => updateFormField("minParfBenefit", e.target.value)}
                   />
@@ -1053,6 +1145,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>CO2 Emission (g/km)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.co2Emission}
                     onChange={(e) => updateFormField("co2Emission", e.target.value)}
                   />
@@ -1060,6 +1153,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>CO Emission (g/km)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.coEmission}
                     onChange={(e) => updateFormField("coEmission", e.target.value)}
                   />
@@ -1067,6 +1161,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>HC Emission (g/km)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.hcEmission}
                     onChange={(e) => updateFormField("hcEmission", e.target.value)}
                   />
@@ -1074,6 +1169,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>NOx Emission (g/km)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.noxEmission}
                     onChange={(e) => updateFormField("noxEmission", e.target.value)}
                   />
@@ -1083,6 +1179,7 @@ export default function VehiclesAddPage() {
                 <div className="space-y-2">
                   <Label>PM Emission (g/km)</Label>
                   <Input
+                   disabled={!isEditable}
                     value={form.pmEmission}
                     onChange={(e) => updateFormField("pmEmission", e.target.value)}
                   />
@@ -1125,10 +1222,10 @@ export default function VehiclesAddPage() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-medium">Maintenance History</h3>
-                  <Button type="button" variant="outline" size="sm" onClick={handleAddMaintenance}>
+                  {isEditable &&<Button type="button" variant="outline" size="sm" onClick={handleAddMaintenance}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add Record
-                  </Button>
+                  </Button>}
                 </div>
                 <div className="border rounded-lg overflow-hidden">
                   <Table>
@@ -1142,12 +1239,13 @@ export default function VehiclesAddPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {maintenanceRecords.map((record) => (
+                      {maintenance.map((record) => (
                         <TableRow key={record.id} className="hover:bg-gray-50">
                           {record.isEditing ? (
                             <>
                               <TableCell className="px-4 py-3">
                                 <Input
+                                 disabled={!isEditable}
                                   type="date"
                                   value={record.lastServiceDate}
                                   onChange={(e) =>
@@ -1158,6 +1256,7 @@ export default function VehiclesAddPage() {
                               </TableCell>
                               <TableCell className="px-4 py-3">
                                 <Input
+                                 disabled={!isEditable}
                                   type="date"
                                   value={record.nextServiceDate}
                                   onChange={(e) =>
@@ -1168,6 +1267,7 @@ export default function VehiclesAddPage() {
                               </TableCell>
                               <TableCell className="px-4 py-3">
                                 <Input
+                                 disabled={!isEditable}
                                   placeholder="e.g., 45,230"
                                   value={record.odometer}
                                   onChange={(e) =>
@@ -1187,6 +1287,7 @@ export default function VehiclesAddPage() {
                                   Upload
                                 </Button>
                                 <input
+                                 disabled={!isEditable}
                                   ref={maintenanceFileInputRef}
                                   type="file"
                                   multiple
@@ -1278,10 +1379,10 @@ export default function VehiclesAddPage() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-medium">Certificate Records</h3>
-                  <Button type="button" variant="outline" size="sm" onClick={handleAddCertificate}>
+                  {isEditable&&<Button type="button" variant="outline" size="sm" onClick={handleAddCertificate}>
                     <Plus className="w-4 h-4 mr-2" />
                     Add Certificate
-                  </Button>
+                  </Button>}
                 </div>
                 <div className="border rounded-lg overflow-hidden">
                   <Table>
@@ -1297,7 +1398,7 @@ export default function VehiclesAddPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {certificateRecords.map((cert) => (
+                      {certificates.map((cert) => (
                         <TableRow key={cert.id} className="hover:bg-gray-50">
                           {cert.isEditing ? (
                             <>
@@ -1321,6 +1422,7 @@ export default function VehiclesAddPage() {
                               </TableCell>
                               <TableCell className="px-4 py-3">
                                 <Input
+                                 disabled={!isEditable}
                                   placeholder="e.g., LTA-2024-001234"
                                   value={cert.number}
                                   onChange={(e) => updateCertificateField(cert.id, "number", e.target.value)}
@@ -1329,6 +1431,7 @@ export default function VehiclesAddPage() {
                               </TableCell>
                               <TableCell className="px-4 py-3">
                                 <Input
+                                 disabled={!isEditable}
                                   type="date"
                                   value={cert.issued}
                                   onChange={(e) => updateCertificateField(cert.id, "issued", e.target.value)}
@@ -1346,6 +1449,7 @@ export default function VehiclesAddPage() {
                               <TableCell className="px-4 py-3">
                                 <label className="cursor-pointer">
                                   <Input
+                                   disabled={!isEditable}
                                     ref={certificateFileInputRef}
                                     type="file"
                                     accept=".pdf,.jpg,.jpeg,.png"
@@ -1445,17 +1549,28 @@ export default function VehiclesAddPage() {
           </Card>
 
           {/* Submit Buttons */}
-          <div className="flex justify-end gap-3 pt-4 border-t">
-            <	Button type="button" variant="outline">
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-[#2160AD] hover:bg-[#1d5497]" onClick={handleAddVehicle} >
-              Add Vehicle
-            </Button>
-          </div>
+          {router.isReady && isEditable && (
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/vehicles")}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="bg-[#2160AD] hover:bg-[#1d5497]"
+                onClick={id ? handleUpdateVehicle : handleAddVehicle}
+              >
+                {id ? "Update Vehicle" : "Add Vehicle"}
+              </Button>
+            
+          </div>)}
         </div>
       </div>
 
+     
     </>
   );
 }
