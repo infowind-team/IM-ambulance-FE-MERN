@@ -50,7 +50,18 @@ export default function LoginPage() {
         return;
       }
       console.log('login data' , data)
-      router.push('/calendar');
+      
+      if (data?.data?.access_token) {
+      console.log(data.data.access_token)
+      localStorage.setItem('accessToken', data.data.access_token)
+      console.log('Tokens and user stored successfully');
+    } else {
+      console.warn('No access_token found in response');
+    }
+
+      setTimeout(() => {
+        router.push('/calendar');
+      }, 200);
     }catch(err: any){
       console.log(err)
     }

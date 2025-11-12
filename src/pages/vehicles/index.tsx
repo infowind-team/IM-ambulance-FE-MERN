@@ -1,5 +1,6 @@
 // app/vehicles/page.tsx
 "use client";
+import { useEffect } from "react";
 
 import React, { useState, useMemo } from "react";
 import {
@@ -46,106 +47,31 @@ interface Vehicle {
   type: "EAS" | "MTS";
   nextService: string;
   coeExpiry: string;
-  status: "Active" | "Inactive";
+  status: "Active" | "Inactive"| string;
 }
 
-const VEHICLES_DATA: Vehicle[] = [
-  {
-    id: "1",
-    vehicleId: "AMB001",
-    plateNumber: "SBA1234A",
-    name: "Ambulance Alpha",
-    model: "Mercedes Sprinter (2020)",
-    mileage: "45,000 km",
-    driver: "Marcus Chen",
-    type: "EAS",
-    nextService: "12/1/2024",
-    coeExpiry: "6/30/2027",
-    status: "Active",
-  },
-  {
-    id: "2",
-    vehicleId: "AMB002",
-    plateNumber: "SBA2345B",
-    name: "Ambulance Beta",
-    model: "Toyota Hiace (2019)",
-    mileage: "52,000 km",
-    driver: "Jennifer Liu",
-    type: "EAS",
-    nextService: "11/15/2024",
-    coeExpiry: "8/20/2026",
-    status: "Active",
-  },
-  {
-    id: "3",
-    vehicleId: "AMB003",
-    plateNumber: "SBA5678E",
-    name: "Ambulance Gamma",
-    model: "Ford Transit (2023)",
-    mileage: "12,500 km",
-    driver: "Sarah Tan",
-    type: "MTS",
-    nextService: "1/5/2025",
-    coeExpiry: "3/25/2030",
-    status: "Active",
-  },
-  {
-    id: "4",
-    vehicleId: "EMG001",
-    plateNumber: "SEM4567D",
-    name: "Emergency Response Unit",
-    model: "Mercedes Vito (2022)",
-    mileage: "15,000 km",
-    driver: "David Kim",
-    type: "EAS",
-    nextService: "12/20/2024",
-    coeExpiry: "1/10/2029",
-    status: "Active",
-  },
-  {
-    id: "5",
-    vehicleId: "TRA001",
-    plateNumber: "STR3456C",
-    name: "Transport One",
-    model: "Nissan NV200 (2021)",
-    mileage: "28,000 km",
-    driver: "Ahmed Hassan",
-    type: "MTS",
-    nextService: "1/1/2025",
-    coeExpiry: "2/15/2028",
-    status: "Inactive",
-  },
-  {
-    id: "6",
-    vehicleId: "TRA002",
-    plateNumber: "STR6789F",
-    name: "Transport Two",
-    model: "Toyota Alphard (2018)",
-    mileage: "68,000 km",
-    driver: "Michael Wong",
-    type: "MTS",
-    nextService: "12/10/2024",
-    coeExpiry: "11/30/2025",
-    status: "Inactive",
-  },
-];
+const VEHICLES_DATA: Vehicle[] = [];
 
 export default function VehiclesPage() {
   const router = useRouter();
-
   const [vehicles, setVehicles] = useState<Vehicle[]>(VEHICLES_DATA);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
 
-  // Filter
+
   const filteredVehicles = useMemo(() => {
+    if (!Array.isArray(vehicles)) return [];
+
     return vehicles.filter((item) => {
       const matchesSearch =
-        searchQuery === "" ||
-        item.vehicleId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.plateNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.driver.toLowerCase().includes(searchQuery.toLowerCase());
+        !searchQuery ||
+        item.vehicleId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.plateNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.driver?.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesStatus =
         selectedStatus === "All Status" || item.status === selectedStatus;
@@ -153,6 +79,7 @@ export default function VehiclesPage() {
       return matchesSearch && matchesStatus;
     });
   }, [vehicles, searchQuery, selectedStatus]);
+
 
   // Sort
   const { sortedData: sortedVehicles, requestSort, getSortIcon } =
@@ -168,11 +95,114 @@ export default function VehiclesPage() {
   }, [sortedVehicles]);
 
   // Delete
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this vehicle?")) {
+  const handleDelete = async(id: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this vehicle?");
+    if (!confirmDelete) return; 
+
+    try{
+      const access_token = localStorage.getItem("accessToken");
+      const response = await fetch(`/api/vehicles/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete vehicle");
+      }
       setVehicles((prev) => prev.filter((v) => v.id !== id));
+      alert("Vehicle deleted successfully!");
+    }catch(error:any){
+       console.error("Error deleting vehicle:", error);
+    alert("Failed to delete vehicle. Please try again.");
+    }
+    
+  };
+
+  const handleView = async(id:string) =>{
+    try{
+      const accessToken = localStorage.getItem("accessToken");
+
+    const response = await fetch(`/api/vehicles/get-by-id/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    
+    if (!response.ok) throw new Error(data.message || "Failed to fetch vehicle details");
+    }catch (error) {
+    console.error("Error fetching vehicle details:", error);
+    alert("Failed to load vehicle details.");
+  }
+    
+  }
+
+
+  const fetchVehicles = async () => {
+    try {
+      setLoading(true);
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+      const params = new URLSearchParams();
+      if (searchQuery) params.append("search", searchQuery);
+      if (selectedStatus !== "All Status") params.append("status", selectedStatus);
+      params.append("sortBy", "1");
+      params.append("sortOrder", "1");
+
+      const res = await fetch(
+        `/api/vehicles/get-all/${page}/30?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: access_token ? `Bearer ${access_token}` : "",
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch vehicles");
+
+      const data = await res.json();
+      console.log("Vehicle API Response:", data);
+      const fetchedVehicles = data?.data?.data?.list || [];
+
+  
+    const mappedVehicles: Vehicle[] = fetchedVehicles.map((item: any) => ({
+      id: item._id,
+      vehicleId: item._id, 
+      plateNumber: item.vehicleNumber,
+      name: `${item.make || ""} ${item.model || ""}`.trim(),
+      model: item.model,
+      mileage: "-", 
+      driver: item.driverId || "-", 
+      type: item.type === "Ambulance" ? "EAS" : "MTS", 
+      nextService: "-", 
+      coeExpiry: "-", 
+      status: item.status,
+    }));
+
+    
+    setVehicles(mappedVehicles);
+   
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, [page, limit, searchQuery, selectedStatus]);
 
   return (
     <>
@@ -267,7 +297,7 @@ export default function VehiclesPage() {
           <Card className="overflow-hidden">
             <Table>
               <TableHeader className="header-bg-soft">
-                <TableRow>
+                <TableRow >
                   <TableHead className="p-4">
                     <button
                       className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
@@ -336,7 +366,7 @@ export default function VehiclesPage() {
               </TableHeader>
               <TableBody>
                 {sortedVehicles.map((item) => (
-                  <TableRow key={item.id} className="hover:header-bg-soft transition">
+                  <TableRow key={item.id || item.vehicleId || item.plateNumber} className="hover:header-bg-soft transition">
                     <TableCell className="p-4">
                       <div className="font-mono font-medium text-[#2160AD]">{item.vehicleId}</div>
                       <div className="text-xs text-gray-500 mt-1">{item.plateNumber}</div>
@@ -386,7 +416,7 @@ export default function VehiclesPage() {
                     </TableCell>
                     <TableCell className="p-4">
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" title="View Details">
+                        <Button variant="ghost" size="icon" title="View Details" onClick={() => handleView(item.id)}>
                           <Eye className="h-4 w-4 text-blue-600" />
                         </Button>
                         <Button variant="ghost" size="icon" title="Edit Details">

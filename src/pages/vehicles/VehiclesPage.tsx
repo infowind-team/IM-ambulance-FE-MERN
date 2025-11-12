@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FunctionalSidebar from '../components/FunctionalSidebar';
+import FunctionalSidebar from '../../components/FunctionalSidebar';
 import {
   Table,
   TableBody,
@@ -9,17 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, Plus, Eye, Pencil, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+
 
 // Vehicle data type
 interface Vehicle {
