@@ -32,6 +32,7 @@ import FunctionalHeader from "@/layout/FunctionalHeader";
 import EntitlementTab from "./leave-management/EntitlementTab";
 import ApplicationsTab from "./leave-management/ApplicationsTab";
 import MassAdjustmentTab from "./leave-management/MassAdjustmentTab";
+import LeaveSchemesTab from "./leave-management/LeaveSchemesTab";
 
 // Icons for action buttons
 const InfoIcon = () => (
@@ -145,150 +146,14 @@ export default function LeaveManagement() {
 
           {/* Leave Schemes Tab */}
           <TabsContent value="schemes" className="flex-1 overflow-auto p-6">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                  <h3 className="text-base font-medium text-[#2160AD] text-base">
-                    MOM-Compliant Leave Schemes
-                  </h3>
-                  <p className="text-base text-gray-600 mt-1">
-                    Configure Singapore MOM-compliant leave entitlements with
-                    custom company benefits and staff group configurations
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Export
-                  </Button>
-                  <Button className="bg-[#2160AD] hover:bg-[#2160AD]/90">
-                    <Plus className="w-4 h-4 mr-2" />
-                    New Scheme
-                  </Button>
-                </div>
-              </div>
-
-              {/* Search + Configure */}
-              <div className="flex gap-4 justify-between">
-                <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search schemes..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Button variant="outline">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Configure Prorate
-                </Button>
-              </div>
-
-              {/* Table */}
-              <Card className="overflow-hidden">
-                <Table>
-                  <TableHeader className="header-bg-soft">
-                    <TableRow className="border-b">
-                      <TableHead className="p-4 font-semibold">
-                        Scheme Details
-                      </TableHead>
-                      <TableHead className="p-4 font-semibold">
-                        Leave Types
-                      </TableHead>
-                      <TableHead className="p-4 font-semibold">
-                        Service Years
-                      </TableHead>
-                      <TableHead className="p-4 font-semibold">Eligible</TableHead>
-                      <TableHead className="p-4 font-semibold">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredSchemes.map((scheme) => (
-                      <TableRow
-                        key={scheme.id}
-                        className="border-b hover:header-bg-soft"
-                      >
-                        <TableCell className="p-4">
-                          <div>
-                            <div className="font-medium text-[#2160AD] text-base">
-                              {scheme.name}
-                            </div>
-                            <div className="text-base text-gray-500 mt-1">
-                              {scheme.description}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <div className="flex flex-wrap gap-1.5">
-                            {scheme.leaveTypes.map((type) => (
-                              <Badge
-                                key={type}
-                                variant="outline"
-                                className="text-base border-[#2160AD]/30"
-                              >
-                                {type}
-                              </Badge>
-                            ))}
-                          </div>
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <Badge variant="secondary" className="text-xs">
-                            {scheme.serviceYears}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">
-                              {scheme.eligibleCount}
-                            </span>
-                            <span className="text-base text-gray-500">
-                              employees
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="p-4">
-                          <div className="flex items-center gap-2">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8 w-8 p-0 hover:bg-[#2160AD]/10"
-                              title="View scheme details"
-                            >
-                              <InfoIcon />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8 w-8 p-0"
-                              title="Edit scheme"
-                            >
-                              <PenLine className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                              title="Delete scheme"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Card>
-
-              {/* Optional: Empty State */}
-              {filteredSchemes.length === 0 && (
-                <div className="text-center py-12 text-gray-500">
-                  No leave schemes found.
-                </div>
-              )}
-            </div>
+            <LeaveSchemesTab
+              schemes={leaveSchemes}
+              onEdit={(scheme) => console.log('Edit', scheme)}
+              onDelete={(id) => console.log('Delete', id)}
+              onView={(scheme) => console.log('View', scheme)}
+              onNewScheme={() => console.log('New Scheme')}
+              onConfigureProrate={() => console.log('Configure Prorate')}
+            />
           </TabsContent>
 
           <TabsContent value="entitlement" className="flex-1 overflow-auto p-6">

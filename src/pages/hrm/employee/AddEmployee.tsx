@@ -11,6 +11,7 @@ import {
   User,
   Building,
   Check,
+  X,
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -463,11 +464,12 @@ export default function AddEmployee({ onBack }: AddEmployeeProps) {
                             <div className="flex justify-end pt-2">
                               <Button
                                 type="button"
-                                variant="destructive"
+                                variant="outline"
                                 size="sm"
                                 onClick={() => remove(index)}
-                                className="w-full"
+                                className="border-red-500 text-red-500 hover:text-red-500"
                               >
+                                <X className="h-4 w-4" />
                                 Remove
                               </Button>
                             </div>

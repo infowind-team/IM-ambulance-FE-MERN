@@ -143,14 +143,16 @@ export default function OperationsTab() {
 
   return (
     <div className="space-y-4">
-      {/* Warning Alert */}
-      <Alert className="bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      
+      <Alert className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg rounded-l-0">
         <TriangleAlert className="h-4 w-4 text-red-400" />
-        <AlertDescription className="text-sm text-red-700">
-          <span className="font-semibold">Warning:</span>{" "}
-          <span className="font-normal">
-            There are 150 unassigned shifts this month
-          </span>
+        <AlertDescription>
+          <p className="text-sm text-red-700">
+            <span className="font-semibold">Warning:</span>{" "}
+            <span className="font-normal">
+              There are 150 unassigned shifts this month
+            </span>
+          </p>
         </AlertDescription>
       </Alert>
 

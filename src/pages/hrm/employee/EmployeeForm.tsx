@@ -88,7 +88,6 @@ export default function EmployeeForm() {
                     placeholder="IMA0000"
                     value={staffId}
                     onChange={(e) => setStaffId(e.target.value)}
-                    className="text-center"
                 />
                 <Button type="button" variant='outline' onClick={generateStaffId}>
                     Generate
@@ -140,7 +139,7 @@ export default function EmployeeForm() {
                   type="number"
                   placeholder="0"
                   min="0"
-                  className="pr-16 text-center"
+                  className="pr-17"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
                   months

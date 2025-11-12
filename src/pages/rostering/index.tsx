@@ -10,10 +10,21 @@ import OperationsTab from './OperationsTab';
 import { SharedDatePicker } from '@/components/ui/shared-date-picker';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import ExportRosterDialog from './ExportRosterDialog';
+import RosterPreviewDialog from './RosterPreviewDialog';
 
 export default function RosteringPage() {
-  const [selectedDate, setSelectedDate] = useState(new Date(2025, 5, 1));
+  const [selectedDate, setSelectedDate] = useState(new Date(2025, 5, 1));  
   const [selectedTab, setSelectedTab] = useState('shift');
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  // Shared state between Export dialog and Preview
+  const [previewData, setPreviewData] = useState<{
+    team: 'shift' | 'office' | 'ops';
+    startDate: Date;
+    endDate: Date;
+  } | null>(null);
 
   return (
     <>
@@ -34,6 +45,7 @@ export default function RosteringPage() {
             <Button
               variant="outline"
               className="h-8 rounded-md px-3 gap-2 border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10"
+              onClick={() => setIsExportOpen(true)}
             >
               <FileDown className="w-4 h-4" />
               Export
@@ -55,6 +67,24 @@ export default function RosteringPage() {
           <TabsContent value="office" className="p-6"><OfficeHoursTab /></TabsContent>
           <TabsContent value="ops" className="p-6"><OperationsTab /></TabsContent>
         </Tabs>
+
+        {/* Export Dialog */}
+        <ExportRosterDialog
+          isOpen={isExportOpen}
+          onClose={() => setIsExportOpen(false)}
+          onPreview={(team, startDate, endDate) => {
+            setPreviewData({ team, startDate, endDate });
+            setIsExportOpen(false);
+            setIsPreviewOpen(true);
+          }}
+        />
+
+        {/* Preview Dialog */}
+        <RosterPreviewDialog
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          previewData={previewData}
+        />
       </div>
     </>
   );
