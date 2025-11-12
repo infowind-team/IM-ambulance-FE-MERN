@@ -130,6 +130,12 @@
   }
 }
 
+:has([class*=" text-"]), :has([class^="text-"]) {
+  h2, h3, h4, p, label, button, input, div, span {
+    line-height: 1.5;
+  }
+}
+
 /**
  * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
  */

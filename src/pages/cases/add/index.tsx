@@ -32,16 +32,32 @@ import { ServiceSearch } from "./ServiceSearch";
 
 // Import shared ALL_SERVICES from ServiceSearch
 import { ALL_SERVICES } from "./ServiceSearch";
+import { DatePicker } from "@/components/ui/date-picker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format, subDays, addDays } from "date-fns";
+import { TimePicker } from "@/components/ui/TimePicker";
 
-const options = [
-  "All Status",
-  "Open",
-  "Pending for Dispatch",
-  "Dispatched",
-  "Pending Confirmation",
-  "Pending for Payment",
-  "Completed",
-  "Cancelled",
+const statusOptions = [
+  { label: "Open", value: "Open" },
+  { label: "Pending for Dispatch", value: "Pending for Dispatch" },
+  { label: "Dispatched", value: "Dispatched" },
+  { label: "Pending for Payment", value: "Pending for Payment" },
+  { label: "Pending Escort Assignment", value: "Pending Escort Assignment" },
+  {
+    label: "Pending Details from Vendor",
+    value: "Pending Details from Vendor",
+  },
+  {
+    label: "Pending for Service Receipt",
+    value: "Pending for Service Receipt",
+  },
+  { label: "Pending Confirmation", value: "Pending Confirmation" },
+  { label: "Completed", value: "Completed" },
+  { label: "Cancelled", value: "Cancelled" },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -63,38 +79,33 @@ interface Trip {
   pickupWard: string;
   pickupRoom: string;
   pickupBed: string;
-
   dropoffLocation: string;
   dropoffBlock: string;
   dropoffUnit: string;
   dropoffWard: string;
   dropoffRoom: string;
   dropoffBed: string;
-
   scheduledTime: string;
 }
-
 /* -------------------------------------------------------------------------- */
 /*                               MAIN COMPONENT                               */
 /* -------------------------------------------------------------------------- */
 export default function CasesAddPage() {
-  const [status, setStatus] = useState("Open");
+  const [selectedStatus, setSelectedStatus] = useState("Open");
   const [intake, setIntake] = useState("Phone Call");
   const [transport, setTransport] = useState("Select transport mode");
   const [gender, setGender] = useState("Male");
-
   const [tripType, setTripType] = useState<"one-way" | "two-way" | "three-way">(
     "one-way"
   );
-
   const [vehicleType, setVehicleType] = useState("Ambulance");
   const [vehicleNumber, setVehicleNumber] = useState("AMB001");
 
-  /* Requestor */
+  // Requestor
   const [requestorName, setRequestorName] = useState("");
   const [requestorContact, setRequestorContact] = useState("");
 
-  /* Patient */
+  // Patient
   const [patientName, setPatientName] = useState("");
   const [patientNric, setPatientNric] = useState("");
   const [patientAge, setPatientAge] = useState("");
@@ -102,28 +113,28 @@ export default function CasesAddPage() {
   const [patientContact, setPatientContact] = useState("");
   const [patientCondition, setPatientCondition] = useState("");
 
-  /* Next of Kin */
+  // NOK
   const [nokName, setNokName] = useState("");
   const [nokContact, setNokContact] = useState("");
   const [nokRelationship, setNokRelationship] = useState("Parent");
   const [nokAccompanying, setNokAccompanying] = useState("0");
 
-  /* Times */
+  // Time
   const [bookingTime, setBookingTime] = useState("");
-  const [bookingDate, setBookingDate] = useState("");
+  const [bookingDate, setBookingDate] = useState<Date | null>(null);
 
-  /* Vehicle assignment */
+  // Vehicle assignment
   const [mto, setMto] = useState("");
   const [emt, setEmt] = useState("");
   const [escort, setEscort] = useState("");
 
-  /* Services */
+  // Services
   const [serviceSearch, setServiceSearch] = useState("");
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>(
     []
   );
 
-  /* ------------------------------ Trip state ----------------------------- */
+  // Trips
   const [trips, setTrips] = useState<Trip[]>([
     {
       id: "trip-1",
@@ -191,7 +202,7 @@ export default function CasesAddPage() {
       id: `${service.value}-${Date.now()}`,
       name: service.label,
       price: parseFloat(service.price.replace("$", "")),
-      unit: "per hour",
+      unit: service.unit,
       quantity: 1,
     };
     setSelectedServices((prev) => [...prev, newService]);
@@ -229,14 +240,14 @@ export default function CasesAddPage() {
             <Label className="text-base font-medium text-base-optimized mb-2 block">
               Status <span className="text-red-500">*</span>
             </Label>
-            <Select value={status} onValueChange={setStatus}>
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
               <SelectTrigger className="w-full text-base-optimized">
-                <SelectValue />
+                <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                {options.map((opt) => (
-                  <SelectItem key={opt} value={opt}>
-                    {opt}
+                {statusOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -277,20 +288,35 @@ export default function CasesAddPage() {
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Booking Date <span className="text-red-500">*</span>
                   </Label>
-                  <Input
-                    type="date"
-                    value={bookingDate}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    placeholder="Select booking date"
-                    className="w-full"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start text-left h-10"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        {bookingDate
+                          ? format(bookingDate, "dd MMM yyyy")
+                          : "Select booking date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="p-0 w-auto">
+                      <DatePicker
+                        mode="single"
+                        selected={bookingDate ?? undefined}
+                        onSelect={(date: Date | undefined) =>
+                          setBookingDate(date ?? null)
+                        }
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div>
                   <Label className="text-base font-medium text-base-optimized mb-2 block">
                     Booking Time <span className="text-red-500">*</span>
                   </Label>
-                  <Input
-                    type="time"
+                  <TimePicker
+                    label=""
                     value={bookingTime}
                     onChange={(e) => setBookingTime(e.target.value)}
                     className="w-full"
@@ -877,8 +903,8 @@ export default function CasesAddPage() {
                       <Label className="text-base font-medium text-base-optimized mb-2 block">
                         Pick up - Scheduled Time
                       </Label>
-                      <Input
-                        type="time"
+                      <TimePicker
+                        label=""
                         value={trip.scheduledTime}
                         onChange={(e) =>
                           updateTrip(trip.id, "scheduledTime", e.target.value)
@@ -890,7 +916,7 @@ export default function CasesAddPage() {
                 </div>
               ))}
 
-              <div className="bg-gray-200 h-px my-4"></div>
+              <div className="bg-gray-200 h-px my-6"></div>
 
               {/* Vehicle Assignment */}
               <div className="space-y-6">

@@ -1,44 +1,20 @@
 "use client";
 
-import React from "react";
 import {
   format,
   eachHourOfInterval,
   startOfDay,
   endOfDay,
 } from 'date-fns';
-
-const statusColors: Record<string, string> = {
-  Open: "#008FD6",
-  "Pending for Dispatch": "#EEA61F",
-  Dispatched: "#E2CC3B",
-  "Pending for Payment": "#1E9E9E",
-  "Pending Escort Assignment": "#00CFE8",
-  "Pending Details from Vendor": "#C33BA8",
-  "Pending for Service Receipt": "#6D27B3",
-  "Pending Confirmation": "#8D6E63",
-  Completed: "#0AAB2F",
-  Cancelled: "#B40909",
-};
-
-interface Event {
-  id: string;
-  time: string; // "06:39"
-  caseId: string;
-  trip: string;
-  route: string;
-  patient: string;
-  tags: string[];
-  status: string;
-  date: string; // "2025-11-04"
-}
-
+import type { Event } from "./index";
+ 
 interface DayViewProps {
   date: Date;
   events: Event[];
+  statusColors: Record<string, string>;
 }
 
-export default function DayView({ date, events }: DayViewProps) {
+export default function DayView({ date, events, statusColors }: DayViewProps) {
   const currentDateStr = format(date, "yyyy-MM-dd");
   const dayEvents = events.filter((e) => e.date === currentDateStr);
   const totalCases = dayEvents.length;
@@ -55,7 +31,7 @@ export default function DayView({ date, events }: DayViewProps) {
       return eventHour === hour;
     });
   };
-
+  
   return (
     <div className="h-full overflow-auto p-6">
       {/* Header */}

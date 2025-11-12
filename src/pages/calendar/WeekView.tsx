@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {
   format,
   startOfWeek,
@@ -10,37 +9,15 @@ import {
   endOfDay,
   isToday,
 } from 'date-fns';
-
-const statusColors: Record<string, string> = {
-  Open: '#008FD6',
-  'Pending for Dispatch': '#EEA61F',
-  Dispatched: '#E2CC3B',
-  'Pending for Payment': '#1E9E9E',
-  'Pending Escort Assignment': '#00CFE8',
-  'Pending Details from Vendor': '#C33BA8',
-  'Pending for Service Receipt': '#6D27B3',
-  'Pending Confirmation': '#8D6E63',
-  Completed: '#0AAB2F',
-  Cancelled: '#B40909',
-};
-
-interface Event {
-  id: string;
-  time: string; // "06:39"
-  caseId: string;
-  trip: string;
-  route: string;
-  tags: string[];
-  status: string;
-  date: string; // "2025-11-03"
-}
+import type { Event } from "./index";
 
 interface WeekViewProps {
   date: Date;
   events: Event[];
+  statusColors: Record<string, string>;
 }
 
-export default function WeekView({ date, events }: WeekViewProps) {
+export default function WeekView({ date, events, statusColors }: WeekViewProps) {
   const weekStart = startOfWeek(date, { weekStartsOn: 0 }); // Sunday
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 

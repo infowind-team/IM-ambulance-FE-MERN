@@ -13,18 +13,19 @@ export interface Service {
   value: string;
   label: string;
   price: string;
+  unit: string;
 }
 
 export const ALL_SERVICES: Service[] = [
-  { value: "Oxygen Support", label: "Oxygen Support", price: "$50" },
-  { value: "Wheelchair Service", label: "Wheelchair Service", price: "$25" },
-  { value: "Stretcher Service", label: "Stretcher Service", price: "$35" },
-  { value: "Medical Escort", label: "Medical Escort", price: "$75" },
-  { value: "Standby Service", label: "Standby Service", price: "$120" },
-  { value: "A&E Transfer", label: "A&E Transfer", price: "$80" },
-  { value: "Dialysis Transport", label: "Dialysis Transport", price: "$45" },
-  { value: "IV Therapy Support", label: "IV Therapy Support", price: "$65" },
-  { value: "Emergency Equipment", label: "Emergency Equipment", price: "$65" },
+  { value: "Oxygen Support", label: "Oxygen Support", unit: "per day", price: "$50" },
+  { value: "Wheelchair Service", label: "Wheelchair Service", unit: "per service", price: "$25" },
+  { value: "Stretcher Service", label: "Stretcher Service", unit: "per service", price: "$35" },
+  { value: "Medical Escort", label: "Medical Escort", unit: "per hour", price: "$75" },
+  { value: "Standby Service", label: "Standby Service", unit: "per day", price: "$120" },
+  { value: "A&E Transfer", label: "A&E Transfer", unit: "per hour", price: "$80" },
+  { value: "Dialysis Transport", label: "Dialysis Transport", unit: "per service", price: "$45" },
+  { value: "IV Therapy Support", label: "IV Therapy Support", unit: "per trip", price: "$65" },
+  { value: "Emergency Equipment", label: "Emergency Equipment", unit: "per trip", price: "$65" },
 ];
 
 interface ServiceSearchProps {

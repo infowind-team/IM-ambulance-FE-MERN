@@ -117,12 +117,47 @@ const CASES_DATA: Case[] = [
   },
 ];
 
+const statusOptions = [
+  { label: "All Status", value: "all" },
+  { label: "Open", value: "Open" },
+  { label: "Pending for Dispatch", value: "Pending for Dispatch" },
+  { label: "Dispatched", value: "Dispatched" },
+  { label: "Pending for Payment", value: "Pending for Payment" },
+  { label: "Pending Escort Assignment", value: "Pending Escort Assignment" },
+  { label: "Pending Details from Vendor", value: "Pending Details from Vendor" },
+  { label: "Pending for Service Receipt", value: "Pending for Service Receipt" },
+  { label: "Pending Confirmation", value: "Pending Confirmation" },
+  { label: "Completed", value: "Completed" },
+  { label: "Cancelled", value: "Cancelled" },
+];
+
+const stats = [
+  {
+    label: "Today's Cases",
+    value: 1,
+    color: "#2160AD",
+    icon: Clock,
+  },
+  {
+    label: "Completed",
+    value: 0,
+    color: "#16A34A", // Tailwind green-600
+    icon: Briefcase,
+  },
+  {
+    label: "Dispatched",
+    value: 0,
+    color: "#EA580C", // Tailwind orange-600
+    icon: MapPin,
+  },
+];
+
 export default function CasesPage() {
   const router = useRouter();
 
   const [cases, setCases] = useState<Case[]>(CASES_DATA);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("All Status");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   const filteredCases = useMemo(() => {
     return cases.filter((item) => {
@@ -133,7 +168,7 @@ export default function CasesPage() {
         item.phone.includes(searchQuery);
 
       const matchesStatus =
-        selectedStatus === "All Status" || item.status === selectedStatus;
+        selectedStatus === "all" || item.status === selectedStatus;
 
       return matchesSearch && matchesStatus;
     });
@@ -161,35 +196,22 @@ export default function CasesPage() {
       <div className="flex-1 w-full overflow-auto">
         <div className="space-y-6 p-4 lg:p-6 w-full">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Today's Cases</p>
-                  <p className="text-2xl font-semibold text-[#2160AD]">1</p>
-                </div>
-                <Clock className="w-8 h-8 text-[#2160AD]/60" />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Completed</p>
-                  <p className="text-2xl font-semibold text-green-600">0</p>
-                </div>
-                <Briefcase className="w-8 h-8 text-green-600/60" />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Dispatched</p>
-                  <p className="text-2xl font-semibold text-orange-600">0</p>
-                </div>
-                <MapPin className="w-8 h-8 text-orange-600/60" />
-              </CardContent>
-            </Card>
+            {stats.map(({ label, value, color, icon: Icon }) => (
+              <Card key={label}>
+                <CardContent className="flex items-center justify-between p-4 pb-6">
+                  <div>
+                    <p className="text-sm text-gray-600">{label}</p>
+                    <p
+                      className="text-2xl font-semibold"
+                      style={{ color: color }}
+                    >
+                      {value}
+                    </p>
+                  </div>
+                  <Icon className="w-8 h-8" style={{ color: `${color}99` }} /> 
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -208,12 +230,14 @@ export default function CasesPage() {
               <div className="md:w-[200px]">
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                   <SelectTrigger className="w-full text-base-optimized">
-                    <SelectValue />
+                    <SelectValue placeholder="All Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="All Status">All Status</SelectItem>
-                    <SelectItem value="Pending for Dispatch">Pending for Dispatch</SelectItem>
-                    <SelectItem value="Dispatched">Dispatched</SelectItem>
+                    {statusOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -231,7 +255,7 @@ export default function CasesPage() {
                 <TableRow>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("caseId")}
                     >
                       Case ID {getSortIcon("caseId")}
@@ -239,7 +263,7 @@ export default function CasesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("patientName")}
                     >
                       Patient Details {getSortIcon("patientName")}
@@ -247,7 +271,7 @@ export default function CasesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("vehicle")}
                     >
                       Vehicle {getSortIcon("vehicle")}
@@ -255,7 +279,7 @@ export default function CasesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("date")}
                     >
                       Booking Date | Time {getSortIcon("date")}
@@ -263,7 +287,7 @@ export default function CasesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("location")}
                     >
                       Pickup Location {getSortIcon("location")}
@@ -271,7 +295,7 @@ export default function CasesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("status")}
                     >
                       Status {getSortIcon("status")}
@@ -313,7 +337,7 @@ export default function CasesPage() {
                     </TableCell>
                     <TableCell className="p-4">
                       <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                        <MapPin className="w-4 h-4 text-gray-500 mt-0.5 shrink-0" />
                         <span className="leading-relaxed">{item.location}</span>
                       </div>
                     </TableCell>
@@ -367,7 +391,7 @@ export default function CasesPage() {
             )}
           </Card>
 
-          <div className="flex justify-between items-center text-sm text-gray-600">
+          <div className="flex justify-between items-center text-base text-gray-600">
             <span>Showing {sortedCases.length} of {cases.length} cases</span>
           </div>
         </div>

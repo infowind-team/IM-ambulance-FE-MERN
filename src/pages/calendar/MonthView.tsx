@@ -1,6 +1,5 @@
 'use client';
-
-import React from 'react';
+ 
 import {
   format,
   startOfMonth,
@@ -12,33 +11,15 @@ import {
   isToday,
 } from 'date-fns';
 
-const statusColors: Record<string, string> = {
-  Open: '#008FD6',
-  'Pending for Dispatch': '#EEA61F',
-  Dispatched: '#E2CC3B',
-  'Pending for Payment': '#1E9E9E',
-  'Pending Escort Assignment': '#00CFE8',
-  'Pending Details from Vendor': '#C33BA8',
-  'Pending for Service Receipt': '#6D27B3',
-  'Pending Confirmation': '#8D6E63',
-  Completed: '#0AAB2F',
-  Cancelled: '#B40909',
-};
-
-interface Event {
-  id: string;
-  caseId: string;
-  time: string;
-  status: string;
-  date: string; // "2025-11-04"
-}
-
+import type { Event } from "./index";
+ 
 interface MonthViewProps {
   date: Date;
   events: Event[];
+  statusColors: Record<string, string>;
 }
 
-export default function MonthView({ date, events }: MonthViewProps) {
+export default function MonthView({ date, events, statusColors }: MonthViewProps) {
   const monthStart = startOfMonth(date);
   const monthEnd = endOfMonth(date);
   const calendarStart = startOfWeek(monthStart, { weekStartsOn: 0 });
@@ -100,7 +81,7 @@ export default function MonthView({ date, events }: MonthViewProps) {
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 h-full">
+      <div className="grid grid-cols-7">
         {days.map((day, idx) => {
           const isCurrentMonth = isSameMonth(day, date);
           const isTodayDate = isToday(day);
@@ -110,7 +91,7 @@ export default function MonthView({ date, events }: MonthViewProps) {
             <div
               key={idx}
               className={`
-                border border-gray-200 min-h-[120px] p-2 cursor-pointer relative
+                border border-gray-200 min-h-32 p-2 cursor-pointer relative
                 ${isCurrentMonth ? 'bg-white hover:header-bg-soft' : 'header-bg-soft text-gray-400'}
                 ${isTodayDate ? 'ring-2 ring-[#2160AD] bg-blue-50' : ''}
                 transition-colors
