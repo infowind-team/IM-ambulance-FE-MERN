@@ -127,6 +127,10 @@ export default function VehiclesPage() {
    router.push(`/vehicles/add?id=${id}`);
     
   }
+  
+  const editVehicle = async(id:string)=>{
+    router.push(`/vehicles/add?id=${id}`)
+  }
 
 
   const fetchVehicles = async () => {
@@ -402,7 +406,7 @@ export default function VehiclesPage() {
                         <Button variant="ghost" size="icon" title="View Details" onClick={() => handleView(item.id)}>
                           <Eye className="h-4 w-4 text-blue-600" />
                         </Button>
-                        <Button variant="ghost" size="icon" title="Edit Details">
+                        <Button variant="ghost" size="icon" title="Edit Details" onClick={() => editVehicle(item.id)}>
                           <SquarePen className="h-4 w-4 text-gray-500" />
                         </Button>
                         <Button

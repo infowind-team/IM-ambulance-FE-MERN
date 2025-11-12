@@ -457,10 +457,7 @@ export default function VehiclesAddPage() {
             "remarks": "Annual inspection passed successfully" 
           }
         
-      }
-
-
-
+      } 
       const res = await fetch("/api/vehicles/create-vehicle", {
         method: "POST",
         headers: {
@@ -487,9 +484,105 @@ export default function VehiclesAddPage() {
     }
   };
 
-  const handleUpdateVehicle = async() =>{};
+  const handleUpdateVehicle = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    if (!id) {
+      alert("Missing vehicle ID");
+      return;
+    }
 
+    try {
+      setLoading(true);
+      const accessToken = localStorage.getItem("accessToken");
+
+      const payload = {
+        vehicleNumber: form.vehicleNumber,
+        chassisNumber: form.chassisNumber,
+        type: form.type ,
+        scheme: form.scheme,
+        make: form.makeModel,
+        model:form.makeModel,
+        year: Number(form.year),
+        status: form.status,
+        propellant: form.propellant,
+        "driverId": "675a3c1b8a3c4d5f6b7a8d11",
+        "medicId": "675a3c1c8a3c4d5f6b7a8d12",
+        "escortId": "675a3c1d8a3c4d5f6b7a8d13",
+        "ownerId": "675a3c1e8a3c4d5f6b7a8d14",
+        "specifications": {
+          engineNumber: form.engineNo,
+          engineType: form.engineType,
+          "engineCapacity": Number(form.engineCapacity),
+          "maxUnladenWeight": Number(form.maxUnladenWeight),
+          "maxLadenWeight": Number(form.maxLadenWeight),
+          "enginePower": Number(form.maxPowerOutput),
+          "primaryColour": form.primaryColor,
+          "secondaryColour": form.secondaryColor,
+          "passengerCapacity": Number(form.passengerCapacity),
+          "wheelchairAccessible": true,
+          "lifter": true,
+          "stretcherCompatible": true
+        },
+        "emissions": {
+          "co2Emissions": 180,
+          "coEmissions": 1.5,
+          "hcEmissions": 0.8,
+          "noxEmissions": 2.1,
+          "pmEmissions": 0.02
+        },
+        "owner": {
+          vehicleId: "675a3d5e8a3c4d5f6b7a8e35",
+          ownerName: 'IM Ambulance Services Pte Ltd',
+          certificateNumber: "CERT001",
+          "registeredAddress": "123 Medical Drive, Singapore 123456",
+          "mailingAddress": "123 Medical Drive, Singapore 123456",
+          "ownerIdType": "Company Registration",
+          registrationDate: form.registrationDate
+        },
+        "maintenance": 
+          {
+            vehicleId: "675a3d5e8a3c4d5f6b7a8e25",
+            "lastServiceDate":  "2025-11-12",
+            "nextServiceDate":  "2025-12-12",
+            "currentOdometerReading": 123435,
+            "documentUrl": "insurance_policy.pdf"
+          }
+        ,
+        "certificates": 
+          {
+            "vehicleId": "675a3d5e8a3c4d5f6b7a8e25",
+            "certificateType": "Vehicle Inspection Certificate (LTA)",
+            "certificateNumber": "LTA-2024-001234",
+            "issuedDate": "2024-01-15T00:00:00.000Z",
+            "expiryDate": "2025-01-14T00:00:00.000Z",
+            "documentUrl": "inspection_cert.pdf",
+            "remarks": "Annual inspection passed successfully" 
+          }
+        }
+
+      const response = await fetch(`/api/vehicles/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || "Failed to update vehicle");
+
+      alert("Vehicle updated successfully!");
+      router.push("/vehicles");
+    } catch (error: any) {
+      console.error("Error updating vehicle:", error);
+      alert(error.message || "Error updating vehicle");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
