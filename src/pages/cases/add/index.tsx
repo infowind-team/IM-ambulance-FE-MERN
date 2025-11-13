@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -28,9 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ServiceSearch } from "./ServiceSearch";
-
-// Import shared ALL_SERVICES from ServiceSearch
+import { ServiceSearch, type Service } from "./ServiceSearch";
 import { ALL_SERVICES } from "./ServiceSearch";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
@@ -38,7 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format, subDays, addDays } from "date-fns";
+import { format } from "date-fns";
 import { TimePicker } from "@/components/ui/TimePicker";
 
 const statusOptions = [
@@ -47,19 +45,40 @@ const statusOptions = [
   { label: "Dispatched", value: "Dispatched" },
   { label: "Pending for Payment", value: "Pending for Payment" },
   { label: "Pending Escort Assignment", value: "Pending Escort Assignment" },
-  {
-    label: "Pending Details from Vendor",
-    value: "Pending Details from Vendor",
-  },
-  {
-    label: "Pending for Service Receipt",
-    value: "Pending for Service Receipt",
-  },
+  { label: "Pending Details from Vendor", value: "Pending Details from Vendor" },
+  { label: "Pending for Service Receipt", value: "Pending for Service Receipt" },
   { label: "Pending Confirmation", value: "Pending Confirmation" },
   { label: "Completed", value: "Completed" },
   { label: "Cancelled", value: "Cancelled" },
 ];
 
+/* -------------------------------------------------------------------------- */
+/*                                 TYPES & STATE                              */
+/* -------------------------------------------------------------------------- */
+interface SelectedService {
+  id: string;
+  name: string;
+  price: number;
+  unit: string;          // <-- unit is stored here
+  quantity: number;
+}
+
+interface Trip {
+  id: string;
+  pickupLocation: string;
+  pickupBlock: string;
+  pickupUnit: string;
+  pickupWard: string;
+  pickupRoom: string;
+  pickupBed: string;
+  dropoffLocation: string;
+  dropoffBlock: string;
+  dropoffUnit: string;
+  dropoffWard: string;
+  dropoffRoom: string;
+  dropoffBed: string;
+  scheduledTime: string;
+}
 /* -------------------------------------------------------------------------- */
 /*                                 TYPES & STATE                              */
 /* -------------------------------------------------------------------------- */
@@ -95,9 +114,7 @@ export default function CasesAddPage() {
   const [intake, setIntake] = useState("Phone Call");
   const [transport, setTransport] = useState("Select transport mode");
   const [gender, setGender] = useState("Male");
-  const [tripType, setTripType] = useState<"one-way" | "two-way" | "three-way">(
-    "one-way"
-  );
+  const [tripType, setTripType] = useState<"one-way" | "two-way" | "three-way">("one-way");
   const [vehicleType, setVehicleType] = useState("Ambulance");
   const [vehicleNumber, setVehicleNumber] = useState("AMB001");
 
@@ -130,9 +147,7 @@ export default function CasesAddPage() {
 
   // Services
   const [serviceSearch, setServiceSearch] = useState("");
-  const [selectedServices, setSelectedServices] = useState<SelectedService[]>(
-    []
-  );
+  const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
 
   // Trips
   const [trips, setTrips] = useState<Trip[]>([
@@ -154,7 +169,10 @@ export default function CasesAddPage() {
     },
   ]);
 
-  React.useEffect(() => {
+  /* ---------------------------------------------------------------------- */
+  /*                             TRIP TYPE SYNC                             */
+  /* ---------------------------------------------------------------------- */
+  useEffect(() => {
     const count = tripType === "one-way" ? 1 : tripType === "two-way" ? 2 : 3;
     setTrips((prev) => {
       const kept = prev.slice(0, count);
@@ -193,8 +211,12 @@ export default function CasesAddPage() {
     return selectedServices.reduce((sum, s) => sum + s.price * s.quantity, 0);
   }, [selectedServices]);
 
-  const handleServiceSelect = (service: any) => {
+  /* ---------------------------------------------------------------------- */
+  /*                         SERVICE SELECTION HANDLER                       */
+  /* ---------------------------------------------------------------------- */
+  const handleServiceSelect = (service: Service | null) => {
     if (!service) return;
+
     const already = selectedServices.some((s) => s.name === service.label);
     if (already) return;
 
@@ -202,25 +224,15 @@ export default function CasesAddPage() {
       id: `${service.value}-${Date.now()}`,
       name: service.label,
       price: parseFloat(service.price.replace("$", "")),
-      unit: service.unit,
+      unit: service.unit,               // <-- unit saved
       quantity: 1,
     };
     setSelectedServices((prev) => [...prev, newService]);
     setServiceSearch("");
   };
 
-  /* ---------------------------------------------------------------------- */
-  /*                         QUICK-ADD HANDLER                              */
-  /* ---------------------------------------------------------------------- */
-  const handleQuickAdd = (svc: (typeof ALL_SERVICES)[0]) => {
-    setServiceSearch(svc.label);
-    const fakeSelect = {
-      label: svc.label,
-      value: svc.value,
-      price: svc.price,
-    };
-    handleServiceSelect(fakeSelect);
-    setTimeout(() => setServiceSearch(""), 300);
+  const handleQuickAdd = (svc: Service) => {
+    handleServiceSelect(svc);
   };
 
   return (
@@ -464,7 +476,7 @@ export default function CasesAddPage() {
 
               <div>
                 <Label className="text-base font-medium text-base-optimized mb-2 block">
-                  Patient Contact <span className="text-red-500">*</span>
+                  Patient Contact
                 </Label>
                 <Input
                   placeholder="+65 XXXX XXXX"
@@ -495,7 +507,7 @@ export default function CasesAddPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-base font-medium text-base-optimized mb-2 block">
-                      NOK Name <span className="text-red-500">*</span>
+                      NOK Name
                     </Label>
                     <Input
                       placeholder="Enter NOK name"
@@ -507,7 +519,7 @@ export default function CasesAddPage() {
                   </div>
                   <div>
                     <Label className="text-base font-medium text-base-optimized mb-2 block">
-                      NOK Contact <span className="text-red-500">*</span>
+                      NOK Contact
                     </Label>
                     <Input
                       placeholder="+65 9123 4567"
@@ -548,7 +560,7 @@ export default function CasesAddPage() {
                   </div>
                   <div>
                     <Label className="text-base font-medium text-base-optimized mb-2 block">
-                      Accompanying NOK <span className="text-red-500">*</span>
+                      Accompanying NOK
                     </Label>
                     <Input
                       type="number"
@@ -975,7 +987,7 @@ export default function CasesAddPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div>
                     <Label className="text-base font-medium text-base-optimized mb-2 block">
-                      MTO
+                      MTO <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       placeholder="Medical Transport Officer"
@@ -1042,8 +1054,7 @@ export default function CasesAddPage() {
                   </Label>
                   <div className="flex flex-wrap gap-2">
                     {ALL_SERVICES.filter(
-                      (svc) =>
-                        !selectedServices.some((s) => s.name === svc.label)
+                      (svc) => !selectedServices.some((s) => s.name === svc.label)
                     )
                       .slice(0, 4)
                       .map((svc) => (

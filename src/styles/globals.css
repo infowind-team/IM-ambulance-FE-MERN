@@ -129,8 +129,8 @@
     font-family: "Lato", sans-serif;
   }
 }
-
-:has([class*=" text-"]), :has([class^="text-"]) {
+ 
+:where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
   h2, h3, h4, p, label, button, input, div, span {
     line-height: 1.5;
   }
