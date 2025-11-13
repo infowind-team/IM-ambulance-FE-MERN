@@ -91,9 +91,22 @@ export default function CasesPage() {
   const fetchCases = async () => {
     try {
       setLoading(true);
+      const allStatuses = ["Pending for Dispatch", "Dispatched", "Completed", 'All Status'];
       const access_token =
-       typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
-      const res = await fetch(`/api/cases/get-cases?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(searchQuery)}&selectedStatus=${encodeURIComponent(selectedStatus)}`, {
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      
+      // const params = new URLSearchParams();
+      // if (searchQuery) params.append("search", searchQuery);
+
+      // if (selectedStatus === "All Status") {
+        
+      //   params.append("status", allStatuses.join(","));
+      //   const a = allStatuses.join(",")
+      //   console.log(a)
+      // } else if (selectedStatus) {
+      //   params.append("status", selectedStatus);
+      // }
+      const res = await fetch(`/api/cases/get-all/${page}/${pageSize}?search=${encodeURIComponent(searchQuery)}&status=${encodeURIComponent(selectedStatus)}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -148,6 +161,7 @@ export default function CasesPage() {
 
   const fetchCurrentDayStats = async () => {
     try {
+      
       const access_token =
         typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
 
@@ -177,8 +191,8 @@ export default function CasesPage() {
     fetchCurrentDayStats();
   }, []);
 
-  
-    const filteredCases = useMemo(() => {
+
+  const filteredCases = useMemo(() => {
     return cases.filter((item) => {
       const matchesSearch =
         searchQuery === "" ||
