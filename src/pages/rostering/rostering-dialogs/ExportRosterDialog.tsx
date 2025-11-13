@@ -11,10 +11,12 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Eye, FileDown, X } from 'lucide-react';
+import { Calendar, Eye, FileDown, X } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { SharedDatePicker } from '@/components/ui/shared-date-picker';
 import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DatePicker } from '@/components/ui/date-picker';
 
 type TeamKey = 'shift' | 'office' | 'ops';
 
@@ -58,12 +60,12 @@ export default function ExportRosterDialog({ isOpen, onClose, onPreview }: Expor
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Export Roster</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-base">Export Roster</DialogTitle>
+          <DialogDescription className="text-base">
             Select a team and date range to export or preview the roster.
           </DialogDescription>
         </DialogHeader>
-
+        
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <Label>Select Team <span className="text-red-500">*</span></Label>
@@ -86,19 +88,39 @@ export default function ExportRosterDialog({ isOpen, onClose, onPreview }: Expor
 
           <div className="space-y-2">
             <Label>{isWeekly ? 'Select Week' : 'Select Month'} <span className="text-red-500">*</span></Label>
-            {isWeekly ? (
-              <SharedDatePicker
-                date={weekDate}
-                onDateChange={setWeekDate}
-                mode="week"
-              />
-            ) : (
-              <SharedDatePicker
-                date={monthDate}
-                onDateChange={setMonthDate}
-                mode="month"
-              />
-            )}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left h-10"
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  {weekDate
+                    ? format(weekDate, "dd MMM yyyy")
+                    : "Select booking date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="p-0 w-auto">
+              {isWeekly ? (
+                <DatePicker
+                  mode="single"
+                  selected={weekDate}
+                  onSelect={(date: Date | undefined) =>
+                    date && setWeekDate(date)
+                  }
+                />
+              ) : (
+                <DatePicker
+                  mode="single"
+                  selected={monthDate}
+                  onSelect={(date: Date | undefined) =>
+                    date && setMonthDate(date)
+                  }
+                />
+              )}
+              </PopoverContent>
+            </Popover>
+            
           </div>
 
           <div className="bg-gray-50 p-4 rounded-lg">

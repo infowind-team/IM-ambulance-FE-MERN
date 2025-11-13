@@ -232,7 +232,7 @@ export default function CalendarPage() {
                       className="w-3 h-3 rounded-full border"
                       style={{ backgroundColor: color, borderColor: color }}
                     />
-                    <span className="flex-1" style={{fontSize: 14}}>{status}</span>
+                    <span className="flex-1 text-sm">{status}</span>
                   </label>
                 ))}
               </div>
@@ -263,7 +263,7 @@ export default function CalendarPage() {
                         <Check className="w-3 h-3 text-white" />
                       )}
                     </button>
-                    <span className="flex-1" style={{fontSize: 14}}>{type}</span>
+                    <span className="flex-1 text-sm">{type}</span>
                   </label>
                 ))}
               </div>

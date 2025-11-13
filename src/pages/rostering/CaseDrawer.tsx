@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navigation, MapPin, Clock, Info, Check } from "lucide-react";
-import CancelCaseDialog from "./CancelCaseDialog";
-import AssignStatusDialog from "./AssignStatusDialog";
+import CancelCaseDialog from "./rostering-dialogs/CancelCaseDialog";
+import AssignStatusDialog from "./rostering-dialogs/AssignStatusDialog";
 
 interface Case {
     id: string;

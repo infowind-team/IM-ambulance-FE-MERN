@@ -241,7 +241,7 @@ export default function CasesAddPage() {
         title="Add New Case"
         breadcrumb={[
           { label: "Operations" },
-          { label: "Cases" },
+          { label: "Cases", href: "/cases" },
           { label: "Add New Case" },
         ]}
       />
@@ -249,7 +249,7 @@ export default function CasesAddPage() {
         <div className="p-4 lg:p-6 space-y-6 w-full">
           {/* Status */}
           <div className="max-w-[300px]">
-            <Label className="text-base font-medium text-base-optimized mb-2 block">
+            <Label>
               Status <span className="text-red-500">*</span>
             </Label>
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
@@ -276,7 +276,7 @@ export default function CasesAddPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label>
                   Mode of Intake <span className="text-red-500">*</span>
                 </Label>
                 <Select value={intake} onValueChange={setIntake}>
@@ -297,7 +297,7 @@ export default function CasesAddPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Booking Date <span className="text-red-500">*</span>
                   </Label>
                   <Popover>
@@ -324,7 +324,7 @@ export default function CasesAddPage() {
                   </Popover>
                 </div>
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Booking Time <span className="text-red-500">*</span>
                   </Label>
                   <TimePicker
@@ -339,7 +339,7 @@ export default function CasesAddPage() {
               <div className="bg-gray-200 h-px my-4"></div>
 
               <div>
-                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label>
                   Requestor Name <span className="text-red-500">*</span>
                 </Label>
                 <Input
@@ -353,7 +353,7 @@ export default function CasesAddPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Requestor Contact <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -365,7 +365,7 @@ export default function CasesAddPage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Mode of Transport
                   </Label>
                   <Select value={transport} onValueChange={setTransport}>
@@ -405,7 +405,7 @@ export default function CasesAddPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Patient Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -417,7 +417,7 @@ export default function CasesAddPage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     NRIC <span className="text-red-500">*</span>
                   </Label>
                   <Input
@@ -432,7 +432,7 @@ export default function CasesAddPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Age
                   </Label>
                   <Input
@@ -444,7 +444,7 @@ export default function CasesAddPage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Weight (KG)
                   </Label>
                   <Input
@@ -456,7 +456,7 @@ export default function CasesAddPage() {
                   />
                 </div>
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Gender
                   </Label>
                   <Select value={gender} onValueChange={setGender}>
@@ -475,7 +475,7 @@ export default function CasesAddPage() {
               </div>
 
               <div>
-                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label>
                   Patient Contact
                 </Label>
                 <Input
@@ -488,7 +488,7 @@ export default function CasesAddPage() {
               </div>
 
               <div>
-                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label>
                   Patient's Condition | Chief Complaint
                 </Label>
                 <Textarea
@@ -506,7 +506,7 @@ export default function CasesAddPage() {
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       NOK Name
                     </Label>
                     <Input
@@ -518,7 +518,7 @@ export default function CasesAddPage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       NOK Contact
                     </Label>
                     <Input
@@ -532,7 +532,7 @@ export default function CasesAddPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       Relationship
                     </Label>
                     <Select
@@ -559,7 +559,7 @@ export default function CasesAddPage() {
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       Accompanying NOK
                     </Label>
                     <Input
@@ -584,7 +584,7 @@ export default function CasesAddPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <Label className="text-base font-medium text-base-optimized mb-2 block">
+                <Label>
                   Trip Type <span className="text-red-500">*</span>
                 </Label>
                 <div role="radiogroup" className="flex gap-4">
@@ -605,7 +605,7 @@ export default function CasesAddPage() {
                             <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
                           )}
                         </button>
-                        <Label className="font-medium text-base">
+                        <Label>
                           {type.charAt(0).toUpperCase() +
                             type.slice(1).replace("-", " ")}
                         </Label>
@@ -626,14 +626,14 @@ export default function CasesAddPage() {
                     <div className="w-6 h-6 rounded-full bg-[#2160AD] text-white text-sm flex items-center justify-center font-medium">
                       {idx + 1}
                     </div>
-                    <h4 className="text-base font-medium">Trip {idx + 1}</h4>
+                    <h4>Trip {idx + 1}</h4>
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Pickup */}
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-base font-medium text-base-optimized mb-2 block">
+                        <Label>
                           Pickup Location{" "}
                           <span className="text-red-500">*</span>
                         </Label>
@@ -667,13 +667,13 @@ export default function CasesAddPage() {
                       <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <Label className="text-base font-medium">
+                          <Label>
                             Address Details
                           </Label>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
-                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                            <Label>
                               Block Number
                             </Label>
                             <Input
@@ -691,7 +691,7 @@ export default function CasesAddPage() {
                             />
                           </div>
                           <div>
-                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                            <Label>
                               Unit Number
                             </Label>
                             <Input
@@ -712,7 +712,7 @@ export default function CasesAddPage() {
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Ward Details
                               </Label>
                               <Input
@@ -730,7 +730,7 @@ export default function CasesAddPage() {
                               />
                             </div>
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Room Number
                               </Label>
                               <Input
@@ -748,7 +748,7 @@ export default function CasesAddPage() {
                               />
                             </div>
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Bed Number
                               </Label>
                               <Input
@@ -773,7 +773,7 @@ export default function CasesAddPage() {
                     {/* Dropoff */}
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-base font-medium text-base-optimized mb-2 block">
+                        <Label>
                           Dropoff Location{" "}
                           <span className="text-red-500">*</span>
                         </Label>
@@ -806,13 +806,13 @@ export default function CasesAddPage() {
                       <div className="flex flex-col gap-6 rounded-xl border p-4 header-bg-soft/50 border-gray-200">
                         <div className="flex items-center gap-2 mb-3">
                           <Home className="w-4 h-4 text-[#2160AD]" />
-                          <Label className="text-base font-medium">
+                          <Label>
                             Address Details
                           </Label>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
-                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                            <Label>
                               Block Number
                             </Label>
                             <Input
@@ -830,7 +830,7 @@ export default function CasesAddPage() {
                             />
                           </div>
                           <div>
-                            <Label className="text-base font-medium text-base-optimized mb-2 block">
+                            <Label>
                               Unit Number
                             </Label>
                             <Input
@@ -851,7 +851,7 @@ export default function CasesAddPage() {
                         <div className="mt-4 pt-4 border-t border-gray-200">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Ward Details
                               </Label>
                               <Input
@@ -869,7 +869,7 @@ export default function CasesAddPage() {
                               />
                             </div>
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Room Number
                               </Label>
                               <Input
@@ -887,7 +887,7 @@ export default function CasesAddPage() {
                               />
                             </div>
                             <div>
-                              <Label className="text-base font-medium text-base-optimized mb-2 block">
+                              <Label>
                                 Bed Number
                               </Label>
                               <Input
@@ -912,7 +912,7 @@ export default function CasesAddPage() {
 
                   <div className="mt-4">
                     <div className="max-w-md">
-                      <Label className="text-base font-medium text-base-optimized mb-2 block">
+                      <Label>
                         Pick up - Scheduled Time
                       </Label>
                       <TimePicker
@@ -941,7 +941,7 @@ export default function CasesAddPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       Vehicle Type
                     </Label>
                     <Select value={vehicleType} onValueChange={setVehicleType}>
@@ -963,7 +963,7 @@ export default function CasesAddPage() {
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       Vehicle Number
                     </Label>
                     <Select
@@ -986,7 +986,7 @@ export default function CasesAddPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       MTO <span className="text-red-500">*</span>
                     </Label>
                     <Input
@@ -998,7 +998,7 @@ export default function CasesAddPage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       EMT / EN / PRM
                     </Label>
                     <Input
@@ -1010,7 +1010,7 @@ export default function CasesAddPage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-base font-medium text-base-optimized mb-2 block">
+                    <Label>
                       Escort (Person)
                     </Label>
                     <Input
@@ -1049,7 +1049,7 @@ export default function CasesAddPage() {
 
                 {/* QUICK ADD SECTION */}
                 <div>
-                  <Label className="text-base font-medium text-base-optimized mb-2 block">
+                  <Label>
                     Quick Add Services
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -1075,7 +1075,7 @@ export default function CasesAddPage() {
 
               {selectedServices.length > 0 && (
                 <div>
-                  <Label className="text-base-optimized font-medium mb-3 block">
+                  <Label>
                     Added Services
                   </Label>
                   <div className="border rounded-lg overflow-hidden">
@@ -1166,7 +1166,7 @@ export default function CasesAddPage() {
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between items-start py-3 border-b border-gray-200">
                     <div className="flex-1">
-                      <span className="font-medium text-base">
+                      <span>
                         Base Transport Fee
                       </span>
                       <div className="text-sm text-gray-600 mt-1">
@@ -1186,7 +1186,7 @@ export default function CasesAddPage() {
                         className="flex justify-between py-2 text-sm border-b border-dashed"
                       >
                         <div className="flex-1">
-                          <span className="font-medium text-base">
+                          <span>
                             {svc.name}
                           </span>
                           <div className="text-sm text-gray-600 mt-1">

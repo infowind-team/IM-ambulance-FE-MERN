@@ -129,7 +129,7 @@ export function ServiceSearch({
     <div className="space-y-2 w-full">
       {/* Optional label */}
       {label && (
-        <Label className="text-base font-medium text-base-optimized mb-2 block">
+        <Label>
           {label} {required && <span className="text-red-500">*</span>}
         </Label>
       )}

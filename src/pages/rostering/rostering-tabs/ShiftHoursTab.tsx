@@ -29,27 +29,12 @@ import {
   DrawerTitle,
   DrawerHeader,
 } from "@/components/ui/drawer";
+import CaseDrawer from "../CaseDrawer";
 
-/* --------------------------------------------------------------- */
-/* Confirmation Dialog for Unassigning staff                        */
-/* --------------------------------------------------------------- */
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import CaseDrawer from "./CaseDrawer";
-
-interface UnassignStaff {
-  name: string;
-  role: "Driver" | "Medic" | "Escort";
-}
-
-/* --------------------------------------------------------------- */
-/* Case Drawer – Dynamic with all HTML converted to React           */
-/* --------------------------------------------------------------- */
+  
+/* ------------------------------------------------------------------ */
+/* Types                                                              */
+/* ------------------------------------------------------------------ */
 interface Case {
   id: string;
   caseNumber: string;
@@ -62,8 +47,14 @@ interface Case {
   status: "Open" | "Pending for Dispatch" | "Completed";
 }
 
+interface ShiftGroup {
+  time: string;
+  count: number;
+  cases: Case[];
+}
+
 /* ------------------------------------------------------------------ */
-/* Mock Data & Shift Groups                                           */
+/* Mock Data                                                          */
 /* ------------------------------------------------------------------ */
 const mockCases: Case[] = [
   {
@@ -145,18 +136,31 @@ const mockCases: Case[] = [
   },
 ];
 
-const shiftGroups = {
+const shiftGroups: Record<string, ShiftGroup> = {
   "Day Shift": {
-    time: "08:00 - 11:00",
-    count: 4,
+    time: "08:00 - 20:00",
+    count: 5,
     cases: mockCases.slice(0, 5),
   },
-  "Afternoon Shift": {
-    time: "11:00 - 14:00",
+  "Night Shift": {
+    time: "20:00 - 08:00",
     count: 2,
     cases: mockCases.slice(5),
   },
 };
+
+/* ------------------------------------------------------------------ */
+/* Stats Cards – Array Driven                                         */
+/* ------------------------------------------------------------------ */
+const statsCards = [
+  { value: 0, label: "Total Cases", bg: "bg-[#2160AD]", border: "border-[#2160AD]/20" },
+  { value: 0, label: "Open Cases", bg: "bg-red-500", border: "border-red-500/20" },
+  { value: 0, label: "1-Way Trip", bg: "bg-purple-500", border: "border-purple-500/20" },
+  { value: 0, label: "2-Way Trip", bg: "bg-indigo-500", border: "border-indigo-500/20" },
+  { value: 0, label: "Staff Available", bg: "bg-teal-500", border: "border-teal-500/20" },
+  { value: 0, label: "Cases Fulfilled", bg: "bg-blue-500", border: "border-blue-500/20" },
+  { value: 0, label: "Cancelled Cases", bg: "bg-pink-500", border: "border-pink-500/20" },
+];
 
 /* ------------------------------------------------------------------ */
 /* Main Component                                                     */
@@ -168,38 +172,32 @@ export default function ShiftHoursTab() {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
 
-  // Unassign dialog state
-  const [openUnassignDialog, setOpenUnassignDialog] = useState(false);
-  const [staffToUnassign, setStaffToUnassign] = useState<UnassignStaff | null>(
-    null
-  );
+  // Compute stats dynamically
+  const allCases = Object.values(shiftGroups).flatMap(g => g.cases);
+  const stats = {
+    total: allCases.length,
+    open: allCases.filter(c => c.status === "Open").length,
+    oneWay: allCases.filter(c => c.serviceType === "One-way").length,
+    twoWay: allCases.filter(c => c.serviceType === "Two-way").length,
+    threeWay: allCases.filter(c => c.serviceType === "Three-way").length,
+    staffAvailable: 6,
+    fulfilled: allCases.filter(c => c.status === "Completed").length,
+    cancelled: 0,
+  };
+
+  // Update stats cards with real values
+  const updatedStatsCards = statsCards.map((card, index) => {
+    const values = Object.values(stats);
+    return { ...card, value: values[index] ?? card.value };
+  });
 
   const getStatusColor = (status: Case["status"]) => {
     switch (status) {
-      case "Open":
-        return "bg-blue-500";
-      case "Pending for Dispatch":
-        return "bg-amber-500";
-      case "Completed":
-        return "bg-emerald-500";
-      default:
-        return "header-bg-soft0";
+      case "Open": return "bg-blue-500";
+      case "Pending for Dispatch": return "bg-amber-500";
+      case "Completed": return "bg-emerald-500";
+      default: return "bg-gray-400";
     }
-  };
-
-  const filteredCases = mockCases.filter((c) => {
-    if (statusFilter !== "all" && c.status !== statusFilter) return false;
-    return true;
-  });
-
-  const stats = {
-    total: filteredCases.length,
-    open: filteredCases.filter((c) => c.status === "Open").length,
-    oneWay: filteredCases.filter((c) => c.serviceType === "One-way").length,
-    twoWay: filteredCases.filter((c) => c.serviceType === "Two-way").length,
-    staffAvailable: 6,
-    fulfilled: filteredCases.filter((c) => c.status === "Completed").length,
-    cancelled: 0,
   };
 
   const openCaseDrawer = (c: Case) => {
@@ -207,62 +205,42 @@ export default function ShiftHoursTab() {
     setOpenDrawer(true);
   };
 
-  const handleUnassignConfirm = () => {
-    if (!staffToUnassign) return;
-    console.log(`Unassigning ${staffToUnassign.role}: ${staffToUnassign.name}`);
-    // TODO: Replace with real API call
-    // await unassignStaff(staffToUnassign);
-  };
-
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-[#2160AD] rounded-lg p-4 text-white border border-[#2160AD]/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.total}</div>
-          <div className="opacity-90 text-base">Total Cases</div>
-        </Card>
-        <Card className="bg-red-500 rounded-lg p-4 text-white border border-red-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.open}</div>
-          <div className="opacity-90 text-base">Open Cases</div>
-        </Card>
-        <Card className="bg-purple-500 rounded-lg p-4 text-white border border-purple-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.oneWay}</div>
-          <div className="opacity-90 text-base">1-Way Trip</div>
-        </Card>
-        <Card className="bg-indigo-500 rounded-lg p-4 text-white border border-indigo-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.twoWay}</div>
-          <div className="opacity-90 text-base">2-Way Trip</div>
-        </Card>
+        {updatedStatsCards.slice(0, 4).map((card, idx) => (
+          <Card
+            key={idx}
+            className={`${card.bg} ${card.border} rounded-lg p-4 text-white border gap-1 hover:shadow-lg transition-all`}
+          >
+            <div className="text-2xl font-medium">{card.value}</div>
+            <div className="opacity-90 text-base">{card.label}</div>
+          </Card>
+        ))}
       </div>
+      
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-teal-500 rounded-lg p-4 text-white border border-teal-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.staffAvailable}</div>
-          <div className="opacity-90 text-base">Staff Available</div>
-        </Card>
-        <Card className="bg-blue-500 rounded-lg p-4 text-white border border-blue-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.fulfilled}</div>
-          <div className="opacity-90 text-base">Cases Fulfilled</div>
-        </Card>
-        <Card className="bg-pink-500 rounded-lg p-4 text-white border border-pink-500/20 gap-1 hover:shadow-lg transition-all">
-          <div className="text-2xl font-medium">{stats.cancelled}</div>
-          <div className="opacity-90 text-base">Cancelled Cases</div>
-        </Card>
+        {updatedStatsCards.slice(4).map((card, idx) => (
+          <Card
+            key={idx}
+            className={`${card.bg} ${card.border} rounded-lg p-4 text-white border gap-1 hover:shadow-lg transition-all`}
+          >
+            <div className="text-2xl font-medium">{card.value}</div>
+            <div className="opacity-90 text-base">{card.label}</div>
+          </Card>
+        ))}
       </div>
-
+      
       {/* Warning Alert */}
       {stats.open > 0 && (
-        <Alert className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg rounded-l-0">
-          <TriangleAlert className="h-4 w-4 text-red-400" />
-          <AlertDescription>
-            <p className="text-sm text-red-700">
-              <span className="font-semibold">Warning:</span>{" "}
-              <span className="font-normal">
-                There are {stats.open} open case{stats.open > 1 ? "s" : ""} not
-                assigned
-              </span>
-            </p>
+        <Alert className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4">
+          <TriangleAlert className="h-5 w-5 text-red-600" />
+          <AlertDescription className="ml-3 text-red-800 flex">
+            <strong>Warning:</strong> There are {stats.open} open case
+            {stats.open > 1 ? "s" : ""} that are not yet assigned.
           </AlertDescription>
         </Alert>
       )}
@@ -274,9 +252,9 @@ export default function ShiftHoursTab() {
             <SelectValue placeholder="Shift Hours" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Shifts</SelectItem>
-            <SelectItem value="day">Day Shift</SelectItem>
-            <SelectItem value="afternoon">Afternoon Shift</SelectItem>
+            <SelectItem value="all">Shift Hours</SelectItem>
+            <SelectItem value="day">Day Shift (08:00-20:00)</SelectItem>
+            <SelectItem value="afternoon">Night Shift (20:00-08:00)</SelectItem>
           </SelectContent>
         </Select>
 
@@ -286,9 +264,9 @@ export default function ShiftHoursTab() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="Open">Open</SelectItem>
-            <SelectItem value="Pending for Dispatch">Pending</SelectItem>
-            <SelectItem value="Completed">Completed</SelectItem>
+            <SelectItem value="Available">Available</SelectItem>
+            <SelectItem value="Pending for Dispatch">Pending for Dispatch</SelectItem>
+            <SelectItem value="Off Duty">Off Duty</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -323,16 +301,16 @@ export default function ShiftHoursTab() {
                   <Card
                     key={c.id}
                     onClick={() => openCaseDrawer(c)}
-                    className="bg-white border-2 border-[#2160AD]/20 rounded-2xl p-5 shadow-md cursor-pointer hover:shadow-xl transition-all hover:border-[#2160AD]/50 gap-0 hover-lift"
+                    className="bg-white border-2 border-[#2160AD]/20 rounded-2xl p-5 shadow-md cursor-pointer hover:shadow-xl transition-all hover:border-[#2160AD]/50 hover-lift relative"
                   >
                     <div className="flex justify-between items-start mb-4">
-                      <Badge
+                      <span
                         className={`${getStatusColor(
                           c.status
-                        )} text-white px-3 py-2 rounded-lg font-semibold text-base`}
+                        )} text-white px-3 py-2 rounded-lg font-semibold tracking-wide text-base-optimized`}
                       >
                         {c.status}
-                      </Badge>
+                      </span>
                     </div>
 
                     <div>
@@ -343,13 +321,13 @@ export default function ShiftHoursTab() {
                         <div className="font-semibold text-gray-900">
                           Patient: {c.patient}
                         </div>
-                        <div className="flex items-start space-x-1">
+                        <div className="flex items-start space-x-2">
                           <span className="text-[#2160AD] mt-1 text-lg">
                           📍
                           </span>
                           <span className="font-medium">{c.pickup}</span>
                         </div>
-                        <div className="flex items-start space-x-1">
+                        <div className="flex items-start space-x-2">
                           <span className="text-[#2160AD] mt-1 text-lg">
                           🏥
                           </span>

@@ -71,8 +71,7 @@ export default function MonthView({ date, events, statusColors }: MonthViewProps
           (day) => (
             <div
               key={day}
-              className="p-3 text-center text-gray-700 font-medium border-r border-gray-200 last:border-r-0"
-              style={{ fontSize: '14px' }}
+              className="p-3 text-center text-gray-700 font-medium border-r border-gray-200 last:border-r-0 text-sm"
             >
               {day}
             </div>
@@ -98,8 +97,8 @@ export default function MonthView({ date, events, statusColors }: MonthViewProps
               `}
             >
               <div
-                className={`mb-2 ${isTodayDate ? 'text-[#2160AD] font-semibold' : 'text-gray-700'}`}
-                style={{ fontSize: '14px', fontWeight: 500 }}
+                className={`mb-2 text-sm ${isTodayDate ? 'text-[#2160AD] font-semibold' : 'text-gray-700'}`}
+                style={{ fontWeight: 500 }}
               >
                 {format(day, 'd')}
               </div>

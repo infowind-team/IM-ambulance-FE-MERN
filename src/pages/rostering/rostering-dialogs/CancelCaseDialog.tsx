@@ -61,7 +61,7 @@ export default function CancelCaseDialog({
         </DialogHeader>
 
         <div className="py-4">
-          <Label htmlFor="cancel-reason" className="text-base font-medium">
+          <Label htmlFor="cancel-reason">
             Reason for Cancellation <span className="text-red-500">*</span>
           </Label>
           <Textarea

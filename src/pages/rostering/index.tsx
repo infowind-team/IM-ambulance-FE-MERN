@@ -4,17 +4,17 @@
 import React, { useState } from 'react';
 import { FileDown } from 'lucide-react';
 import FunctionalHeader from '@/layout/FunctionalHeader';
-import ShiftHoursTab from './ShiftHoursTab';
-import OfficeHoursTab from './OfficeHoursTab';
-import OperationsTab from './OperationsTab';
+import OfficeHoursTab from './rostering-tabs/OfficeHoursTab';
+import OperationsTab from './rostering-tabs/OperationsTab';
 import { SharedDatePicker } from '@/components/ui/shared-date-picker';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import ExportRosterDialog from './ExportRosterDialog';
-import RosterPreviewDialog from './RosterPreviewDialog';
+import ExportRosterDialog from './rostering-dialogs/ExportRosterDialog';
+import RosterPreviewDialog from './rostering-dialogs/RosterPreviewDialog';
+import ShiftHoursTab from './rostering-tabs/ShiftHoursTab';
 
 export default function RosteringPage() {
-  const [selectedDate, setSelectedDate] = useState(new Date(2025, 5, 1));  
+  const [selectedDate, setSelectedDate] = useState(new Date(2025, 5, 1));
   const [selectedTab, setSelectedTab] = useState('shift');
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -28,33 +28,38 @@ export default function RosteringPage() {
 
   return (
     <>
-      <FunctionalHeader title="Rostering" />
-      <div className="flex-1 w-full overflow-auto">
-        {/* Toolbar */}
-        <div className="border-b border-gray-200 px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {/* Shared DatePicker (Day mode only) */}
-              <SharedDatePicker
-                date={selectedDate}
-                onDateChange={setSelectedDate}
-                mode="day"
-              />
-            </div>
-
-            <Button
-              variant="outline"
-              className="h-8 rounded-md px-3 gap-2 border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10"
-              onClick={() => setIsExportOpen(true)}
-            >
-              <FileDown className="w-4 h-4" />
-              Export
-            </Button>
+      <FunctionalHeader
+        title="Rostering"
+        breadcrumb={[
+          { label: "Operations" },
+          { label: "Rostering" },
+        ]}
+      />
+      {/* Toolbar */}
+      <div className="border-b border-gray-200 px-6 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            {/* Shared DatePicker (Day mode only) */}
+            <SharedDatePicker
+              date={selectedDate}
+              onDateChange={setSelectedDate}
+              mode="day"
+            />
           </div>
-        </div>
 
+          <Button
+            variant="outline"
+            className="h-8 rounded-md px-3 gap-2 border-[#2160AD]/20 text-[#2160AD] hover:bg-[#2160AD]/10"
+            onClick={() => setIsExportOpen(true)}
+          >
+            <FileDown className="w-4 h-4" />
+            Export
+          </Button>
+        </div>
+      </div>
+      <div className="flex-1 w-full overflow-auto">
         {/* Tabs */}
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className='gap-0'>
           <div className="border-b border-gray-200 px-6">
             <TabsList className="bg-transparent flex space-x-8 p-0">
               <TabsTrigger value="shift" className="py-3 px-1">Ground Crew (Shift)</TabsTrigger>
