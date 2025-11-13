@@ -2195,7 +2195,7 @@ export default function CasesAddPage() {
                           })}
                           className="w-full"
                         />
-                        {/* ✅ Show validation error message */}
+                        {/* Show validation error message */}
                         {errors.trips?.[idx]?.scheduledTime && (
                           <p className="text-red-500 text-sm mt-1">
                             {errors.trips[idx].scheduledTime?.message}
