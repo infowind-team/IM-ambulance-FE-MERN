@@ -145,8 +145,18 @@ export default function VehiclesPage() {
       params.append("sortBy", "1");
       params.append("sortOrder", "1");
 
+      // const res = await fetch(
+      //   `/api/vehicles/get-all?page=${page}&limit=30&${params.toString()}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: access_token ? `Bearer ${access_token}` : "",
+      //     },
+      //   }
+      // );
       const res = await fetch(
-        `/api/vehicles/get-all/${page}/30?${params.toString()}`,
+        `/api/vehicles/get-all?page=${page}&limit=30&${params.toString()}`,
         {
           method: "GET",
           headers: {
@@ -155,6 +165,7 @@ export default function VehiclesPage() {
           },
         }
       );
+
 
       if (!res.ok) throw new Error("Failed to fetch vehicles");
 
