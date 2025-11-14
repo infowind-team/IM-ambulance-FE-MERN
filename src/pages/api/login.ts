@@ -4,7 +4,6 @@ import axios from 'axios';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = JSON.parse(req.body);
   try {
-    // const response = await fetch(`https://api.encharge.io/v1/segments/956329/people?limit=${limit}&offset=${offset}&sort=${sort}&order=${order}&ignoreAnonymous=true&userType=patient`, {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BE_DOMAIN}/auth/sign-in`, {
       email,
       password,
