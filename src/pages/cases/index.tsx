@@ -272,17 +272,17 @@ export default function CasesPage() {
                   <TableHead className="p-4">
                     <button
                       className="flex items-center hover:text-gray-900 cursor-pointer"
-                      onClick={() => requestSort("vehicle")}
+                      // onClick={() => requestSort("vehicle")}
                     >
-                      Vehicle {getSortIcon("vehicle")}
+                      Vehicle
                     </button>
                   </TableHead>
                   <TableHead className="p-4">
                     <button
                       className="flex items-center hover:text-gray-900 cursor-pointer"
-                      onClick={() => requestSort("date")}
+                      // onClick={() => requestSort("date")}
                     >
-                      Booking Date | Time {getSortIcon("date")}
+                      Booking Date | Time
                     </button>
                   </TableHead>
                   <TableHead className="p-4">

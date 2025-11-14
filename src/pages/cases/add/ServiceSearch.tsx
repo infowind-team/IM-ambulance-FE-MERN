@@ -1,115 +1,41 @@
-// components/theme-ui/ServiceSearch.tsx
+// @/components/cases/add/ServiceSearch.tsx
 "use client";
 
-import * as React from "react";
-import { Plus, X } from "lucide-react";
-import { Label } from "@/components/ui/label";
+import { useState, useEffect, useRef, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react";
+import { Search, Plus, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandItem,
-  CommandList,
-  CommandInput,
-} from "@/components/ui/command";
+import { ALL_SERVICES, Service } from "./ALL_SERVICES";
 
-/* --------------------------------------------------------------- */
-/*                         SERVICE DEFINITION                        */
-/* --------------------------------------------------------------- */
-export interface Service {
+type Props = {
   value: string;
-  label: string;
-  price: string;
-  unit: string;
-}
-
-/* --------------------------------------------------------------- */
-/*                         ALL SERVICES (static)                    */
-/* --------------------------------------------------------------- */
-export const ALL_SERVICES: Service[] = [
-  { value: "oxygen-support", label: "Oxygen Support", unit: "per day", price: "$50" },
-  { value: "wheelchair", label: "Wheelchair Service", unit: "per service", price: "$25" },
-  { value: "stretcher", label: "Stretcher Service", unit: "per service", price: "$35" },
-  { value: "medical-escort", label: "Medical Escort", unit: "per hour", price: "$75" },
-  { value: "standby", label: "Standby Service", unit: "per day", price: "$120" },
-  { value: "ae-transfer", label: "A&E Transfer", unit: "per hour", price: "$80" },
-  { value: "dialysis", label: "Dialysis Transport", unit: "per service", price: "$45" },
-  { value: "iv-therapy", label: "IV Therapy Support", unit: "per trip", price: "$65" },
-  { value: "emergency-equipment", label: "Emergency Equipment", unit: "per trip", price: "$65" },
-];
-
-/* --------------------------------------------------------------- */
-/*                         PROPS                                            */
-/* --------------------------------------------------------------- */
-interface ServiceSearchProps {
-  /** Current input value (controlled) */
-  value: string;
-  /** Called on every keystroke */
   onChange: (value: string) => void;
-  /** Called when a service is selected (or custom service added) */
-  onSelect?: (service: Service | null) => void;
-  placeholder?: string;
-  label?: string;
-  required?: boolean;
-}
+  onSelect: (service: Service | null) => void;
+};
 
-/* --------------------------------------------------------------- */
-/*                         MAIN COMPONENT                                   */
-/* --------------------------------------------------------------- */
-export function ServiceSearch({
-  value,
-  onChange,
-  onSelect,
-  placeholder = "Search or add custom service...",
-  label = "Add Service",
-  required = false,
-}: ServiceSearchProps) {
-  const [open, setOpen] = React.useState(false);
-  const [search, setSearch] = React.useState("");
+export default function ServiceSearch({ value, onChange, onSelect }: Props) {
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState(value);
 
-  /* ----------------------------------------------------------- */
-  /*  Filter services – memoised, runs only when `search` changes */
-  /* ----------------------------------------------------------- */
-  const filtered = React.useMemo(() => {
-    if (!search) return ALL_SERVICES;
-    const lower = search.toLowerCase();
-    return ALL_SERVICES.filter(
-      (s) =>
-        s.label.toLowerCase().includes(lower) ||
-        s.value.toLowerCase().includes(lower)
-    );
-  }, [search]);
+  const filteredServices = ALL_SERVICES.filter((service: { label: string; value: string; }) =>
+    service.label.toLowerCase().includes(value.toLowerCase()) ||
+    service.value.toLowerCase().includes(value.toLowerCase())
+  );
 
-  /* ----------------------------------------------------------- */
-  /*  Sync internal search with external `value` (controlled)    */
-  /* ----------------------------------------------------------- */
-  React.useEffect(() => {
-    setSearch(value);
-  }, [value]);
+  const handleSelect = (service: Service) => {
+    onSelect(service);
+    onChange("");
+    setOpen(false);
+    inputRef.current?.focus();
+  };
 
-  /* ----------------------------------------------------------- */
-  /*  Handlers                                                    */
-  /* ----------------------------------------------------------- */
   const handleInputChange = (val: string) => {
     setSearch(val);
     onChange(val);
     setOpen(true);
-  };
-
-  const handleSelect = (service: Service) => {
-    setSearch(service.label);
-    onChange(service.label);
-    onSelect?.(service);
-    setOpen(false);
-  };
-
-  const handleCustomAdd = () => {
-    if (search.trim() && !ALL_SERVICES.some((s) => s.label === search)) {
-      onSelect?.(null); // signal “custom service”
-      setOpen(false);
-    }
   };
 
   const handleClear = () => {
@@ -118,85 +44,64 @@ export function ServiceSearch({
     setOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && filtered.length === 0) {
-      e.preventDefault();
-      handleCustomAdd();
-    }
-  };
 
   return (
     <div className="space-y-2 w-full">
-      {/* Optional label */}
-      {label && (
-        <Label>
-          {label} {required && <span className="text-red-500">*</span>}
-        </Label>
-      )}
-
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <div className="relative">
-            <Input
-              type="text"
-              value={search}
-              onChange={(e) => handleInputChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              className="w-full pr-10"
-            />
-
-            {/* Clear button */}
-            {search && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:text-gray-700"
-                onClick={handleClear}
-              >
-                <X className="h-4 w-4" />
-                <span className="sr-only">Clear search</span>
-              </Button>
-            )}
+          <div className="relative w-full flex gap-2">
+            <div className="relative w-full flex">
+              {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" /> */}
+              <Input
+                ref={inputRef}
+                value={search}
+                onChange={(e) => handleInputChange(e.target.value)}
+                placeholder="Search services..."
+                className="pr-10"
+              // onFocus={() => setOpen(true)}
+              />
+              {search && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  onClick={handleClear}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+            <Button size="icon" variant="outline">
+              <Plus className="w-5 h-5" />
+            </Button>
           </div>
         </PopoverTrigger>
-
-        <PopoverContent
-          className="w-[var(--radix-popover-trigger-width)] p-0"
-          align="start"
-          onOpenAutoFocus={(e) => e.preventDefault()}
-        >
+        <PopoverContent className="w-[450px] max-w-full p-1" align="start" onOpenAutoFocus={(e) => e.preventDefault()}>
           <Command>
-            {/* Built-in input – we hide it and use our own above */}
-            <CommandInput className="hidden" />
-
-            <CommandList className="max-h-64 overflow-auto p-1">
-              <CommandEmpty className="py-6 text-center text-sm text-muted-foreground">
+            {/* <CommandInput placeholder="Search services..." value={value} onValueChange={onChange} /> */}
+            <CommandList className="max-h-64 overflow-auto">
+              <CommandEmpty className="p-6 text-center text-sm text-muted-foreground">
                 No matching services. Press **Enter** to add “{search}” as a custom service.
               </CommandEmpty>
 
-              {filtered.map((service) => (
+              {/* <CommandGroup heading="Available Services"> */}
+              {filteredServices.map((service: Service) => (
                 <CommandItem
                   key={service.value}
-                  value={service.value}
                   onSelect={() => handleSelect(service)}
                   className="flex cursor-pointer items-center justify-between rounded-sm px-2 py-2 text-sm outline-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"
                 >
                   <div className="flex-1">
-                    <div className="font-medium text-base-optimized">
-                      {service.label}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {/* {service.unit} */} Additional Service
-                    </div>
+                    <div className="font-medium text-base-optimized">{service.label}</div>
+                    <div className="text-sm text-muted-foreground">{service.unit ? `${service.unit}` : ""}</div>
                   </div>
-
                   <div className="ml-4 text-sm font-medium text-[#2160AD]">
                     {service.price}
                   </div>
                 </CommandItem>
               ))}
+              {/* </CommandGroup> */}
+
             </CommandList>
           </Command>
         </PopoverContent>

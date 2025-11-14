@@ -156,15 +156,11 @@ export default function OfficeHoursTab() {
   return (
     <div className="space-y-4">
       
-      <Alert className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg rounded-l-0">
-        <TriangleAlert className="h-4 w-4 text-red-400" />
-        <AlertDescription>
-          <p className="text-sm text-red-700">
-            <span className="font-semibold">Warning:</span>{" "}
-            <span className="font-normal">
-              There are 150 unassigned shifts this month
-            </span>
-          </p>
+      {/* Warning Alert */} 
+      <Alert className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4">
+        <TriangleAlert className="h-5 w-5 text-red-600" />
+        <AlertDescription className="text-red-800 flex">
+          <strong>Warning:</strong> There are 150 unassigned shifts this month
         </AlertDescription>
       </Alert>
 
@@ -182,8 +178,7 @@ export default function OfficeHoursTab() {
           <div className="flex gap-2">
             <Button
               onClick={handleSave}
-              className="h-8 rounded-md px-3 gap-2 bg-[#2160AD] text-white hover:bg-[#1a4d8a]"
-              style={{ fontSize: "16px" }}
+              className="h-8 rounded-md px-3 gap-2 bg-[#2160AD] text-white hover:bg-[#1a4d8a] text-base"
             >
               <Save className="w-4 h-4" />
               Save
@@ -191,8 +186,7 @@ export default function OfficeHoursTab() {
             <Button
               onClick={handleCancel}
               variant="outline"
-              className="h-8 rounded-md px-3 gap-2 border-red-300 text-red-600 hover:bg-red-50"
-              style={{ fontSize: "16px" }}
+              className="h-8 rounded-md px-3 gap-2 border-red-300 text-red-600 hover:bg-red-50 text-base"
             >
               <X className="w-4 h-4" />
               Cancel
@@ -207,8 +201,8 @@ export default function OfficeHoursTab() {
           <TableHeader className="header-bg-soft">
             <TableRow>
               <TableHead
-                className="text-[#2160AD] font-semibold p-2 border-b-2 border-[#2160AD] text-left sticky left-0 z-10"
-                style={{ fontSize: "16px", minWidth: "130px" }}
+                className="text-[#2160AD] header-bg-soft font-semibold p-2 border-b-2 border-[#2160AD] text-left sticky left-0 z-10"
+                style={{ fontSize: "16px", minWidth: "140px" }}
               >
                 Staff
               </TableHead>
@@ -230,7 +224,7 @@ export default function OfficeHoursTab() {
                 key={member.id}
                 className="hover:header-bg-soft transition"
               >
-                <TableCell className="py-4 border-r border-gray-200 bg-white sticky left-0 z-10">
+                <TableCell className="p-3 border-r border-gray-200 bg-white sticky left-0 z-10">
                   <div>
                     <div
                       className="font-medium text-[#2160AD]"
@@ -244,7 +238,7 @@ export default function OfficeHoursTab() {
                 {member.shifts.map((shift, idx) => (
                   <TableCell
                     key={idx}
-                    className="py-4 text-center border-r border-gray-100"
+                    className="p-1 text-center border-r border-gray-100"
                   >
                     {isEditing ? (
                       <Select
@@ -253,7 +247,7 @@ export default function OfficeHoursTab() {
                           handleShiftChange(member.id, idx, val)
                         }
                       >
-                        <SelectTrigger className="h-7 w-full text-xs">
+                        <SelectTrigger className="h-8! p-1 rounded border-gray-200 bg-white w-full text-sm">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>

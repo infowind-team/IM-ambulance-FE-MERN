@@ -68,22 +68,22 @@ export default function VehiclesAddPage() {
   const [maintenanceRecords, setMaintenanceRecords] = useState<MaintenanceRecord[]>([
     {
       id: 1,
-      lastService: "2024-01-15",
-      nextDue: "2024-07-15",
+      lastService: "15/01/2024",
+      nextDue: "15/07/2024",
       odometer: "45,230",
       files: 1,
     },
     {
       id: 2,
-      lastService: "2024-02-28",
-      nextDue: "2024-08-28",
+      lastService: "28/02/2024",
+      nextDue: "28/08/2024",
       odometer: "46,850",
       files: 1,
     },
     {
       id: 3,
-      lastService: "2024-03-10",
-      nextDue: "2024-09-10",
+      lastService: "10/03/2024",
+      nextDue: "10/09/2024",
       odometer: "47,200",
       files: 0,
     },
@@ -94,8 +94,8 @@ export default function VehiclesAddPage() {
       id: 1,
       type: "Vehicle Inspection Certificate (LTA)",
       number: "LTA-2024-001234",
-      issued: "2024-01-15",
-      expiry: "2025-01-14",
+      issued: "15/01/2024",
+      expiry: "14/01/2024",
       file: "inspection_cert.pdf",
       remarks: "-",
     },
@@ -103,8 +103,8 @@ export default function VehiclesAddPage() {
       id: 2,
       type: "Vehicle Insurance",
       number: "INS-2024-567890",
-      issued: "2024-02-01",
-      expiry: "2025-01-31",
+      issued: "01/02/2024",
+      expiry: "31/01/2024",
       file: "insurance_policy.pdf",
       remarks: "Comprehensive coverage",
     },
@@ -153,7 +153,7 @@ export default function VehiclesAddPage() {
     qpDuringCoe: "-",
     coeNo: "",
     parfEligibility: "53630.00",
-    parfExpiryDate: "2030-09-24",
+    parfExpiryDate: "24/09/2030",
     minParfBenefit: "26815.00",
     co2Emission: "180",
     coEmission: "1.5",
@@ -226,12 +226,12 @@ export default function VehiclesAddPage() {
       prev.map((r) =>
         r.id === id
           ? {
-              ...r,
-              isEditing: false,
-              lastService: r.lastService.trim(),
-              nextDue: r.nextDue.trim(),
-              odometer: r.odometer.trim(),
-            }
+            ...r,
+            isEditing: false,
+            lastService: r.lastService.trim(),
+            nextDue: r.nextDue.trim(),
+            odometer: r.odometer.trim(),
+          }
           : r
       )
     );
@@ -290,10 +290,10 @@ export default function VehiclesAddPage() {
       prev.map((r) =>
         r.id === id
           ? {
-              ...r,
-              [field]: value,
-              ...(field === "fileObj" ? { file: (value as File).name } : {}),
-            }
+            ...r,
+            [field]: value,
+            ...(field === "fileObj" ? { file: (value as File).name } : {}),
+          }
           : r
       )
     );
@@ -304,12 +304,12 @@ export default function VehiclesAddPage() {
       prev.map((r) =>
         r.id === id
           ? {
-              ...r,
-              isEditing: false,
-              type: r.type.trim(),
-              number: r.number.trim(),
-              remarks: r.remarks.trim(),
-            }
+            ...r,
+            isEditing: false,
+            type: r.type.trim(),
+            number: r.number.trim(),
+            remarks: r.remarks.trim(),
+          }
           : r
       )
     );
@@ -344,1010 +344,1052 @@ export default function VehiclesAddPage() {
     setCertificateRecords((prev) => prev.filter((r) => r.id !== id));
   };
 
+  // Helper: Convert DD/MM/YYYY → YYYY-MM-DD
+  const toIsoDate = (ddmmyyyy: string): string => {
+    if (!ddmmyyyy) return "";
+    const [day, month, year] = ddmmyyyy.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+
+  // Helper: Convert YYYY-MM-DD → DD/MM/YYYY
+  const toDisplayDate = (isoDate: string): string => {
+    if (!isoDate) return "";
+    const [year, month, day] = isoDate.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <>
       <FunctionalHeader
         title="Add New Vehicle"
         breadcrumb={[
           { label: "Operations" },
-          { label: "Vehicle" },
+          { label: "vehicles", href: "/vehicles" },
           { label: "Add New Vehicle" },
         ]}
       />
       <div className="flex-1 w-full overflow-auto">
-        <div className="space-y-6 p-4 lg:p-6 w-full"> 
-            {/* Status */}
-            <div className="max-w-[300px]">
-              <Label className="text-base font-medium text-base-optimized mb-2 block">
-                Status <span className="text-red-500">*</span>
-              </Label>
-              <Select value={form.status} onValueChange={(v) => updateFormField("status", v)}>
-                <SelectTrigger className="w-full text-base-optimized">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
-                  <SelectItem value="Maintenance">Maintenance</SelectItem>
-                  <SelectItem value="Out of Service">Out of Service</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <div className="space-y-6 p-4 lg:p-6 w-full">
+          {/* Status */}
+          <div className="max-w-[300px]">
+            <Label className="text-base font-medium text-base-optimized mb-2 block">
+              Status <span className="text-red-500">*</span>
+            </Label>
+            <Select value={form.status} onValueChange={(v) => updateFormField("status", v)}>
+              <SelectTrigger className="w-full text-base-optimized">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Inactive">Inactive</SelectItem>
+                <SelectItem value="Maintenance">Maintenance</SelectItem>
+                <SelectItem value="Out of Service">Out of Service</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            {/* Vehicle Registration Details */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="w-5 h-5" />
-                  Vehicle Registration Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <Label>
-                      Vehicle Number <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      required
-                      value={form.vehicleNumber}
-                      onChange={(e) => updateFormField("vehicleNumber", e.target.value)}
-                      placeholder="e.g., SAZ1234A"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>
-                      Chassis No. <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      required
-                      value={form.chassisNo}
-                      onChange={(e) => updateFormField("chassisNo", e.target.value)}
-                      placeholder="e.g., JTFST22P200040240"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Vehicle Scheme</Label>
-                    <Select
-                      value={form.vehicleScheme}
-                      onValueChange={(v) => updateFormField("vehicleScheme", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select scheme" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="normal">Normal</SelectItem>
-                        <SelectItem value="opc">OPC</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Vehicle Type</Label>
-                    <Select
-                      value={form.vehicleType}
-                      onValueChange={(v) => updateFormField("vehicleType", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="ambulance">Ambulance</SelectItem>
-                        <SelectItem value="van">Van</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+          {/* Vehicle Registration Details */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Truck className="w-5 h-5" />
+                Vehicle Registration Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>
+                    Vehicle Number <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    required
+                    value={form.vehicleNumber}
+                    onChange={(e) => updateFormField("vehicleNumber", e.target.value)}
+                    placeholder="e.g., SAZ1234A"
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label>
-                      Make & Model <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      required
-                      value={form.makeModel}
-                      onChange={(e) => updateFormField("makeModel", e.target.value)}
-                      placeholder="e.g., Mercedes-Benz Sprinter"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Year</Label>
-                    <Input
-                      value={form.year}
-                      onChange={(e) => updateFormField("year", e.target.value)}
-                      placeholder="e.g., 2023"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Current Propellant</Label>
-                    <Select
-                      value={form.currentPropellant}
-                      onValueChange={(v) => updateFormField("currentPropellant", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Diesel">Diesel</SelectItem>
-                        <SelectItem value="Petrol">Petrol</SelectItem>
-                        <SelectItem value="Electric">Electric</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="space-y-2">
+                  <Label>
+                    Chassis No. <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    required
+                    value={form.chassisNo}
+                    onChange={(e) => updateFormField("chassisNo", e.target.value)}
+                    placeholder="e.g., JTFST22P200040240"
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Vehicle Scheme <span className="text-red-500">*</span></Label>
+                  <Select
+                    value={form.vehicleScheme}
+                    onValueChange={(v) => updateFormField("vehicleScheme", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select scheme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Ambulance">Ambulance</SelectItem>
+                      <SelectItem value="Emergency Response">Emergency Response</SelectItem>
+                      <SelectItem value="Patient Transport">Patient Transport</SelectItem>
+                      <SelectItem value="Medical Support">Medical Support</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Vehicle Type <span className="text-red-500">*</span></Label>
+                  <Select
+                    value={form.vehicleType}
+                    onValueChange={(v) => updateFormField("vehicleType", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Basic Life Support">Basic Life Support</SelectItem>
+                      <SelectItem value="Advanced Life Support">Advanced Life Support</SelectItem>
+                      <SelectItem value="ICU Ambulance">ICU Ambulance</SelectItem>
+                      <SelectItem value="Pediatric Ambulance">Pediatric Ambulance</SelectItem>
+                      <SelectItem value="medical">Maternity Ambulance</SelectItem>
+                      <SelectItem value="Maternity Ambulance">Psychiatric Transport</SelectItem>
+                      <SelectItem value="Bariatric Ambulance">Bariatric Ambulance</SelectItem>
+                      <SelectItem value="Trauma Response">Trauma Response</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>
+                    Make & Model <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    required
+                    value={form.makeModel}
+                    onChange={(e) => updateFormField("makeModel", e.target.value)}
+                    placeholder="e.g., Mercedes-Benz Sprinter"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Year</Label>
+                  <Input
+                    value={form.year}
+                    onChange={(e) => updateFormField("year", e.target.value)}
+                    placeholder="e.g., 2023"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Current Propellant</Label>
+                  <Select
+                    value={form.currentPropellant}
+                    onValueChange={(v) => updateFormField("currentPropellant", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Petrol">Petrol</SelectItem>
+                      <SelectItem value="Electric">Electric</SelectItem>
+                      <SelectItem value="Hybrid">Hybrid</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Team Details */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Team Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label>
-                      Driver <span className="text-red-500">*</span>
-                    </Label>
-                    <Select
-                      value={form.driver}
-                      onValueChange={(v) => updateFormField("driver", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Driver" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="John Doe">John Doe</SelectItem>
-                        <SelectItem value="Jane Smith">Jane Smith</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Medic</Label>
-                    <Select
-                      value={form.medic}
-                      onValueChange={(v) => updateFormField("medic", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Medic" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Dr. Lee">Dr. Lee</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Escort</Label>
-                    <Select
-                      value={form.escort}
-                      onValueChange={(v) => updateFormField("escort", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="-" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">-</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+          {/* Team Details */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <User className="w-5 h-5" />
+                Team Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>
+                    Driver <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={form.driver}
+                    onValueChange={(v) => updateFormField("driver", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Driver" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                      <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Medic</Label>
+                  <Select
+                    value={form.medic}
+                    onValueChange={(v) => updateFormField("medic", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Medic" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                      <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Escort</Label>
+                  <Select
+                    value={form.escort}
+                    onValueChange={(v) => updateFormField("escort", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="-" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Owner's Details */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Owner's Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>
-                      Owner's Name <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      required
-                      value={form.ownerName}
-                      onChange={(e) => updateFormField("ownerName", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>
-                      NRIC/Passport/Company Cert No.{" "}
-                      <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      required
-                      value={form.ownerId}
-                      onChange={(e) => updateFormField("ownerId", e.target.value)}
-                    />
-                  </div>
+          {/* Owner's Details */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Owner's Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>
+                    Owner's Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    required
+                    value={form.ownerName}
+                    onChange={(e) => updateFormField("ownerName", e.target.value)}
+                  />
                 </div>
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <Label>Registered Address</Label>
-                    <Input
-                      value={form.registeredAddress}
-                      onChange={(e) => updateFormField("registeredAddress", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Mailing Address</Label>
-                    <Input
-                      value={form.mailingAddress}
-                      onChange={(e) => updateFormField("mailingAddress", e.target.value)}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>
+                    NRIC/Passport/Company Cert No.{" "}
+                    <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    required
+                    value={form.ownerId}
+                    onChange={(e) => updateFormField("ownerId", e.target.value)}
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Owner's ID Type</Label>
-                    <Select
-                      value={form.ownerIdType}
-                      onValueChange={(v) => updateFormField("ownerIdType", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Company Registration">
-                          Company Registration
-                        </SelectItem>
-                        <SelectItem value="NRIC">NRIC</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Registration Date</Label>
-                    <Input
-                      type="date"
-                      value={form.registrationDate}
-                      onChange={(e) => updateFormField("registrationDate", e.target.value)}
-                    />
-                  </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label>Registered Address</Label>
+                  <Input
+                    value={form.registeredAddress}
+                    onChange={(e) => updateFormField("registeredAddress", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Mailing Address</Label>
+                  <Input
+                    value={form.mailingAddress}
+                    onChange={(e) => updateFormField("mailingAddress", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Owner's ID Type</Label>
+                  <Select
+                    value={form.ownerIdType}
+                    onValueChange={(v) => updateFormField("ownerIdType", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Company Registration">
+                        Company Registration
+                      </SelectItem>
+                      <SelectItem value="NRIC">NRIC</SelectItem>
+                      <SelectItem value="Passport">Passport</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Registration Date</Label>
+                  <Input
+                    type="date"
+                    value={form.registrationDate}
+                    onChange={(e) => updateFormField("registrationDate", e.target.value)}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Registration Details */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Registration Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label>Previous Vehicle No.</Label>
-                    <Input
-                      value={form.previousVehicleNo}
-                      onChange={(e) => updateFormField("previousVehicleNo", e.target.value)}
-                      defaultValue="-"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Effective Date of Ownership</Label>
-                    <Input
-                      type="date"
-                      value={form.effectiveOwnershipDate}
-                      onChange={(e) => updateFormField("effectiveOwnershipDate", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Original Registration Date</Label>
-                    <Input
-                      type="date"
-                      value={form.originalRegistrationDate}
-                      onChange={(e) => updateFormField("originalRegistrationDate", e.target.value)}
-                    />
-                  </div>
+          {/* Registration Details */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Registration Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Previous Vehicle No.</Label>
+                  <Input
+                    value={form.previousVehicleNo}
+                    onChange={(e) => updateFormField("previousVehicleNo", e.target.value)}
+                    defaultValue="-"
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>No. of Transfers</Label>
-                    <Input
-                      value={form.noOfTransfers}
-                      onChange={(e) => updateFormField("noOfTransfers", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>IU Label No.</Label>
-                    <Input
-                      value={form.iuLabelNo}
-                      onChange={(e) => updateFormField("iuLabelNo", e.target.value)}
-                      placeholder="e.g., 40057623"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Effective Date of Ownership</Label>
+                  <Input
+                    type="date"
+                    value={form.effectiveOwnershipDate}
+                    onChange={(e) => updateFormField("effectiveOwnershipDate", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Original Registration Date</Label>
+                  <Input
+                    type="date"
+                    value={form.originalRegistrationDate}
+                    onChange={(e) => updateFormField("originalRegistrationDate", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>No. of Transfers</Label>
+                  <Input
+                    value={form.noOfTransfers}
+                    onChange={(e) => updateFormField("noOfTransfers", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>IU Label No.</Label>
+                  <Input
+                    value={form.iuLabelNo}
+                    onChange={(e) => updateFormField("iuLabelNo", e.target.value)}
+                    placeholder="e.g., 40057623"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Vehicle Specifications */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="w-5 h-5" />
-                  Vehicle Specifications
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <Label>Engine No.</Label>
-                    <Input
-                      value={form.engineNo}
-                      onChange={(e) => updateFormField("engineNo", e.target.value)}
-                      placeholder="e.g., 1KDB045665"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Engine Type</Label>
-                    <Select
-                      value={form.engineType}
-                      onValueChange={(v) => updateFormField("engineType", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Diesel">Diesel</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Maximum Unladen Weight (kg)</Label>
-                    <Input
-                      value={form.maxUnladenWeight}
-                      onChange={(e) => updateFormField("maxUnladenWeight", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Maximum Laden Weight (kg)</Label>
-                    <Input
-                      value={form.maxLadenWeight}
-                      onChange={(e) => updateFormField("maxLadenWeight", e.target.value)}
-                    />
-                  </div>
+          {/* Vehicle Specifications */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Vehicle Specifications
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>Engine No.</Label>
+                  <Input
+                    value={form.engineNo}
+                    onChange={(e) => updateFormField("engineNo", e.target.value)}
+                    placeholder="e.g., 1KDB045665"
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <Label>Engine Capacity (cc)</Label>
-                    <Input
-                      value={form.engineCapacity}
-                      onChange={(e) => updateFormField("engineCapacity", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Maximum Power Output (kW)</Label>
-                    <Input
-                      value={form.maxPowerOutput}
-                      onChange={(e) => updateFormField("maxPowerOutput", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Primary Color</Label>
-                    <Select
-                      value={form.primaryColor}
-                      onValueChange={(v) => updateFormField("primaryColor", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="White">White</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Secondary Color</Label>
-                    <Select
-                      value={form.secondaryColor}
-                      onValueChange={(v) => updateFormField("secondaryColor", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Red">Red</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="space-y-2">
+                  <Label>Engine Type</Label>
+                  <Select
+                    value={form.engineType}
+                    onValueChange={(v) => updateFormField("engineType", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Petrol">Petrol</SelectItem>
+                      <SelectItem value="Electric">Electric</SelectItem>
+                      <SelectItem value="Hybrid">Hybrid</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <Label>Passenger Capacity</Label>
-                    <Input
-                      value={form.passengerCapacity}
-                      onChange={(e) => updateFormField("passengerCapacity", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Wheelchair Accessible</Label>
-                    <RadioGroup
-                      value={form.wheelchairAccessible}
-                      onValueChange={(v) => updateFormField("wheelchairAccessible", v)}
-                      className="flex gap-4"
-                    >
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="Yes" id="wa-yes" />
-                        <Label htmlFor="wa-yes">Yes</Label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="No" id="wa-no" />
-                        <Label htmlFor="wa-no">No</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Lifter</Label>
-                    <RadioGroup
-                      value={form.lifter}
-                      onValueChange={(v) => updateFormField("lifter", v)}
-                      className="flex gap-4"
-                    >
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="Yes" id="lifter-yes" />
-                        <Label htmlFor="lifter-yes">Yes</Label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="No" id="lifter-no" />
-                        <Label htmlFor="lifter-no">No</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Stretcher Compatible</Label>
-                    <RadioGroup
-                      value={form.stretcherCompatible}
-                      onValueChange={(v) => updateFormField("stretcherCompatible", v)}
-                      className="flex gap-4"
-                    >
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="Yes" id="stretcher-yes" />
-                        <Label htmlFor="stretcher-yes">Yes</Label>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <RadioGroupItem value="No" id="stretcher-no" />
-                        <Label htmlFor="stretcher-no">No</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
+                <div className="space-y-2">
+                  <Label>Maximum Unladen Weight (kg)</Label>
+                  <Input
+                    value={form.maxUnladenWeight}
+                    onChange={(e) => updateFormField("maxUnladenWeight", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Maximum Laden Weight (kg)</Label>
+                  <Input
+                    value={form.maxLadenWeight}
+                    onChange={(e) => updateFormField("maxLadenWeight", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>Engine Capacity (cc)</Label>
+                  <Input
+                    value={form.engineCapacity}
+                    onChange={(e) => updateFormField("engineCapacity", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Maximum Power Output (kW)</Label>
+                  <Input
+                    value={form.maxPowerOutput}
+                    onChange={(e) => updateFormField("maxPowerOutput", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Primary Color</Label>
+                  <Select
+                    value={form.primaryColor}
+                    onValueChange={(v) => updateFormField("primaryColor", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="White">White</SelectItem>
+                      <SelectItem value="Yellow">Yellow</SelectItem>
+                      <SelectItem value="Blue">Blue</SelectItem>
+                      <SelectItem value="Red">Red</SelectItem>
+                      <SelectItem value="Green">Green</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Secondary Color</Label>
+                  <Select
+                    value={form.secondaryColor}
+                    onValueChange={(v) => updateFormField("secondaryColor", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Red">Red</SelectItem>
+                      <SelectItem value="Blue">Blue</SelectItem>
+                      <SelectItem value="Green">Green</SelectItem>
+                      <SelectItem value="Orange">Orange</SelectItem>
+                      <SelectItem value="Black">Black</SelectItem>
+                      <SelectItem value="None">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>Passenger Capacity</Label>
+                  <Input
+                    value={form.passengerCapacity}
+                    onChange={(e) => updateFormField("passengerCapacity", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Wheelchair Accessible</Label>
+                  <RadioGroup
+                    value={form.wheelchairAccessible}
+                    onValueChange={(v) => updateFormField("wheelchairAccessible", v)}
+                    className="flex gap-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="wa-yes" />
+                      <Label className="m-0" htmlFor="wa-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="wa-no" />
+                      <Label className="m-0" htmlFor="wa-no">No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <div className="space-y-2">
+                  <Label>Lifter</Label>
+                  <RadioGroup
+                    value={form.lifter}
+                    onValueChange={(v) => updateFormField("lifter", v)}
+                    className="flex gap-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="lifter-yes" />
+                      <Label className="m-0" htmlFor="lifter-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="lifter-no" />
+                      <Label className="m-0" htmlFor="lifter-no">No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                <div className="space-y-2">
+                  <Label>Stretcher Compatible</Label>
+                  <RadioGroup
+                    value={form.stretcherCompatible}
+                    onValueChange={(v) => updateFormField("stretcherCompatible", v)}
+                    className="flex gap-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="stretcher-yes" />
+                      <Label htmlFor="stretcher-yes">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="stretcher-no" />
+                      <Label htmlFor="stretcher-no">No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* ARF & COE */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <TriangleAlert className="w-5 h-5" />
-                  Additional Registration Fee (ARF) & COE Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <Label>Open Market Value (S$)</Label>
-                    <Input
-                      value={form.omv}
-                      onChange={(e) => updateFormField("omv", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Additional Registration Fee Rate (%)</Label>
-                    <Input
-                      value={form.arfRate}
-                      onChange={(e) => updateFormField("arfRate", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Actual ARF Paid (S$)</Label>
-                    <Input
-                      value={form.actualArfPaid}
-                      onChange={(e) => updateFormField("actualArfPaid", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>COE Expiry Date</Label>
-                    <Input
-                      type="date"
-                      value={form.coeExpiryDate}
-                      onChange={(e) => updateFormField("coeExpiryDate", e.target.value)}
-                    />
-                  </div>
+          {/* ARF & COE */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <TriangleAlert className="w-5 h-5" />
+                Additional Registration Fee (ARF) & COE Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-2">
+                  <Label>Open Market Value (S$)</Label>
+                  <Input
+                    value={form.omv}
+                    onChange={(e) => updateFormField("omv", e.target.value)}
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-2">
-                    <Label>OPC Cash Rebate Eligibility</Label>
-                    <Select
-                      value={form.opcCashRebate}
-                      onValueChange={(v) => updateFormField("opcCashRebate", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>QP during COE Bidding Exercise</Label>
-                    <Input
-                      value={form.qpDuringCoe}
-                      onChange={(e) => updateFormField("qpDuringCoe", e.target.value)}
-                      defaultValue="-"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>COE No.</Label>
-                    <Input
-                      value={form.coeNo}
-                      onChange={(e) => updateFormField("coeNo", e.target.value)}
-                      placeholder="e.g., COE123456789"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Additional Registration Fee Rate (%)</Label>
+                  <Input
+                    value={form.arfRate}
+                    onChange={(e) => updateFormField("arfRate", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>Actual ARF Paid (S$)</Label>
+                  <Input
+                    value={form.actualArfPaid}
+                    onChange={(e) => updateFormField("actualArfPaid", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>COE Expiry Date</Label>
+                  <Input
+                    type="date"
+                    value={form.coeExpiryDate}
+                    onChange={(e) => updateFormField("coeExpiryDate", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <Label>OPC Cash Rebate Eligibility</Label>
+                  <Select
+                    value={form.opcCashRebate}
+                    onValueChange={(v) => updateFormField("opcCashRebate", v)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="No">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>QP during COE Bidding Exercise</Label>
+                  <Input
+                    value={form.qpDuringCoe}
+                    onChange={(e) => updateFormField("qpDuringCoe", e.target.value)}
+                    defaultValue="-"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>COE No.</Label>
+                  <Input
+                    value={form.coeNo}
+                    onChange={(e) => updateFormField("coeNo", e.target.value)}
+                    placeholder="e.g., COE123456789"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* PARF Rebate */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  PARF Rebate Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-2">
-                    <Label>PARF Eligibility (S$)</Label>
-                    <Input
-                      value={form.parfEligibility}
-                      onChange={(e) => updateFormField("parfEligibility", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>PARF Eligibility Expiry Date</Label>
-                    <Input
-                      type="date"
-                      value={form.parfExpiryDate}
-                      onChange={(e) => updateFormField("parfExpiryDate", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Min PARF Benefit (S$)</Label>
-                    <Input
-                      value={form.minParfBenefit}
-                      onChange={(e) => updateFormField("minParfBenefit", e.target.value)}
-                    />
-                  </div>
+          {/* PARF Rebate */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                PARF Rebate Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <Label>PARF Eligibility (S$)</Label>
+                  <Input
+                    value={form.parfEligibility}
+                    onChange={(e) => updateFormField("parfEligibility", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>PARF Eligibility Expiry Date</Label>
+                  <Input
+                    type="date"
+                    value={form.parfExpiryDate}
+                    onChange={(e) => updateFormField("parfExpiryDate", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Min PARF Benefit (S$)</Label>
+                  <Input
+                    value={form.minParfBenefit}
+                    onChange={(e) => updateFormField("minParfBenefit", e.target.value)}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Emissions */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="w-5 h-5" />
-                  Vehicle Emissions Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="space-y-2">
-                    <Label>CO2 Emission (g/km)</Label>
-                    <Input
-                      value={form.co2Emission}
-                      onChange={(e) => updateFormField("co2Emission", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>CO Emission (g/km)</Label>
-                    <Input
-                      value={form.coEmission}
-                      onChange={(e) => updateFormField("coEmission", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>HC Emission (g/km)</Label>
-                    <Input
-                      value={form.hcEmission}
-                      onChange={(e) => updateFormField("hcEmission", e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>NOx Emission (g/km)</Label>
-                    <Input
-                      value={form.noxEmission}
-                      onChange={(e) => updateFormField("noxEmission", e.target.value)}
-                    />
-                  </div>
+          {/* Emissions */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Vehicle Emissions Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="space-y-2">
+                  <Label>CO2 Emission (g/km)</Label>
+                  <Input
+                    value={form.co2Emission}
+                    onChange={(e) => updateFormField("co2Emission", e.target.value)}
+                  />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                  <div className="space-y-2">
-                    <Label>PM Emission (g/km)</Label>
-                    <Input
-                      value={form.pmEmission}
-                      onChange={(e) => updateFormField("pmEmission", e.target.value)}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>CO Emission (g/km)</Label>
+                  <Input
+                    value={form.coEmission}
+                    onChange={(e) => updateFormField("coEmission", e.target.value)}
+                  />
                 </div>
-              </CardContent>
-            </Card>
+                <div className="space-y-2">
+                  <Label>HC Emission (g/km)</Label>
+                  <Input
+                    value={form.hcEmission}
+                    onChange={(e) => updateFormField("hcEmission", e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>NOx Emission (g/km)</Label>
+                  <Input
+                    value={form.noxEmission}
+                    onChange={(e) => updateFormField("noxEmission", e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div className="space-y-2">
+                  <Label>PM Emission (g/km)</Label>
+                  <Input
+                    value={form.pmEmission}
+                    onChange={(e) => updateFormField("pmEmission", e.target.value)}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Documentation Upload */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Upload className="w-5 h-5" />
-                  Documentation (Optional)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
-                  <Upload className="w-8 h-8 mx-auto text-gray-400" />
-                  <p className="text-gray-600 mt-2">
-                    Click to upload files or drag and drop
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Registration documents, insurance, etc. (PDF, DOC, JPG up to
-                    10MB)
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Documentation Upload */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="w-5 h-5" />
+                Documentation (Optional)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                <Upload className="w-8 h-8 mx-auto text-gray-400" />
+                <p className="text-gray-600 mt-2">
+                  Click to upload files or drag and drop
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Registration documents, insurance, etc. (PDF, DOC, JPG up to
+                  10MB)
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Maintenance & Compliance Records */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Wrench className="w-5 h-5" />
-                  Maintenance & Compliance Records
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">Maintenance History</h3>
-                    <Button type="button" variant="outline" size="sm" onClick={handleAddMaintenance}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Record
-                    </Button>
-                  </div>
-                  <div className="border rounded-lg overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-[#2160AD] hover:bg-[#2160AD]">
-                          <TableHead className="text-white px-4 py-3">Last Service Date</TableHead>
-                          <TableHead className="text-white px-4 py-3">Next Service Due</TableHead>
-                          <TableHead className="text-white px-4 py-3">Current Odometer (km)</TableHead>
-                          <TableHead className="text-white px-4 py-3">Documents</TableHead>
-                          <TableHead className="text-white px-4 py-3">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {maintenanceRecords.map((record) => (
-                          <TableRow key={record.id} className="hover:bg-gray-50">
-                            {record.isEditing ? (
-                              <>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    type="date"
-                                    value={record.lastService}
-                                    onChange={(e) =>
-                                      updateMaintenanceField(record.id, "lastService", e.target.value)
-                                    }
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    type="date"
-                                    value={record.nextDue}
-                                    onChange={(e) =>
-                                      updateMaintenanceField(record.id, "nextDue", e.target.value)
-                                    }
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    placeholder="e.g., 45,230"
-                                    value={record.odometer}
-                                    onChange={(e) =>
-                                      updateMaintenanceField(record.id, "odometer", e.target.value)
-                                    }
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
+          {/* Maintenance & Compliance Records */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Wrench className="w-5 h-5" />
+                Maintenance & Compliance Records
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium">Maintenance History</h3>
+                  <Button type="button" variant="outline" size="sm" onClick={handleAddMaintenance}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Record
+                  </Button>
+                </div>
+                <div className="border rounded-lg overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-[#2160AD] hover:bg-[#2160AD]">
+                        <TableHead className="text-white px-4 py-3">Last Service Date</TableHead>
+                        <TableHead className="text-white px-4 py-3">Next Service Due</TableHead>
+                        <TableHead className="text-white px-4 py-3">Current Odometer (km)</TableHead>
+                        <TableHead className="text-white px-4 py-3">Documents</TableHead>
+                        <TableHead className="text-white px-4 py-3">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {maintenanceRecords.map((record) => (
+                        <TableRow key={record.id} className="hover:bg-gray-50">
+                          {record.isEditing ? (
+                            <>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  type="date"
+                                  value={toIsoDate(record.lastService)}
+                                  onChange={(e) =>
+                                    updateMaintenanceField(record.id, "lastService", toDisplayDate(e.target.value))
+                                  }
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  type="date"
+                                  value={toIsoDate(record.nextDue)}
+                                  onChange={(e) =>
+                                    updateMaintenanceField(record.id, "nextDue", toDisplayDate(e.target.value))
+                                  }
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  placeholder="e.g., 45,230"
+                                  value={record.odometer}
+                                  onChange={(e) =>
+                                    updateMaintenanceField(record.id, "odometer", e.target.value)
+                                  }
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => maintenanceFileInputRef.current?.click()}
+                                  className="h-8"
+                                >
+                                  <Upload className="w-4 h-4 mr-1" />
+                                  Upload
+                                </Button>
+                                <input
+                                  ref={maintenanceFileInputRef}
+                                  type="file"
+                                  multiple
+                                  hidden
+                                  onChange={(e) => handleMaintenanceFileUpload(record.id, e)}
+                                />
+                                {record.files > 0 && (
+                                  <div className="mt-1 text-xs text-blue-600">
+                                    {record.files} file{record.files > 1 ? "s" : ""}
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <div className="flex items-center gap-1">
                                   <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => maintenanceFileInputRef.current?.click()}
-                                    className="h-8"
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => saveMaintenance(record.id)}
+                                    className="h-8 w-8"
                                   >
+                                    <Check className="w-4 h-4 text-green-600" />
+                                  </Button>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => cancelMaintenance(record.id)}
+                                    className="h-8 w-8"
+                                  >
+                                    <X className="w-4 h-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className="px-4 py-3">{record.lastService || "-"}</TableCell>
+                              <TableCell className="px-4 py-3">{record.nextDue || "-"}</TableCell>
+                              <TableCell className="px-4 py-3">{record.odometer}</TableCell>
+                              <TableCell className="px-4 py-3">
+                                {record.files > 0 ? (
+                                  <div className="flex items-center gap-2">
+                                    <Folder className="w-4 h-4 text-blue-600" />
+                                    <span className="text-xs text-blue-600">
+                                      {record.files} file{record.files > 1 ? "s" : ""}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-xs text-gray-400">No files</span>
+                                )}
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => editMaintenance(record.id)}
+                                  >
+                                    <SquarePen className="w-4 h-4 text-gray-500" />
+                                  </Button>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => deleteMaintenance(record.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Certificates & Licenses */}
+          <Card className="overflow-hidden">
+            <CardHeader className="header-bg-soft pb-6">
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                Certificates & Licenses
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium">Certificate Records</h3>
+                  <Button type="button" variant="outline" size="sm" onClick={handleAddCertificate}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Certificate
+                  </Button>
+                </div>
+                <div className="border rounded-lg overflow-hidden">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-[#2160AD] hover:bg-[#2160AD]">
+                        <TableHead className="text-white px-4 py-3">Type</TableHead>
+                        <TableHead className="text-white px-4 py-3">Number</TableHead>
+                        <TableHead className="text-white px-4 py-3">Issued</TableHead>
+                        <TableHead className="text-white px-4 py-3">Expiry</TableHead>
+                        <TableHead className="text-white px-4 py-3">Document</TableHead>
+                        <TableHead className="text-white px-4 py-3">Remarks</TableHead>
+                        <TableHead className="text-white px-4 py-3">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {certificateRecords.map((cert) => (
+                        <TableRow key={cert.id} className="hover:bg-gray-50">
+                          {cert.isEditing ? (
+                            <>
+                              <TableCell className="px-4 py-3">
+                                <Select
+                                  value={cert.type}
+                                  onValueChange={(v) => updateCertificateField(cert.id, "type", v)}
+                                >
+                                  <SelectTrigger className="h-9 w-full">
+                                    <SelectValue placeholder="Select type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Vehicle Inspection Certificate (LTA)">
+                                      Vehicle Inspection Certificate (LTA)
+                                    </SelectItem>
+                                    <SelectItem value="Vehicle Insurance">Vehicle Insurance</SelectItem>
+                                    <SelectItem value="Road Tax">Road Tax</SelectItem>
+                                    <SelectItem value="COE">COE</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  placeholder="e.g., LTA-2024-001234"
+                                  value={cert.number}
+                                  onChange={(e) => updateCertificateField(cert.id, "number", e.target.value)}
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  type="date"
+                                  value={toIsoDate(cert.issued)}
+                                  onChange={(e) =>
+                                    updateCertificateField(cert.id, "issued", toDisplayDate(e.target.value))
+                                  }
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Input
+                                  type="date"
+                                  value={toIsoDate(cert.expiry)}
+                                  onChange={(e) =>
+                                    updateCertificateField(cert.id, "expiry", toDisplayDate(e.target.value))
+                                  }
+                                  className="h-9 w-full"
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <label className="cursor-pointer">
+                                  <Input
+                                    ref={certificateFileInputRef}
+                                    type="file"
+                                    accept=".pdf,.jpg,.jpeg,.png"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) updateCertificateField(cert.id, "fileObj", file);
+                                    }}
+                                  />
+                                  <Button size="sm" variant="outline" className="h-8" onClick={() => certificateFileInputRef.current?.click()}>
                                     <Upload className="w-4 h-4 mr-1" />
                                     Upload
                                   </Button>
-                                  <input
-                                    ref={maintenanceFileInputRef}
-                                    type="file"
-                                    multiple
-                                    hidden
-                                    onChange={(e) => handleMaintenanceFileUpload(record.id, e)}
-                                  />
-                                  {record.files > 0 && (
-                                    <div className="mt-1 text-xs text-blue-600">
-                                      {record.files} file{record.files > 1 ? "s" : ""}
-                                    </div>
-                                  )}
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <div className="flex items-center gap-1">
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => saveMaintenance(record.id)}
-                                      className="h-8 w-8"
-                                    >
-                                      <Check className="w-4 h-4 text-green-600" />
-                                    </Button>
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => cancelMaintenance(record.id)}
-                                      className="h-8 w-8"
-                                    >
-                                      <X className="w-4 h-4 text-red-600" />
-                                    </Button>
+                                </label>
+                                {cert.file && (
+                                  <div className="mt-1 text-xs text-blue-600 truncate max-w-[100px]">
+                                    {cert.file}
                                   </div>
-                                </TableCell>
-                              </>
-                            ) : (
-                              <>
-                                <TableCell className="px-4 py-3">{record.lastService}</TableCell>
-                                <TableCell className="px-4 py-3">{record.nextDue}</TableCell>
-                                <TableCell className="px-4 py-3">{record.odometer}</TableCell>
-                                <TableCell className="px-4 py-3">
-                                  {record.files > 0 ? (
-                                    <div className="flex items-center gap-2">
-                                      <Folder className="w-4 h-4 text-blue-600" />
-                                      <span className="text-xs text-blue-600">
-                                        {record.files} file{record.files > 1 ? "s" : ""}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <span className="text-xs text-gray-400">No files</span>
-                                  )}
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <div className="flex gap-1">
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => editMaintenance(record.id)}
-                                    >
-                                      <SquarePen className="w-4 h-4 text-gray-500" />
-                                    </Button>
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => deleteMaintenance(record.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 text-red-600" />
-                                    </Button>
-                                  </div>
-                                </TableCell>
-                              </>
-                            )}
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Certificates & Licenses */}
-            <Card className="overflow-hidden">
-              <CardHeader className="header-bg-soft pb-6">
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5" />
-                  Certificates & Licenses
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium">Certificate Records</h3>
-                    <Button type="button" variant="outline" size="sm" onClick={handleAddCertificate}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Certificate
-                    </Button>
-                  </div>
-                  <div className="border rounded-lg overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-[#2160AD] hover:bg-[#2160AD]">
-                          <TableHead className="text-white px-4 py-3">Type</TableHead>
-                          <TableHead className="text-white px-4 py-3">Number</TableHead>
-                          <TableHead className="text-white px-4 py-3">Issued</TableHead>
-                          <TableHead className="text-white px-4 py-3">Expiry</TableHead>
-                          <TableHead className="text-white px-4 py-3">Document</TableHead>
-                          <TableHead className="text-white px-4 py-3">Remarks</TableHead>
-                          <TableHead className="text-white px-4 py-3">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {certificateRecords.map((cert) => (
-                          <TableRow key={cert.id} className="hover:bg-gray-50">
-                            {cert.isEditing ? (
-                              <>
-                                <TableCell className="px-4 py-3">
-                                  <Select
-                                    value={cert.type}
-                                    onValueChange={(v) => updateCertificateField(cert.id, "type", v)}
+                                )}
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <Textarea
+                                  placeholder="Optional notes"
+                                  value={cert.remarks}
+                                  onChange={(e) => updateCertificateField(cert.id, "remarks", e.target.value)}
+                                  className="min-h-[40px] resize-none"
+                                  rows={1}
+                                />
+                              </TableCell>
+                              <TableCell className="px-4 py-3">
+                                <div className="flex items-center gap-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => saveCertificate(cert.id)}
+                                    className="h-8 w-8"
                                   >
-                                    <SelectTrigger className="h-9 w-full">
-                                      <SelectValue placeholder="Select type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="Vehicle Inspection Certificate (LTA)">
-                                        Vehicle Inspection Certificate (LTA)
-                                      </SelectItem>
-                                      <SelectItem value="Vehicle Insurance">Vehicle Insurance</SelectItem>
-                                      <SelectItem value="Road Tax">Road Tax</SelectItem>
-                                      <SelectItem value="COE">COE</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    placeholder="e.g., LTA-2024-001234"
-                                    value={cert.number}
-                                    onChange={(e) => updateCertificateField(cert.id, "number", e.target.value)}
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    type="date"
-                                    value={cert.issued}
-                                    onChange={(e) => updateCertificateField(cert.id, "issued", e.target.value)}
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Input
-                                    type="date"
-                                    value={cert.expiry}
-                                    onChange={(e) => updateCertificateField(cert.id, "expiry", e.target.value)}
-                                    className="h-9 w-full"
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <label className="cursor-pointer">
-                                    <Input
-                                      ref={certificateFileInputRef}
-                                      type="file"
-                                      accept=".pdf,.jpg,.jpeg,.png"
-                                      className="hidden"
-                                      onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) updateCertificateField(cert.id, "fileObj", file);
-                                      }}
-                                    />
-                                    <Button size="sm" variant="outline" className="h-8" onClick={() => certificateFileInputRef.current?.click()}>
-                                      <Upload className="w-4 h-4 mr-1" />
-                                      Upload
-                                    </Button> 
-                                  </label>
-                                  {cert.file && (
-                                    <div className="mt-1 text-xs text-blue-600 truncate max-w-[100px]">
+                                    <Check className="w-4 h-4 text-green-600" />
+                                  </Button>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => cancelCertificate(cert.id)}
+                                    className="h-8 w-8"
+                                  >
+                                    <X className="w-4 h-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </>
+                          ) : (
+                            <>
+                              <TableCell className="px-4 py-3">{cert.type}</TableCell>
+                              <TableCell className="px-4 py-3">{cert.number}</TableCell>
+                              <TableCell className="px-4 py-3">{cert.issued || "-"}</TableCell>
+                              <TableCell className="px-4 py-3">{cert.expiry || "-"}</TableCell>
+                              <TableCell className="px-4 py-3">
+                                {cert.file ? (
+                                  <div className="flex items-center gap-2">
+                                    <FileText className="w-4 h-4 text-blue-600" />
+                                    <span className="text-xs text-blue-600 truncate max-w-[120px]">
                                       {cert.file}
-                                    </div>
-                                  )}
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <Textarea
-                                    placeholder="Optional notes"
-                                    value={cert.remarks}
-                                    onChange={(e) => updateCertificateField(cert.id, "remarks", e.target.value)}
-                                    className="min-h-[40px] resize-none"
-                                    rows={1}
-                                  />
-                                </TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <div className="flex items-center gap-1">
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => saveCertificate(cert.id)}
-                                      className="h-8 w-8"
-                                    >
-                                      <Check className="w-4 h-4 text-green-600" />
-                                    </Button>
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => cancelCertificate(cert.id)}
-                                      className="h-8 w-8"
-                                    >
-                                      <X className="w-4 h-4 text-red-600" />
-                                    </Button>
+                                    </span>
                                   </div>
-                                </TableCell>
-                              </>
-                            ) : (
-                              <>
-                                <TableCell className="px-4 py-3">{cert.type}</TableCell>
-                                <TableCell className="px-4 py-3">{cert.number}</TableCell>
-                                <TableCell className="px-4 py-3">{cert.issued}</TableCell>
-                                <TableCell className="px-4 py-3">{cert.expiry}</TableCell>
-                                <TableCell className="px-4 py-3">
-                                  {cert.file ? (
-                                    <div className="flex items-center gap-2">
-                                      <FileText className="w-4 h-4 text-blue-600" />
-                                      <span className="text-xs text-blue-600 truncate max-w-[120px]">
-                                        {cert.file}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <span className="text-xs text-gray-400">-</span>
-                                  )}
-                                </TableCell>
-                                <TableCell className="px-4 py-3 text-sm">{cert.remarks || "-"}</TableCell>
-                                <TableCell className="px-4 py-3">
-                                  <div className="flex gap-1">
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => editCertificate(cert.id)}
-                                    >
-                                      <SquarePen className="w-4 h-4 text-gray-500" />
-                                    </Button>
-                                    <Button
-                                      size="icon"
-                                      variant="ghost"
-                                      onClick={() => deleteCertificate(cert.id)}
-                                    >
-                                      <Trash2 className="w-4 h-4 text-red-600" />
-                                    </Button>
-                                  </div>
-                                </TableCell>
-                              </>
-                            )}
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                                ) : (
+                                  <span className="text-xs text-gray-400">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell className="px-4 py-3 text-sm">{cert.remarks || "-"}</TableCell>
+                              <TableCell className="px-4 py-3">
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => editCertificate(cert.id)}
+                                  >
+                                    <SquarePen className="w-4 h-4 text-gray-500" />
+                                  </Button>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    onClick={() => deleteCertificate(cert.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4 text-red-600" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Submit Buttons */}
-            <div className="flex justify-end gap-3 pt-4 border-t">
-              <	Button type="button" variant="outline">
-                Cancel
-              </Button>
-              <Button type="submit" className="bg-[#2160AD] hover:bg-[#1d5497]">
-                Add Vehicle
-              </Button>
-            </div> 
+          {/* Submit Buttons */}
+          <div className="flex justify-end gap-3 pt-4 border-t">
+            <Button type="button" variant="outline" size="lg">
+              Cancel
+            </Button>
+            <Button type="submit" size="lg">
+              Add Vehicle
+            </Button>
+          </div>
         </div>
       </div>
     </>

@@ -71,7 +71,7 @@ export default function ExportRosterDialog({ isOpen, onClose, onPreview }: Expor
             <Label>Select Team <span className="text-red-500">*</span></Label>
             <Select value={team} onValueChange={(v: TeamKey) => setTeam(v)}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Choose team to export" />
               </SelectTrigger>
               <SelectContent>
                 {TEAM_OPTIONS.map(opt => (

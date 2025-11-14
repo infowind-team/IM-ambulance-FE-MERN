@@ -29,7 +29,7 @@ import {
   DrawerTitle,
   DrawerHeader,
 } from "@/components/ui/drawer";
-import CaseDrawer from "../CaseDrawer";
+import CaseDrawer from "../case-drawer/CaseDrawer";
 
   
 /* ------------------------------------------------------------------ */
@@ -238,7 +238,7 @@ export default function ShiftHoursTab() {
       {stats.open > 0 && (
         <Alert className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4">
           <TriangleAlert className="h-5 w-5 text-red-600" />
-          <AlertDescription className="ml-3 text-red-800 flex">
+          <AlertDescription className="text-red-800 flex">
             <strong>Warning:</strong> There are {stats.open} open case
             {stats.open > 1 ? "s" : ""} that are not yet assigned.
           </AlertDescription>
@@ -296,7 +296,7 @@ export default function ShiftHoursTab() {
                 {filteredGroupCases.length > 1 ? "s" : ""}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGroupCases.map((c) => (
                   <Card
                     key={c.id}
@@ -325,31 +325,31 @@ export default function ShiftHoursTab() {
                           <span className="text-[#2160AD] mt-1 text-lg">
                           📍
                           </span>
-                          <span className="font-medium">{c.pickup}</span>
+                          <span className="font-medium">Pick-up: {c.pickup}</span>
                         </div>
                         <div className="flex items-start space-x-2">
                           <span className="text-[#2160AD] mt-1 text-lg">
                           🏥
                           </span>
-                          <span className="font-medium">{c.dropoff}</span>
+                          <span className="font-medium">1st Stop: {c.dropoff}</span>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-1 mt-3 pt-3 border-t border-gray-100 text-base">
+                        <div className="grid grid-cols-1 gap-2 mt-3 pt-3 border-t border-gray-100 text-base">
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Service:</span>
-                            <span className="font-semibold">
+                            <span className="text-gray-600">Service Type:</span>
+                            <span className="font-semibold text-gray-900">
                               {c.serviceType}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Time:</span>
+                            <span className="text-gray-600">Start Time:</span>
                             <span className="font-semibold text-[#2160AD]">
                               {c.startTime}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Req:</span>
-                            <span className="font-semibold">
+                            <span className="text-gray-600">Requirements:</span>
+                            <span className="font-semibold text-gray-900">
                               {c.requirements}
                             </span>
                           </div>

@@ -177,7 +177,7 @@ export default function VehiclesPage() {
   return (
     <>
       <FunctionalHeader
-        title="Vehicle Management"
+        title="Vehicles"
         breadcrumb={[
           { label: "Operations" },
           { label: "Vehicles" },
@@ -186,48 +186,6 @@ export default function VehiclesPage() {
 
       <div className="flex-1 w-full overflow-auto">
         <div className="space-y-6 p-4 lg:p-6 w-full">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Total Vehicles</p>
-                  <p className="text-2xl font-semibold text-[#2160AD]">{stats.total}</p>
-                </div>
-                <Truck className="w-8 h-8 text-[#2160AD]/60" />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Active</p>
-                  <p className="text-2xl font-semibold text-green-600">{stats.active}</p>
-                </div>
-                <CheckCircle className="w-8 h-8 text-green-600/60" />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Inactive</p>
-                  <p className="text-2xl font-semibold text-red-600">{stats.inactive}</p>
-                </div>
-                <XCircle className="w-8 h-8 text-red-600/60" />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="flex items-center justify-between p-4 pb-6">
-                <div>
-                  <p className="text-sm text-gray-600">Due for Service</p>
-                  <p className="text-2xl font-semibold text-orange-600">0</p>
-                </div>
-                <Clock className="w-8 h-8 text-orange-600/60" />
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Search + Filters + Add */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -264,13 +222,13 @@ export default function VehiclesPage() {
           </div>
 
           {/* Table */}
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden w-full">
             <Table>
               <TableHeader className="header-bg-soft">
                 <TableRow>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("vehicleId")}
                     >
                       Vehicle Number
@@ -279,7 +237,7 @@ export default function VehiclesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("name")}
                     >
                       Vehicle Name
@@ -288,16 +246,15 @@ export default function VehiclesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
-                      onClick={() => requestSort("driver")}
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
+                    // onClick={() => requestSort("driver")}
                     >
                       Assigned Driver / MTO
-                      {getSortIcon("driver")}
                     </button>
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("type")}
                     >
                       Type
@@ -306,7 +263,7 @@ export default function VehiclesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("nextService")}
                     >
                       Next Servicing Due Date
@@ -315,7 +272,7 @@ export default function VehiclesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("coeExpiry")}
                     >
                       COE Expiry
@@ -324,7 +281,7 @@ export default function VehiclesPage() {
                   </TableHead>
                   <TableHead className="p-4">
                     <button
-                      className="flex items-center font-semibold text-gray-700 hover:text-[#2160AD]"
+                      className="flex items-center hover:text-gray-900 cursor-pointer"
                       onClick={() => requestSort("status")}
                     >
                       Status
@@ -358,11 +315,10 @@ export default function VehiclesPage() {
                     </TableCell>
                     <TableCell className="p-4">
                       <span
-                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-medium border ${
-                          item.type === "EAS"
-                            ? "bg-blue-50 text-blue-700 border-blue-200"
-                            : "bg-green-50 text-green-700 border-green-200"
-                        }`}
+                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-medium border ${item.type === "EAS"
+                          ? "bg-blue-50 text-blue-700 border-blue-200"
+                          : "bg-green-50 text-green-700 border-green-200"
+                          }`}
                       >
                         {item.type}
                       </span>
@@ -375,11 +331,10 @@ export default function VehiclesPage() {
                     </TableCell>
                     <TableCell className="p-4">
                       <span
-                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-medium border ${
-                          item.status === "Active"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                            : "bg-red-50 text-red-700 border-red-200"
-                        }`}
+                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-xs font-medium border ${item.status === "Active"
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-red-50 text-red-700 border-red-200"
+                          }`}
                       >
                         {item.status}
                       </span>
@@ -421,8 +376,22 @@ export default function VehiclesPage() {
             )}
           </Card>
 
-          <div className="flex justify-between items-center text-sm text-gray-600">
+          <div className="flex justify-between items-center text-base text-gray-600">
             <span>Showing {sortedVehicles.length} of {vehicles.length} vehicles</span>
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#18c07a] rounded"></div>Active: 4
+              </span>
+              <span className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-[#c01818] rounded"></div>Inactive: 1
+              </span>
+              <span className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-100 rounded border border-blue-200"></div>EAS: 3
+              </span>
+              <span className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-100 rounded border border-green-200"></div>MTS: 3
+              </span>
+            </div>
           </div>
         </div>
       </div>
