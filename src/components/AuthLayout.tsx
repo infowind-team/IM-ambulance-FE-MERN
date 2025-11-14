@@ -17,7 +17,7 @@ function ImageImAmbulanceServices() {
   );
 }
 
-export function AuthLayout({ children }: AuthLayoutProps) {
+export default  function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="bg-white relative w-full min-h-screen flex flex-col md:flex-row" data-name="Login">
       {/* Left Panel - Logo (Hidden on mobile, shown on desktop) */}
