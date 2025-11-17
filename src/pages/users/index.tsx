@@ -1,7 +1,7 @@
 // app/users/UserManagementTab.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Users,
   Shield,
@@ -93,6 +93,7 @@ const users: User[] = [
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [permissionFilter, setPermissionFilter] = useState<string>("all");
+  const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, adminUsers: 0, hrUsers: 0, employeeUsers: 0 });
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -106,13 +107,13 @@ export default function UsersPage() {
     return matchesSearch && matchesPermission;
   });
 
-  const stats = {
-    total: users.length,
-    admin: users.filter((u) => u.role === "Admin").length,
-    hr: users.filter((u) => u.role === "HR").length,
-    employee: users.filter((u) => u.role === "Employee").length,
-    active: 4,
-  };
+  // const stats = {
+  //   total: users.length,
+  //   admin: users.filter((u) => u.role === "Admin").length,
+  //   hr: users.filter((u) => u.role === "HR").length,
+  //   employee: users.filter((u) => u.role === "Employee").length,
+  //   active: 4,
+  // };
 
   const getRoleColor = (role: string) => {
     switch (role) {
@@ -126,6 +127,39 @@ export default function UsersPage() {
         return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
+  const fetchUserStats = async() =>{
+    try{
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      
+      const res = await fetch("api/users/get-stats",{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      })
+      if (!res.ok) throw new Error("Failed to fetch current day stats");
+
+      const data = await res.json();
+      console.log(data);
+      setStats({
+        totalUsers: data?.data?.totalUsers || 0,
+        activeUsers: data?.data?.activeUsers || 0,
+        adminUsers: data?.data?.adminUsers || 0,
+        hrUsers: data?.data?.hrUsers || 0 ,
+        employeeUsers: data?.data?.employeeUsers || 0
+
+      });
+
+    }catch (error) {
+      console.error(error);
+    }
+
+  }
+  useEffect(() => {
+      fetchUserStats();
+    }, []);
 
   return (
     <>
@@ -145,7 +179,7 @@ export default function UsersPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[#2160AD]">
-                {stats.total}
+                {stats.totalUsers}
               </div>
               <p className="text-sm text-muted-foreground">All system users</p>
             </CardContent>
@@ -160,7 +194,7 @@ export default function UsersPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-red-600">
-                {stats.admin}
+                {stats.adminUsers}
               </div>
               <p className="text-sm text-muted-foreground">
                 Full system access
@@ -174,7 +208,7 @@ export default function UsersPage() {
               <UserCheck className="h-5 w-5 text-blue-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-600">{stats.hr}</div>
+              <div className="text-3xl font-bold text-blue-600">{stats.hrUsers}</div>
               <p className="text-sm text-muted-foreground">
                 HR department access
               </p>
@@ -188,7 +222,7 @@ export default function UsersPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green-600">
-                {stats.employee}
+                {stats.employeeUsers}
               </div>
               <p className="text-sm text-muted-foreground">
                 Standard user access
@@ -205,7 +239,7 @@ export default function UsersPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[#2160AD]">
-                {stats.active}
+                {stats.activeUsers}
               </div>
               <p className="text-sm text-muted-foreground">Currently active</p>
             </CardContent>
