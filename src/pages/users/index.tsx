@@ -93,7 +93,12 @@ const users: User[] = [
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [permissionFilter, setPermissionFilter] = useState<string>("all");
-   const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, adminUsers: 0, hrUsers: 0, employeeUsers: 0 });
+  const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, adminUsers: 0, hrUsers: 0, employeeUsers: 0 });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(30);
+  const [search, setSearch] = useState("");
+  const [role, setRole] = useState("all");
+
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -160,6 +165,35 @@ export default function UsersPage() {
   useEffect(() => {
       fetchUserStats();
     }, []);
+  
+  const fetchUsersList = async()=>{
+    try{
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      //const roleParam = role === "all" ? "all permission" : role;
+      const res = await fetch( `/api/users/list/${page}/${limit}?search=${search}&role=${role}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      });
+  
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch cases");
+      }
+
+      const data = await res.json();
+      console.log("API response:", data);
+    }catch(error){
+      console.error("Error fetching vehicles:", error);
+    }
+  }
+   useEffect(() => {
+    fetchUsersList();
+  }, [page, limit, search, role]);
+
 
   return (
     <>
@@ -259,8 +293,8 @@ export default function UsersPage() {
               />
             </div>
             <Select
-              value={permissionFilter}
-              onValueChange={setPermissionFilter}
+              value={role}
+              onValueChange={setRole}
             >
               <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="All Permissions" />
