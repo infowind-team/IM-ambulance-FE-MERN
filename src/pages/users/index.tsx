@@ -80,7 +80,7 @@ const users: User[] = [
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face",
   },
   {
-    id: "5",
+    id: "60af8843b52e3b29d8a3e912",
     name: "David Wilson",
     email: "david.wilson@imambulance.com",
     staffId: "A0B1C032",
@@ -92,6 +92,7 @@ const users: User[] = [
 
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  // const [users, setUsers] = useState<User[]>([]);
   const [permissionFilter, setPermissionFilter] = useState<string>("all");
   const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, adminUsers: 0, hrUsers: 0, employeeUsers: 0 });
   const [page, setPage] = useState(1);
@@ -193,6 +194,27 @@ export default function UsersPage() {
    useEffect(() => {
     fetchUsersList();
   }, [page, limit, search, role]);
+
+  const deleteUser = async(userId :string)=>{
+    try{
+      const access_token = localStorage.getItem("accessToken");
+      const res = await fetch(`/api/users/delete-user?userId=${userId}`,{
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to delete user");
+      }
+    }catch(error:any){
+      console.error("Error deleting user:", error);
+    alert("Failed to delete user. Please try again.");
+    }
+  }
 
 
   return (
@@ -383,6 +405,7 @@ export default function UsersPage() {
                         size="icon"
                         variant="ghost"
                         title="Delete User"
+                         onClick={() => deleteUser(user.id)}      
                         className="text-red-600 hover:bg-red-50 hover:text-red-700"
                       >
                         <Trash2 className="h-4 w-4" />
