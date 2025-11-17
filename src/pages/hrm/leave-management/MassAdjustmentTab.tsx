@@ -102,7 +102,7 @@ export default function MassAdjustmentTab() {
   return (
     <div className="space-y-5">
       {/* Mass Leave Adjustment */}
-      <Card className="">
+      <Card className="overflow-hidden w-full">
         <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Mass Leave Adjustment</h4>
         </CardHeader>
@@ -227,7 +227,7 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Filter by Roles */}
-      <Card className="">
+      <Card className="overflow-hidden w-full">
         <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Filter by Roles (Optional)</h4>
         </CardHeader>
@@ -254,7 +254,7 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Staff Selection List */}
-      <Card className="">
+      <Card className="overflow-hidden w-full">
         <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Staff Selection List</h4>
         </CardHeader>
@@ -312,7 +312,7 @@ export default function MassAdjustmentTab() {
       </Card>
 
       {/* Audit Trail */}
-      <Card className="">
+      <Card className="overflow-hidden w-full">
         <CardHeader className="px-5 py-4 header-bg-soft border-b ">
           <h4 className="text-base font-medium text-gray-900">Past Mass Adjustments - Audit Trail</h4>
         </CardHeader>

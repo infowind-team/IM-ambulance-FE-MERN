@@ -3,11 +3,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import FunctionalHeader from "@/layout/FunctionalHeader";
-import EmployeeProfile from "./EmployeeProfile";
-import AttendanceTracking from "./AttendanceTracking";
-import IncentivesManagement from "./IncentivesManagement";
-import PayrollManagement from "./PayrollManagement";
-import LeaveManagement from "./LeaveManagement";
+import EmployeeProfile from "./hrm-tabs/EmployeeProfile";
+import AttendanceTracking from "./hrm-tabs/AttendanceTracking";
+import IncentivesManagement from "./hrm-tabs/IncentivesManagement";
+import PayrollManagement from "./hrm-tabs/PayrollManagement";
+import LeaveManagement from "./hrm-tabs/LeaveManagement";
 
 export default function HRManagementPage() {
   return (

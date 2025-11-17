@@ -223,12 +223,12 @@ export default function EmployeeForm() {
 
             <div className="space-y-2">
               <Label>Street Name</Label>
-              <Input placeholder="Main Street" className="text-center" />
+              <Input placeholder="Main Street" />
             </div>
 
             <div className="space-y-2">
               <Label>Postal Code</Label>
-              <Input placeholder="123456" className="text-center" />
+              <Input placeholder="123456" />
             </div>
           </div>
         </CardContent>

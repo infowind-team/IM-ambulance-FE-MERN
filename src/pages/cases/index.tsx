@@ -249,7 +249,7 @@ export default function CasesPage() {
             </Button>
           </div>
 
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden w-full">
             <Table>
               <TableHeader className="header-bg-soft">
                 <TableRow>

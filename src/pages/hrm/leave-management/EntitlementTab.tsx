@@ -7,7 +7,7 @@ import { Search, Download, Info, PenLine } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -23,39 +23,106 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DownloadLeaveEntitlementDialog from "./entitlement/DownloadLeaveEntitlementDialog";
+
+import DownloadDialog from "../download-dialog/DownloadDialog";
+import LeaveEntitlementDialog from "../hrm-dialogs/LeaveEntitlementDialog";
+import AdjustLeaveDialog from "../hrm-dialogs/AdjustLeaveDialog";
 
 interface EmployeeEntitlement {
   id: string;
   name: string;
   employeeId: string;
   schemes: string[];
+  department?: string;
+  employmentType?: string;
+  entitlements?: LeaveEntitlement[];
+  history?: LeaveHistory[];
 }
 
+interface LeaveEntitlement {
+  type: string;
+  scheme: string;
+  total: string;
+  broughtForward: string;
+  used: string;
+  remaining: string;
+  remainingClass?: string;
+}
+
+interface LeaveHistory {
+  date: string;
+  type: string;
+  used: string;
+  remaining: string;
+}
+
+// Mock data
 const entitlementData: EmployeeEntitlement[] = [
   {
     id: "1",
     name: "Annette Black",
     employeeId: "ADBFC008",
     schemes: ["Mid-Level Staff Standard Scheme", "Childcare Leave Scheme"],
+    department: "Operations",
+    employmentType: "full-time",
+    entitlements: [
+      {
+        type: "Annual Leave",
+        scheme: "Mid-Level Staff Standard Scheme",
+        total: "14 days",
+        broughtForward: "1 days",
+        used: "10 days",
+        remaining: "5 days",
+        remainingClass: "text-orange-600",
+      },
+      {
+        type: "Medical Leave",
+        scheme: "Mid-Level Staff Standard Scheme",
+        total: "14 days",
+        broughtForward: "0 days",
+        used: "0 days",
+        remaining: "14 days",
+      },
+      {
+        type: "Childcare Leave",
+        scheme: "Childcare Leave Scheme",
+        total: "6 days",
+        broughtForward: "0 days",
+        used: "5 days",
+        remaining: "1 days",
+        remainingClass: "text-red-600",
+      },
+    ],
+    history: [
+      { date: "15 Mar 2024", type: "Annual Leave", used: "3 days", remaining: "11 days" },
+      { date: "08 Feb 2024", type: "Sick Leave", used: "1 day", remaining: "13 days" },
+      { date: "22 Jan 2024", type: "Annual Leave", used: "2 days", remaining: "14 days" },
+    ],
   },
+  // ... other employees (same as before)
   {
     id: "2",
     name: "Jennifer Liu",
     employeeId: "JLIU002",
     schemes: ["Mid-Level Staff Standard Scheme", "Childcare Leave Scheme"],
+    department: "HR",
+    employmentType: "full-time",
   },
   {
     id: "3",
     name: "Marcus Chen",
     employeeId: "OPS001",
     schemes: ["Mid-Level Staff Standard Scheme", "Childcare Leave Scheme"],
+    department: "Operations",
+    employmentType: "full-time",
   },
   {
     id: "4",
     name: "Rebecca Taylor",
     employeeId: "HR001",
     schemes: ["Mid-Level Staff Standard Scheme", "Childcare Leave Scheme"],
+    department: "HR",
+    employmentType: "full-time",
   },
 ];
 
@@ -64,19 +131,20 @@ const departments = ["All Departments", "Operations", "HR", "Medical", "Admin"];
 export default function EntitlementTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDept, setSelectedDept] = useState("All Departments");
-  const [openEntitlement, setOpenEntitlement] = useState(false);
+  const [downloadOpen, setDownloadOpen] = useState(false);
+  const [infoEmployee, setInfoEmployee] = useState<EmployeeEntitlement | null>(null);
+  const [adjustEmployee, setAdjustEmployee] = useState<EmployeeEntitlement | null>(null);
 
   const filteredData = entitlementData.filter((emp) => {
     const matchesSearch =
       emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       emp.employeeId.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDept = selectedDept === "All Departments" || true; // Extend with real dept later
+    const matchesDept = selectedDept === "All Departments" || emp.department === selectedDept;
     return matchesSearch && matchesDept;
   });
 
   const handleDownload = (employeeId: string) => {
-    console.log('Downloading for employee ID:', employeeId);
-    // Trigger PDF/CSV download
+    console.log("Download triggered for:", employeeId);
   };
 
   return (
@@ -84,29 +152,23 @@ export default function EntitlementTab() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h3 className="text-[#2160AD] font-semibold mb-1">
-            Employee Leave Entitlement
-          </h3>
+          <h3 className="text-[#2160AD] font-semibold mb-1">Employee Leave Entitlement</h3>
           <p className="text-sm text-gray-600">
             View and manage leave balances and entitlements for all employees
           </p>
         </div>
-        <Button onClick={() => setOpenEntitlement(true)}>
+        <Button onClick={() => setDownloadOpen(true)}>
           <Download className="w-4 h-4 mr-2" />
           Download
         </Button>
       </div>
 
-      <DownloadLeaveEntitlementDialog
-        open={openEntitlement}
-        onOpenChange={setOpenEntitlement}
-        onDownload={handleDownload}
-      />
+      <DownloadDialog open={downloadOpen} onOpenChange={setDownloadOpen} onDownload={handleDownload} />
 
       {/* Filters */}
       <div className="flex gap-4 flex-wrap">
         <div className="relative flex-1 min-w-[250px]">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="Search by employee name or ID..."
             value={searchQuery}
@@ -120,9 +182,7 @@ export default function EntitlementTab() {
           </SelectTrigger>
           <SelectContent>
             {departments.map((dept) => (
-              <SelectItem key={dept} value={dept}>
-                {dept}
-              </SelectItem>
+              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -131,17 +191,11 @@ export default function EntitlementTab() {
       {/* Table */}
       <Card className="overflow-hidden">
         <Table>
-          <TableHeader className="header-bg-soft">
-            <TableRow className="border-b">
-              <TableHead className="p-4 font-semibold">
-                Employee Name / ID
-              </TableHead>
-              <TableHead className="p-4 font-semibold">
-                Leave Schemes
-              </TableHead>
-              <TableHead className="p-4 font-semibold">
-                Actions
-              </TableHead>
+          <TableHeader className="bg-gray-50">
+            <TableRow>
+              <TableHead className="p-4 font-semibold">Employee Name / ID</TableHead>
+              <TableHead className="p-4 font-semibold">Leave Schemes</TableHead>
+              <TableHead className="p-4 font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -171,6 +225,7 @@ export default function EntitlementTab() {
                       size="sm"
                       variant="outline"
                       className="h-8 px-3 text-[#2160AD] border-[#2160AD] hover:bg-[#2160AD]/10"
+                      onClick={() => setInfoEmployee(emp)}
                     >
                       <Info className="w-3 h-3 mr-1" />
                       Info
@@ -178,6 +233,7 @@ export default function EntitlementTab() {
                     <Button
                       size="sm"
                       className="h-8 px-3 bg-[#2160AD] text-white hover:bg-[#1a4d8a]"
+                      onClick={() => setAdjustEmployee(emp)}
                     >
                       <PenLine className="w-3 h-3 mr-1" />
                       Adjust
@@ -190,11 +246,51 @@ export default function EntitlementTab() {
         </Table>
       </Card>
 
-      {/* Empty State */}
       {filteredData.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          No employees found.
-        </div>
+        <div className="text-center py-12 text-gray-500">No employees found.</div>
+      )}
+
+      {/* Info Dialog */}
+      {infoEmployee && (
+        <LeaveEntitlementDialog
+          open={!!infoEmployee}
+          onOpenChange={(open) => !open && setInfoEmployee(null)}
+          employee={{
+            name: infoEmployee.name,
+            id: infoEmployee.employeeId,
+            department: infoEmployee.department ?? "",
+            employmentType: infoEmployee.employmentType ?? "",
+            schemes: infoEmployee.schemes,
+          }}
+          entitlements={infoEmployee.entitlements ?? []}
+          history={infoEmployee.history ?? []}
+          totalEntitlement={
+            infoEmployee.entitlements
+              ? infoEmployee.entitlements.reduce((sum, e) => sum + parseInt(e.total || "0", 10), 0) + " days"
+              : "0 days"
+          }
+          totalRemaining={
+            infoEmployee.entitlements
+              ? infoEmployee.entitlements.reduce((sum, e) => sum + parseInt(e.remaining || "0", 10), 0) + " days"
+              : "0 days"
+          }
+        />
+      )}
+
+      {/* Adjust Dialog */}
+      {adjustEmployee && (
+        <AdjustLeaveDialog
+          open={!!adjustEmployee}
+          onOpenChange={(open) => !open && setAdjustEmployee(null)}
+          employeeName={adjustEmployee.name}
+          employeeId={adjustEmployee.employeeId}
+          history={adjustEmployee.history?.map((h) => ({
+            date: h.date,
+            type: h.type,
+            days: h.used.includes("-") ? h.used : `+${h.used.replace(" days", "")}`,
+            reason: "Manual Adjustment", // placeholder
+          })) ?? []}
+        />
       )}
     </div>
   );

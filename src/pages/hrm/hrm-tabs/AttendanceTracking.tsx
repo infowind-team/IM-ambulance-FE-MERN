@@ -33,8 +33,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AttendanceRecordDialog from "./attendance-tracking/AttendanceRecordDialog";
-import EditAttendanceDialog from "./attendance-tracking/EditAttendanceDialog";
+import AttendanceRecordDialog from "../attendance-tracking/AttendanceRecordDialog";
+import EditAttendanceDialog from "../attendance-tracking/EditAttendanceDialog";
 
 interface AttendanceEntry {
   id: string;

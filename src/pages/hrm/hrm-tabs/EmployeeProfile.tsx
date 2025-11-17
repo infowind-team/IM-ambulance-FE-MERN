@@ -32,8 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import AddEmployee from "./employee/AddEmployee";
+import AddEmployee from "../employee/AddEmployee";
 
 interface Employee {
   id: string;

@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import FunctionalHeader from "@/layout/FunctionalHeader";
-import PublicRatesConfig from "./PublicRatesConfig";
 import Link from "next/link";
+import PublicRatesConfig from "./public-rates";
 
 interface Contract {
   id: string;
@@ -186,7 +186,7 @@ export default function ServiceManagementPage() {
             </span>
           </div>
         </div>
-      </CardContent>
+      </CardContent> 
     </Card>
   );
 

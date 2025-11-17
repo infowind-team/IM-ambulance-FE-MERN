@@ -29,10 +29,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import FunctionalHeader from "@/layout/FunctionalHeader";
-import EntitlementTab from "./leave-management/EntitlementTab";
-import ApplicationsTab from "./leave-management/ApplicationsTab";
-import MassAdjustmentTab from "./leave-management/MassAdjustmentTab";
-import LeaveSchemesTab from "./leave-management/LeaveSchemesTab";
+import LeaveSchemesTab from "../leave-management/LeaveSchemesTab";
+import EntitlementTab from "../leave-management/EntitlementTab";
+import ApplicationsTab from "../leave-management/ApplicationsTab";
+import MassAdjustmentTab from "../leave-management/MassAdjustmentTab";
 
 // Icons for action buttons
 const InfoIcon = () => (
