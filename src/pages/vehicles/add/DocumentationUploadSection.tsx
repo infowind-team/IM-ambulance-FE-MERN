@@ -243,9 +243,9 @@ export default function DocumentationUploadSection() {
                       size="icon"
                       variant="ghost"
                       onClick={() => removeFile(item.id)}
-                      className="hover:bg-red-50"
+                      className="bg-red-50! hover:bg-red-100! text-red-500 hover:text-red-600"
                     >
-                      <Trash2 className="w-4 h-4 text-gray-500 hover:text-red-600" />
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 ))}
