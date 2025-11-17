@@ -24,12 +24,14 @@ export default function BookingInfo() {
           control={control}
           name="intake"
           rules={{ required: "Mode of intake is required" }}
-          render={({ field }: { field: any }) => (
+          render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Mode of Intake <span className="text-red-500">*</span></FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger><SelectValue placeholder="Select intake mode" /></SelectTrigger>
+                    <SelectTrigger
+                      className={`${fieldState.error ? "border-red-300 focus-visible:border-red-300" : ""}`}
+                    ><SelectValue placeholder="Select intake mode" /></SelectTrigger>
                   <SelectContent>
                     {["Phone Call", "Whatsapp", "Email", "Walk-in"].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
                   </SelectContent>
@@ -126,7 +128,7 @@ export default function BookingInfo() {
               control={control}
               name="transportMode"
               rules={{ required: "Mode of transport is required" }}
-              render={({ field }: { field: any }) => (
+              render={({ field, fieldState }: { field: any; fieldState: any }) => (
                 <FormItem>
                   <FormLabel>Mode of Transport</FormLabel>
                   <FormControl>

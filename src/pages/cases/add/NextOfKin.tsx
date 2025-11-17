@@ -42,7 +42,7 @@ export default function NextOfKin() {
         <FormField
           control={control}
           name="nokRelationship"
-          render={({ field }) => (
+          render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Relationship</FormLabel>
               <FormControl>

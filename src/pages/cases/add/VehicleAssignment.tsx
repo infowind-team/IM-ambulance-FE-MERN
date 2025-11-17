@@ -15,7 +15,7 @@ export default function VehicleAssignment() {
         <FormField
           control={control}
           name="vehicleType"
-          render={({ field }) => (
+          render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Vehicle Type</FormLabel>
               <FormControl>
@@ -33,7 +33,7 @@ export default function VehicleAssignment() {
         <FormField
           control={control}
           name="vehicleNumber"
-          render={({ field }) => (
+          render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Vehicle Number</FormLabel>
               <FormControl>

@@ -11,14 +11,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Settings } from "lucide-react";
-import { VehicleFormData } from ".";
+import { useFormContext } from "react-hook-form";
+import { VehicleFormValues } from "./types";
+import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
-type Props = {
-  form: VehicleFormData;
-  updateForm: (updates: Partial<VehicleFormData>) => void;
-};
+export default function VehicleSpecsSection() {
+  const { control, register } = useFormContext<VehicleFormValues>();
 
-export default function VehicleSpecsSection({ form, updateForm }: Props) {
   return (
     <Card className="overflow-hidden w-full">
       <CardHeader className="header-bg-soft pb-6">
@@ -31,143 +30,160 @@ export default function VehicleSpecsSection({ form, updateForm }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Engine No.</Label>
-            <Input
-              value={form.engineNo}
-              onChange={(e) => updateForm({ engineNo: e.target.value })}
-              placeholder="e.g., 1KDB045665"
-            />
+            <Input {...register("engineNo")} placeholder="e.g., 1KDB045665" />
           </div>
-          <div className="space-y-2">
-            <Label>Engine Type</Label>
-            <Select value={form.engineType} onValueChange={(v) => updateForm({ engineType: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Diesel">Diesel</SelectItem>
-                <SelectItem value="Petrol">Petrol</SelectItem>
-                <SelectItem value="Electric">Electric</SelectItem>
-                <SelectItem value="Hybrid">Hybrid</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormField
+            control={control}
+            name="engineType"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Engine Type</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Petrol">Petrol</SelectItem>
+                      <SelectItem value="Electric">Electric</SelectItem>
+                      <SelectItem value="Hybrid">Hybrid</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
           <div className="space-y-2">
             <Label>Maximum Unladen Weight (kg)</Label>
-            <Input
-              value={form.maxUnladenWeight}
-              onChange={(e) => updateForm({ maxUnladenWeight: e.target.value })}
-            />
+            <Input {...register("maxUnladenWeight")} />
           </div>
           <div className="space-y-2">
             <Label>Maximum Laden Weight (kg)</Label>
-            <Input
-              value={form.maxLadenWeight}
-              onChange={(e) => updateForm({ maxLadenWeight: e.target.value })}
-            />
+            <Input {...register("maxLadenWeight")} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Engine Capacity (cc)</Label>
-            <Input
-              value={form.engineCapacity}
-              onChange={(e) => updateForm({ engineCapacity: e.target.value })}
-            />
+            <Input {...register("engineCapacity")} />
           </div>
           <div className="space-y-2">
             <Label>Maximum Power Output (kW)</Label>
-            <Input
-              value={form.maxPowerOutput}
-              onChange={(e) => updateForm({ maxPowerOutput: e.target.value })}
-            />
+            <Input {...register("maxPowerOutput")} />
           </div>
-          <div className="space-y-2">
-            <Label>Primary Color</Label>
-            <Select value={form.primaryColor} onValueChange={(v) => updateForm({ primaryColor: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="White">White</SelectItem>
-                <SelectItem value="Yellow">Yellow</SelectItem>
-                <SelectItem value="Blue">Blue</SelectItem>
-                <SelectItem value="Red">Red</SelectItem>
-                <SelectItem value="Green">Green</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Secondary Color</Label>
-            <Select value={form.secondaryColor} onValueChange={(v) => updateForm({ secondaryColor: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Red">Red</SelectItem>
-                <SelectItem value="Blue">Blue</SelectItem>
-                <SelectItem value="Green">Green</SelectItem>
-                <SelectItem value="Orange">Orange</SelectItem>
-                <SelectItem value="Black">Black</SelectItem>
-                <SelectItem value="None">None</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormField
+            control={control}
+            name="primaryColor"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Primary Color</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="White">White</SelectItem>
+                      <SelectItem value="Yellow">Yellow</SelectItem>
+                      <SelectItem value="Blue">Blue</SelectItem>
+                      <SelectItem value="Red">Red</SelectItem>
+                      <SelectItem value="Green">Green</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="secondaryColor"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Secondary Color</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Red">Red</SelectItem>
+                      <SelectItem value="Blue">Blue</SelectItem>
+                      <SelectItem value="Green">Green</SelectItem>
+                      <SelectItem value="Orange">Orange</SelectItem>
+                      <SelectItem value="Black">Black</SelectItem>
+                      <SelectItem value="None">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Passenger Capacity</Label>
-            <Input
-              value={form.passengerCapacity}
-              onChange={(e) => updateForm({ passengerCapacity: e.target.value })}
-            />
+            <Input {...register("passengerCapacity")} />
           </div>
-          <div className="space-y-2">
-            <Label>Wheelchair Accessible</Label>
-            <RadioGroup
-              value={form.wheelchairAccessible}
-              onValueChange={(v) => updateForm({ wheelchairAccessible: v })}
-              className="flex gap-4"
-            >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="Yes" id="wa-yes" />
-                <Label htmlFor="wa-yes" className="m-0">Yes</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="No" id="wa-no" />
-                <Label htmlFor="wa-no" className="m-0">No</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <div className="space-y-2">
-            <Label>Lifter</Label>
-            <RadioGroup
-              value={form.lifter}
-              onValueChange={(v) => updateForm({ lifter: v })}
-              className="flex gap-4"
-            >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="Yes" id="lifter-yes" />
-                <Label htmlFor="lifter-yes" className="m-0">Yes</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="No" id="lifter-no" />
-                <Label htmlFor="lifter-no" className="m-0">No</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <div className="space-y-2">
-            <Label>Stretcher Compatible</Label>
-            <RadioGroup
-              value={form.stretcherCompatible}
-              onValueChange={(v) => updateForm({ stretcherCompatible: v })}
-              className="flex gap-4"
-            >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="Yes" id="stretcher-yes" />
-                <Label htmlFor="stretcher-yes" className="m-0">Yes</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="No" id="stretcher-no" />
-                <Label htmlFor="stretcher-no" className="m-0">No</Label>
-              </div>
-            </RadioGroup>
-          </div>
+          <FormField
+            control={control}
+            name="wheelchairAccessible"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Wheelchair Accessible</FormLabel>
+                <FormControl>
+                  <RadioGroup value={field.value} onValueChange={field.onChange} className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="wa-yes" />
+                      <Label htmlFor="wa-yes" className="m-0">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="wa-no" />
+                      <Label htmlFor="wa-no" className="m-0">No</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="lifter"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Lifter</FormLabel>
+                <FormControl>
+                  <RadioGroup value={field.value} onValueChange={field.onChange} className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="lifter-yes" />
+                      <Label htmlFor="lifter-yes" className="m-0">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="lifter-no" />
+                      <Label htmlFor="lifter-no" className="m-0">No</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="stretcherCompatible"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Stretcher Compatible</FormLabel>
+                <FormControl>
+                  <RadioGroup value={field.value} onValueChange={field.onChange} className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="Yes" id="stretcher-yes" />
+                      <Label htmlFor="stretcher-yes" className="m-0">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="No" id="stretcher-no" />
+                      <Label htmlFor="stretcher-no" className="m-0">No</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
       </CardContent>
     </Card>

@@ -73,7 +73,7 @@ export default function CancelCaseDialog({
             disabled={isLoading}
           />
           {reason && reason.trim().length > 0 && reason.trim().length < 10 && (
-            <p className="text-sm text-orange-600 mt-2">
+            <p className="text-sm text-red-500 mt-2">
               Please enter at least 10 characters
             </p>
           )}

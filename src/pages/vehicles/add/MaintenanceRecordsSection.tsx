@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Wrench } from "lucide-react";
 import MaintenanceTable from "./MaintenanceTable";
-import { MaintenanceRecord } from ".";
+import { MaintenanceRecord } from "./types";
 
 type Props = {
   records: MaintenanceRecord[];

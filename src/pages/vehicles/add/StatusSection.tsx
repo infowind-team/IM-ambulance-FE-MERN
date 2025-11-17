@@ -1,5 +1,11 @@
 // components/vehicles/add/sections/StatusSection.tsx
-import { Label } from "@/components/ui/label";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -7,29 +13,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useFormContext } from "react-hook-form";
+import { VehicleFormValues } from "./types";
 
-type Props = {
-  status: string;
-  updateForm: (updates: { status: string }) => void;
-};
+export default function StatusSection() {
+  const { control } = useFormContext<VehicleFormValues>();
 
-export default function StatusSection({ status, updateForm }: Props) {
   return (
-    <div className="max-w-[300px]">
-      <Label className="text-base font-medium mb-2 block">
-        Status <span className="text-red-500">*</span>
-      </Label>
-      <Select value={status} onValueChange={(v) => updateForm({ status: v })}>
-        <SelectTrigger>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="Active">Active</SelectItem>
-          <SelectItem value="Inactive">Inactive</SelectItem>
-          <SelectItem value="Maintenance">Maintenance</SelectItem>
-          <SelectItem value="Out of Service">Out of Service</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
+    <FormField
+      control={control}
+      name="status"
+      rules={{ required: "Status is required" }}
+      render={({ field, fieldState }: { field: any; fieldState: any }) => (
+        <FormItem className="max-w-[300px]">
+          <FormLabel className="text-base font-medium">
+            Status <span className="text-red-500">*</span>
+          </FormLabel>
+          <FormControl>
+            <Select value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Active">Active</SelectItem>
+                <SelectItem value="Inactive">Inactive</SelectItem>
+                <SelectItem value="Maintenance">Maintenance</SelectItem>
+                <SelectItem value="Out of Service">Out of Service</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

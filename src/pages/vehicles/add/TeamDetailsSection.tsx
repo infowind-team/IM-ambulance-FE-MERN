@@ -1,6 +1,5 @@
 // components/vehicles/add/sections/TeamDetailsSection.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -8,15 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User } from "lucide-react"; 
-import { VehicleFormData } from ".";
+import { User } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { VehicleFormValues } from "./types";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-type Props = {
-  form: VehicleFormData;
-  updateForm: (updates: Partial<VehicleFormData>) => void;
-};
+export default function TeamDetailsSection() {
+  const { control } = useFormContext<VehicleFormValues>();
 
-export default function TeamDetailsSection({ form, updateForm }: Props) {
   return (
     <Card className="overflow-hidden w-full">
       <CardHeader className="header-bg-soft pb-6">
@@ -27,36 +25,69 @@ export default function TeamDetailsSection({ form, updateForm }: Props) {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label>Driver <span className="text-red-500">*</span></Label>
-            <Select value={form.driver} onValueChange={(v) => updateForm({ driver: v })}>
-              <SelectTrigger><SelectValue placeholder="Select Driver" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Annette Black">Annette Black</SelectItem>
-                <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Medic</Label>
-            <Select value={form.medic} onValueChange={(v) => updateForm({ medic: v })}>
-              <SelectTrigger><SelectValue placeholder="Select Medic" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Annette Black">Annette Black</SelectItem>
-                <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Escort</Label>
-            <Select value={form.escort} onValueChange={(v) => updateForm({ escort: v })}>
-              <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">-</SelectItem>
-                <SelectItem value="Annette Black">Annette Black</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormField
+            control={control}
+            name="driver"
+            rules={{ required: "Driver is required" }}
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Driver <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      className={`${fieldState.error ? "border-red-300 focus-visible:border-red-300" : ""}`}
+                    >
+                      <SelectValue placeholder="Select Driver" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                      <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="medic"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Medic</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue placeholder="Select Medic" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                      <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="escort"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>Escort</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      <SelectItem value="Annette Black">Annette Black</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
       </CardContent>
     </Card>

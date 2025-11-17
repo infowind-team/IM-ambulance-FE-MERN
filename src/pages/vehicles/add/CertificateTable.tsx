@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Upload, FileText, SquarePen, Trash2, Check, X } from "lucide-react";
-import { CertificateRecord } from ".";
+import { CertificateRecord } from "./types";
 
 type Props = {
   records: CertificateRecord[];
@@ -19,7 +19,7 @@ const toDisplay = (d: string) => d ? `${d.split("-")[2]}/${d.split("-")[1]}/${d.
 export default function CertificateTable({ records, setRecords }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const update = (id: number, field: keyof CertificateRecord, value: any) => {
+  const update = <K extends keyof CertificateRecord>(id: number, field: K, value: CertificateRecord[K]) => {
     setRecords(prev => prev.map(r => r.id === id ? {
       ...r,
       [field]: value,

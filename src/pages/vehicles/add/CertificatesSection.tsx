@@ -1,8 +1,8 @@
 // components/vehicles/add/sections/CertificatesSection.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Shield } from "lucide-react"; 
-import { CertificateRecord } from ".";
+import { Plus, Shield } from "lucide-react";
+import { CertificateRecord } from "./types";
 import CertificateTable from "./CertificateTable";
 
 type Props = {

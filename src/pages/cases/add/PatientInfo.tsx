@@ -71,7 +71,7 @@ export default function PatientInfo() {
         <FormField
           control={control}
           name="gender"
-          render={({ field }: { field: any }) => (
+          render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Gender</FormLabel>
               <FormControl>

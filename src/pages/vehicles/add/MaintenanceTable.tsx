@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Upload, Folder, SquarePen, Trash2, Check, X } from "lucide-react";
-import { MaintenanceRecord } from ".";
+import { MaintenanceRecord } from "./types";
  
 type Props = {
   records: MaintenanceRecord[];
@@ -17,7 +17,7 @@ const toDisplay = (d: string) => d ? `${d.split("-")[2]}/${d.split("-")[1]}/${d.
 export default function MaintenanceTable({ records, setRecords }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const update = (id: number, field: keyof MaintenanceRecord, value: any) => {
+  const update = <K extends keyof MaintenanceRecord>(id: number, field: K, value: MaintenanceRecord[K]) => {
     setRecords(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r));
   };
 

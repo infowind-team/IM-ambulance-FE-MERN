@@ -10,14 +10,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TriangleAlert } from "lucide-react";
-import { VehicleFormData } from ".";
+import { useFormContext } from "react-hook-form";
+import { VehicleFormValues } from "./types";
+import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
-type Props = {
-  form: VehicleFormData;
-  updateForm: (updates: Partial<VehicleFormData>) => void;
-};
+export default function ArfCoeSection() {
+  const { control, register } = useFormContext<VehicleFormValues>();
 
-export default function ArfCoeSection({ form, updateForm }: Props) {
   return (
     <Card className="overflow-hidden w-full">
       <CardHeader className="header-bg-soft pb-6">
@@ -30,60 +29,47 @@ export default function ArfCoeSection({ form, updateForm }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Open Market Value (S$)</Label>
-            <Input
-              value={form.omv}
-              onChange={(e) => updateForm({ omv: e.target.value })}
-            />
+            <Input {...register("omv")} />
           </div>
           <div className="space-y-2">
             <Label>Additional Registration Fee Rate (%)</Label>
-            <Input
-              value={form.arfRate}
-              onChange={(e) => updateForm({ arfRate: e.target.value })}
-            />
+            <Input {...register("arfRate")} />
           </div>
           <div className="space-y-2">
             <Label>Actual ARF Paid (S$)</Label>
-            <Input
-              value={form.actualArfPaid}
-              onChange={(e) => updateForm({ actualArfPaid: e.target.value })}
-            />
+            <Input {...register("actualArfPaid")} />
           </div>
           <div className="space-y-2">
             <Label>COE Expiry Date</Label>
-            <Input
-              type="date"
-              value={form.coeExpiryDate}
-              onChange={(e) => updateForm({ coeExpiryDate: e.target.value })}
-            />
+            <Input type="date" {...register("coeExpiryDate")} />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="space-y-2">
-            <Label>OPC Cash Rebate Eligibility</Label>
-            <Select value={form.opcCashRebate} onValueChange={(v) => updateForm({ opcCashRebate: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="No">No</SelectItem>
-                <SelectItem value="Yes">Yes</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormField
+            control={control}
+            name="opcCashRebate"
+            render={({ field, fieldState }: { field: any; fieldState: any }) => (
+              <FormItem>
+                <FormLabel>OPC Cash Rebate Eligibility</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="No">No</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
           <div className="space-y-2">
             <Label>QP during COE Bidding Exercise</Label>
-            <Input
-              value={form.qpDuringCoe}
-              onChange={(e) => updateForm({ qpDuringCoe: e.target.value })}
-              placeholder="-"
-            />
+            <Input {...register("qpDuringCoe")} placeholder="-" />
           </div>
           <div className="space-y-2">
             <Label>COE No.</Label>
-            <Input
-              value={form.coeNo}
-              onChange={(e) => updateForm({ coeNo: e.target.value })}
-              placeholder="e.g., COE123456789"
-            />
+            <Input {...register("coeNo")} placeholder="e.g., COE123456789" />
           </div>
         </div>
       </CardContent>
