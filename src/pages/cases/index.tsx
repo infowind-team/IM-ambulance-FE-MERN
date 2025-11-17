@@ -106,7 +106,7 @@ export default function CasesPage() {
       // } else if (selectedStatus) {
       //   params.append("status", selectedStatus);
       // }
-      const res = await fetch(`/api/cases/get-all/${page}/${pageSize}?search=${encodeURIComponent(searchQuery)}&status=${encodeURIComponent(selectedStatus)}`, {
+      const res = await fetch(`/api/cases/all/${page}/${pageSize}?search=${encodeURIComponent(searchQuery)}&status=${encodeURIComponent(selectedStatus)}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

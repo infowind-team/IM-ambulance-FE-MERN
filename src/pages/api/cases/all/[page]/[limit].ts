@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { search, status } = req.query;
 
   try {
-    const backendUrl = `http://192.168.1.73:9000/cases/get-all/${page}/${limit}?search=${search || ""}&status=${status || ""}`;
+    const backendUrl = `http://192.168.1.73:9000/cases/all/${page}/${limit}?search=${search || ""}&status=${status || ""}`;
       const response = await fetch(backendUrl, {
           headers: {
               "Content-Type": "application/json",
