@@ -2074,47 +2074,97 @@ export default function VehiclesAddPage() {
     removeCertificate(index);
   };
 
-  const onSubmit = async (data: FormValues) => {
+  // 
+  const onSubmit = async (form: FormValues) => {
     try {
       setLoading(true);
 
-      const formData = new FormData();
-      formData.append("vehicleData", JSON.stringify(data));
+      const payload = {
+        vehicleNumber: form.vehicleNumber,
+        chassisNumber: form.chassisNumber,
+        type: form.type,
+        scheme: form.scheme,
+        make: form.makeModel,
+        model: form.makeModel,
+        year: Number(form.year),
+        status: form.status,
+        propellant: form.propellant,
+        driverId: "675a3c1b8a3c4d5f6b7a8d11",
+        medicId: "675a3c1c8a3c4d5f6b7a8d12",
+        escortId: "675a3c1d8a3c4d5f6b7a8d13",
+        ownerId: "675a3c1e8a3c4d5f6b7a8d14",
+        specifications: {
+          engineNumber: form.engineNo,
+          engineType: form.engineType,
+          engineCapacity: Number(form.engineCapacity),
+          maxUnladenWeight: Number(form.maxUnladenWeight),
+          maxLadenWeight: Number(form.maxLadenWeight),
+          enginePower: Number(form.maxPowerOutput),
+          primaryColour: form.primaryColor,
+          secondaryColour: form.secondaryColor,
+          passengerCapacity: Number(form.passengerCapacity),
+          wheelchairAccessible: true,
+          lifter: true,
+          stretcherCompatible: true,
+        },
+        emissions: {
+          co2Emissions: 180,
+          coEmissions: 1.5,
+          hcEmissions: 0.8,
+          noxEmissions: 2.1,
+          pmEmissions: 0.02,
+        },
+        owner: {
+          vehicleId: "675a3d5e8a3c4d5f6b7a8e35",
+          ownerName: "IM Ambulance Services Pte Ltd",
+          certificateNumber: "CERT001",
+          registeredAddress: "123 Medical Drive, Singapore 123456",
+          mailingAddress: "123 Medical Drive, Singapore 123456",
+          ownerIdType: "Company Registration",
+          registrationDate: form.registrationDate,
+        },
+        maintenance: {
+          vehicleId: "675a3d5e8a3c4d5f6b7a8e25",
+          lastServiceDate: "2025-11-12",
+          nextServiceDate: "2025-12-12",
+          currentOdometerReading: 123435,
+          documentUrl: "insurance_policy.pdf",
+        },
+        certificates: {
+          vehicleId: "675a3d5e8a3c4d5f6b7a8e25",
+          certificateType: "Vehicle Inspection Certificate (LTA)",
+          certificateNumber: "LTA-2024-001234",
+          issuedDate: "2024-01-15T00:00:00.000Z",
+          expiryDate: "2025-01-14T00:00:00.000Z",
+          documentUrl: "inspection_cert.pdf",
+          remarks: "Annual inspection passed successfully",
+        },
+      };
 
-      data.maintenance?.forEach((item, i) => {
-        if (item.fileObjs?.length) {
-          item.fileObjs.forEach((file, index) => {
-            formData.append(`maintenanceFiles_${i}_${index}`, file);
-          });
+      const access_token = localStorage.getItem("accessToken");
+
+      const response = await fetch(
+        vehicleId
+          ? `/api/vehicles/update/${vehicleId}`
+          : `/api/vehicles/create-vehicle`,
+        {
+          method: vehicleId ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: access_token ? `Bearer ${access_token}` : "",
+          },
+          body: JSON.stringify(payload),
         }
-      });
-
-      data.certificates?.forEach((item, i) => {
-        if (item.fileObj instanceof File) {
-          formData.append(`certificateFile_${i}`, item.fileObj);
-        }
-      });
-
-      const url = vehicleId
-        ? `/api/vehicles/update/${vehicleId}`
-        : `/api/vehicles/create`;
-
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
+      );
 
       if (!response.ok) throw new Error("Failed to save vehicle");
-
-      alert("Vehicle saved successfully!");
-      router.push("/vehicles");
-    } catch (err) {
-      console.error(err);
-      alert("An error occurred while saving");
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <>
