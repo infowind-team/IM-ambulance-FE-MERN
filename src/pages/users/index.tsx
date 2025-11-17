@@ -91,7 +91,7 @@ const users: User[] = [
 ];
 
 export default function UsersPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  //const [searchTerm, setSearchTerm] = useState("");
   // const [users, setUsers] = useState<User[]>([]);
   const [permissionFilter, setPermissionFilter] = useState<string>("all");
   const [stats, setStats] = useState({ totalUsers: 0, activeUsers: 0, adminUsers: 0, hrUsers: 0, employeeUsers: 0 });
@@ -101,17 +101,17 @@ export default function UsersPage() {
   const [role, setRole] = useState("all");
 
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.staffId.toLowerCase().includes(searchTerm.toLowerCase());
+  // const filteredUsers = users.filter((user) => {
+  //   const matchesSearch =
+  //     user.name.toLowerCase().includes(search.toLowerCase()) ||
+  //     user.email.toLowerCase().includes(search.toLowerCase()) ||
+  //     user.staffId.toLowerCase().includes(search.toLowerCase());
 
-    const matchesPermission =
-      permissionFilter === "all" || user.role === permissionFilter;
+  //   const matchesPermission =
+  //     permissionFilter === "all" || user.role === permissionFilter;
 
-    return matchesSearch && matchesPermission;
-  });
+  //   return matchesSearch && matchesPermission;
+  // });
 
   // const stats = {
   //   total: users.length,
@@ -309,8 +309,8 @@ export default function UsersPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 placeholder="Search by name, staff ID, or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -347,7 +347,7 @@ export default function UsersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
+              {users.map((user) => (
                 <TableRow
                   key={user.id}
                   className="hover:header-bg-soft transition"
@@ -419,7 +419,7 @@ export default function UsersPage() {
         </Card>
 
         <div className="text-sm text-muted-foreground">
-          Showing {filteredUsers.length} of {users.length} users
+          Showing {users.length} of {users.length} users
         </div>
       </div>
     </>
