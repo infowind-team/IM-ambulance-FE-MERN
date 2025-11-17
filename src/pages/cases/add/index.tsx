@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import FunctionalHeader from "@/layout/FunctionalHeader";
@@ -13,89 +13,98 @@ import TripDetails from "./TripDetails";
 import VehicleAssignment from "./VehicleAssignment";
 import BillingSummary from "./BillingSummary";
 import AdditionalRemarks from "./AdditionalRemarks";
-import { SelectedService, Trip, TripType } from "./types";
+import { CaseFormValues, SelectedService, Trip, TripType } from "./types";
 import ServiceSelection from "./ServiceSelection";
 import { Navigation, User } from "lucide-react";
+import { Form } from "@/components/ui/form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 
+const createEmptyTrip = (index: number): Trip => ({
+  id: `trip-${index + 1}`,
+  pickupLocation: "",
+  pickupBlock: "",
+  pickupUnit: "",
+  pickupWard: "",
+  pickupRoom: "",
+  pickupBed: "",
+  dropoffLocation: "",
+  dropoffBlock: "",
+  dropoffUnit: "",
+  dropoffWard: "",
+  dropoffRoom: "",
+  dropoffBed: "",
+  scheduledTime: "",
+});
 
 export default function CasesAddPage() {
-  // === Status & Basic ===
-  const [status, setStatus] = useState("Open");
+  const form = useForm<CaseFormValues>({
+    defaultValues: {
+      status: "Open",
+      intake: "Phone Call",
+      bookingDate: null,
+      bookingTime: "",
+      requestorName: "",
+      requestorContact: "",
+      transportMode: "Wheelchair",
+      patientName: "",
+      patientNric: "",
+      patientAge: "",
+      patientWeight: "",
+      gender: "Male",
+      patientContact: "",
+      patientCondition: "",
+      nokName: "",
+      nokContact: "",
+      nokRelationship: "Parent",
+      nokAccompanying: "0",
+      tripType: "one-way",
+      trips: [createEmptyTrip(0)],
+      vehicleType: "Ambulance",
+      vehicleNumber: "AMB001",
+      mto: "",
+      emt: "",
+      escort: "",
+      remarks: "",
+    },
+    mode: "onSubmit",
+  });
 
-  // === Booking ===
-  const [intake, setIntake] = useState("Phone Call");
-  const [bookingDate, setBookingDate] = useState<Date | null>(null);
-  const [bookingTime, setBookingTime] = useState("");
-  const [requestorName, setRequestorName] = useState("");
-  const [requestorContact, setRequestorContact] = useState("");
-  const [transportMode, setTransportMode] = useState("Wheelchair");
+  const tripType = useWatch({
+    control: form.control,
+    name: "tripType",
+  }) as TripType;
 
-  // === Patient ===
-  const [patientName, setPatientName] = useState("");
-  const [patientNric, setPatientNric] = useState("");
-  const [patientAge, setPatientAge] = useState("");
-  const [patientWeight, setPatientWeight] = useState("");
-  const [gender, setGender] = useState("Male");
-  const [patientContact, setPatientContact] = useState("");
-  const [patientCondition, setPatientCondition] = useState("");
-
-  // === NOK ===
-  const [nokName, setNokName] = useState("");
-  const [nokContact, setNokContact] = useState("");
-  const [nokRelationship, setNokRelationship] = useState("Parent");
-  const [nokAccompanying, setNokAccompanying] = useState("0");
-
-  // === Trips ===
-  const [tripType, setTripType] = useState<TripType>("one-way");
-  const [trips, setTrips] = useState<Trip[]>([
-    {
-      id: "trip-1",
-      pickupLocation: "", pickupBlock: "", pickupUnit: "", pickupWard: "", pickupRoom: "", pickupBed: "",
-      dropoffLocation: "", dropoffBlock: "", dropoffUnit: "", dropoffWard: "", dropoffRoom: "", dropoffBed: "",
-      scheduledTime: ""
-    }
-  ]);
-
-  // === Vehicle & Crew ===
-  const [vehicleType, setVehicleType] = useState("Ambulance");
-  const [vehicleNumber, setVehicleNumber] = useState("AMB001");
-  const [mto, setMto] = useState("");
-  const [emt, setEmt] = useState("");
-  const [escort, setEscort] = useState("");
+  const { fields: tripFields, replace } = useFieldArray({
+    control: form.control,
+    name: "trips",
+  });
 
   // === Services ===
   const [serviceSearch, setServiceSearch] = useState("");
   const [selectedServices, setSelectedServices] = useState<SelectedService[]>([]);
 
-  // === Remarks ===
-  const [remarks, setRemarks] = useState("");
-
-  // Sync trip count
   useEffect(() => {
     const count = tripType === "one-way" ? 1 : tripType === "two-way" ? 2 : 3;
-    setTrips(prev => {
-      const kept = prev.slice(0, count);
-      const missing = count - kept.length;
-      return [
-        ...kept,
-        ...Array.from({ length: missing }, (_, i) => ({
-          id: `trip-${kept.length + i + 1}`,
-          pickupLocation: "", pickupBlock: "", pickupUnit: "", pickupWard: "", pickupRoom: "", pickupBed: "",
-          dropoffLocation: "", dropoffBlock: "", dropoffUnit: "", dropoffWard: "", dropoffRoom: "", dropoffBed: "",
-          scheduledTime: ""
-        }))
-      ];
-    });
-  }, [tripType]);
+    const currentTrips = form.getValues("trips");
+    if (currentTrips.length === count) return;
 
-  const updateTrip = (id: string, field: keyof Trip, value: string) => {
-    setTrips(prev => prev.map(t => t.id === id ? { ...t, [field]: value } : t));
-  };
+    if (currentTrips.length > count) {
+      replace(currentTrips.slice(0, count));
+      return;
+    }
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    const missing = count - currentTrips.length;
+    const nextTrips = [
+      ...currentTrips,
+      ...Array.from({ length: missing }, (_, i) => createEmptyTrip(currentTrips.length + i)),
+    ];
+    replace(nextTrips);
+  }, [tripType, form, replace]);
+
+  const onSubmit = (values: CaseFormValues) => {
     console.log("Case Created:", {
-      status, intake, bookingDate, trips, selectedServices, mto, remarks
+      ...values,
+      selectedServices,
     });
     // API call here
   };
@@ -111,76 +120,54 @@ export default function CasesAddPage() {
         ]}
       />
       <div className="flex-1 w-full overflow-auto">
-        <form onSubmit={onSubmit} className="p-4 lg:p-6 space-y-6 w-full">
-          <CaseStatus value={status} onChange={setStatus} />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 lg:p-6 space-y-6 w-full">
+            <CaseStatus />
 
-          <BookingInfo
-            intake={intake} onIntakeChange={setIntake}
-            bookingDate={bookingDate} onBookingDateChange={setBookingDate}
-            bookingTime={bookingTime} onBookingTimeChange={setBookingTime}
-            requestorName={requestorName} onRequestorNameChange={setRequestorName}
-            requestorContact={requestorContact} onRequestorContactChange={setRequestorContact}
-            transportMode={transportMode} onTransportModeChange={setTransportMode}
-          />
+            <BookingInfo />
 
-          <Card className="overflow-hidden w-full">
-            <CardHeader className="header-bg-soft pb-6">
-              <CardTitle className="flex items-center gap-2"><User className="w-5 h-5" /> Patient Information</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <PatientInfo
-                patientName={patientName} setPatientName={setPatientName}
-                patientNric={patientNric} setPatientNric={setPatientNric}
-                patientAge={patientAge} setPatientAge={setPatientAge}
-                patientWeight={patientWeight} setPatientWeight={setPatientWeight}
-                gender={gender} setGender={setGender}
-                patientContact={patientContact} setPatientContact={setPatientContact}
-                patientCondition={patientCondition} setPatientCondition={setPatientCondition}
-              />
-              <hr className="my-4" />
-              <NextOfKin
-                nokName={nokName} setNokName={setNokName}
-                nokContact={nokContact} setNokContact={setNokContact}
-                nokRelationship={nokRelationship} setNokRelationship={setNokRelationship}
-                nokAccompanying={nokAccompanying} setNokAccompanying={setNokAccompanying}
-              />
-            </CardContent>
-          </Card>
+            <Card className="overflow-hidden w-full">
+              <CardHeader className="header-bg-soft pb-6">
+                <CardTitle className="flex items-center gap-2"><User className="w-5 h-5" /> Patient Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <PatientInfo />
+                <hr className="my-4" />
+                <NextOfKin />
+              </CardContent>
+            </Card>
 
-          <Card className="overflow-hidden w-full">
-            <CardHeader className="header-bg-soft pb-6">
-              <CardTitle className="flex items-center gap-2"><Navigation className="w-5 h-5" /> Trip Details</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <TripTypeSelector value={tripType} onChange={setTripType} />
-              <hr className="mb-4" />
-              <TripDetails trips={trips} updateTrip={updateTrip} />
-              <VehicleAssignment
-                vehicleType={vehicleType} setVehicleType={setVehicleType}
-                vehicleNumber={vehicleNumber} setVehicleNumber={setVehicleNumber}
-                mto={mto} setMto={setMto}
-                emt={emt} setEmt={setEmt}
-                escort={escort} setEscort={setEscort}
-              />
-            </CardContent>
-          </Card>
+            <Card className="overflow-hidden w-full">
+              <CardHeader className="header-bg-soft pb-6">
+                <CardTitle className="flex items-center gap-2"><Navigation className="w-5 h-5" /> Trip Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <TripTypeSelector />
+                <hr className="mb-4" />
+                <TripDetails trips={tripFields} />
+                <VehicleAssignment />
+              </CardContent>
+            </Card>
 
-          <ServiceSelection
-            selectedServices={selectedServices}
-            setSelectedServices={setSelectedServices}
-            serviceSearch={serviceSearch}
-            setServiceSearch={setServiceSearch}
-          />
+            <ServiceSelection
+              selectedServices={selectedServices}
+              setSelectedServices={setSelectedServices}
+              serviceSearch={serviceSearch}
+              setServiceSearch={setServiceSearch}
+            />
 
-          <BillingSummary services={selectedServices} baseTransportFee={85.00} />
+            <BillingSummary services={selectedServices} baseTransportFee={85.00} />
 
-          <AdditionalRemarks value={remarks} onChange={setRemarks} />
+            <AdditionalRemarks />
 
-          <div className="flex justify-end gap-4 border-t pt-6">
-            <Button type="button" variant="outline" size="lg">Cancel</Button>
-            <Button type="submit" size="lg">Create Case</Button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-4 border-t pt-6">
+              <Button type="button" variant="outline" size="lg" onClick={() => form.reset()}>
+                Cancel
+              </Button>
+              <Button type="submit" size="lg">Create Case</Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </>
   );

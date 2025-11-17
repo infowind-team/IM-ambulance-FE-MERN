@@ -1,40 +1,49 @@
-import { Label } from "@/components/ui/label";
-import { TripType } from "./types";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Circle } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { CaseFormValues } from "./types";
 
-type Props = {
-  value: TripType;
-  onChange: (v: TripType) => void;
-};
+export default function TripTypeSelector() {
+  const { control } = useFormContext<CaseFormValues>();
 
-export default function TripTypeSelector({ value, onChange }: Props) {
   return (
-    <div>
-      <Label>Trip Type <span className="text-red-500">*</span></Label>
-      <div className="flex gap-4 mt-3">
-        {(["one-way", "two-way", "three-way"] as const).map(type => (
-          <label key={type} className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="tripType"
-              checked={value === type}
-              onChange={() => onChange(type)}
-              className="w-4 h-4 border-gray-300 bg-gray-200 hidden"
-            />
-            <button
-              type="button"
-              role="radio"
-              aria-checked={value === type}
-              className={`border-gray-300 aspect-square size-4 rounded-full transition-all relative bg-gray-200`}
-            >
-              {value === type && (
-                <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
-              )}
-            </button>
-            <span className="capitalize">{type.replace("-", " ")}</span>
-          </label>
-        ))}
-      </div>
-    </div>
+    <FormField
+      control={control}
+      name="tripType"
+      rules={{ required: "Trip type is required" }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Trip Type <span className="text-red-500">*</span></FormLabel>
+          <FormControl>
+            <div className="flex gap-4 mt-3">
+              {(["one-way", "two-way", "three-way"] as const).map(type => (
+                <label key={type} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="tripType"
+                    className="hidden"
+                    checked={field.value === type}
+                    onChange={() => field.onChange(type)}
+                  />
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={field.value === type}
+                    onClick={() => field.onChange(type)}
+                    className="border-gray-300 aspect-square size-4 rounded-full transition-all relative bg-gray-200"
+                  >
+                    {field.value === type && (
+                      <Circle className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary" />
+                    )}
+                  </button>
+                  <span className="capitalize">{type.replace("-", " ")}</span>
+                </label>
+              ))}
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

@@ -24,3 +24,32 @@ export type SelectedService = {
   unit?: string;
   quantity: number;
 };
+
+export type CaseFormValues = {
+  status: string;
+  intake: string;
+  bookingDate: Date | null;
+  bookingTime: string;
+  requestorName: string;
+  requestorContact: string;
+  transportMode: string;
+  patientName: string;
+  patientNric: string;
+  patientAge: string;
+  patientWeight: string;
+  gender: string;
+  patientContact: string;
+  patientCondition: string;
+  nokName: string;
+  nokContact: string;
+  nokRelationship: string;
+  nokAccompanying: string;
+  tripType: TripType;
+  trips: Trip[];
+  vehicleType: string;
+  vehicleNumber: string;
+  mto: string;
+  emt: string;
+  escort: string;
+  remarks: string;
+};

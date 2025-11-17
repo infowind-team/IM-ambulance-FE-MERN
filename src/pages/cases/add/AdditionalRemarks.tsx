@@ -1,14 +1,13 @@
-// @/components/cases/add/AdditionalRemarks.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { FileText } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { CaseFormValues } from "./types";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
-type Props = {
-  value: string;
-  onChange: (value: string) => void;
-};
+export default function AdditionalRemarks() {
+  const { control } = useFormContext<CaseFormValues>();
 
-export default function AdditionalRemarks({ value, onChange }: Props) {
   return (
     <Card>
       <CardHeader className="header-bg-soft pb-6">
@@ -18,14 +17,25 @@ export default function AdditionalRemarks({ value, onChange }: Props) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Textarea
-          placeholder="Enter any special instructions, medical notes, or additional information..."
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          rows={5}
-          className="resize-none"
+        <FormField
+          control={control}
+          name="remarks"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Enter any special instructions, medical notes, or additional information..."
+                  rows={5}
+                  className="resize-none"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       </CardContent>
     </Card>
   );
 }
+// @/components/cases/add/AdditionalRemarks.tsx

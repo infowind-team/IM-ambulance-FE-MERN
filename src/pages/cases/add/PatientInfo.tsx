@@ -1,52 +1,117 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { User } from "lucide-react";
+import { CaseFormValues } from "./types";
+import { useFormContext } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-type Props = {
-  patientName: string; setPatientName: (v: string) => void;
-  patientNric: string; setPatientNric: (v: string) => void;
-  patientAge: string; setPatientAge: (v: string) => void;
-  patientWeight: string; setPatientWeight: (v: string) => void;
-  gender: string; setGender: (v: string) => void;
-  patientContact: string; setPatientContact: (v: string) => void;
-  patientCondition: string; setPatientCondition: (v: string) => void;
-};
+export default function PatientInfo() {
+  const { control } = useFormContext<CaseFormValues>();
 
-export default function PatientInfo({
-  patientName, setPatientName, patientNric, setPatientNric,
-  patientAge, setPatientAge, patientWeight, setPatientWeight,
-  gender, setGender, patientContact, setPatientContact,
-  patientCondition, setPatientCondition
-}: Props) {
   return (
     <div className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
-        <div><Label>Patient Name <span className="text-red-500">*</span></Label><Input value={patientName} onChange={e => setPatientName(e.target.value)} placeholder="Enter patient name" /></div>
-        <div><Label>NRIC <span className="text-red-500">*</span></Label><Input value={patientNric} onChange={e => setPatientNric(e.target.value)} placeholder="S****567Z" /></div>
+        <FormField
+          control={control}
+          name="patientName"
+          rules={{ required: "Patient name is required" }}
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Patient Name <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Enter patient name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="patientNric"
+          rules={{ required: "Patient NRIC is required" }}
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>NRIC <span className="text-red-500">*</span></FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="S****567Z" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       <div className="grid sm:grid-cols-3 gap-4">
-        <div><Label>Age</Label><Input type="number" value={patientAge} onChange={e => setPatientAge(e.target.value)} placeholder="65" /></div>
-        <div><Label>Weight (KG)</Label><Input type="number" value={patientWeight} onChange={e => setPatientWeight(e.target.value)} placeholder="70" /></div>
-        <div><Label>Gender</Label>
-          <Select value={gender} onValueChange={setGender}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem></SelectContent>
-          </Select>
-        </div>
+        <FormField
+          control={control}
+          name="patientAge"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Age</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} placeholder="65" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="patientWeight"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Weight (KG)</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} placeholder="70" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="gender"
+          render={({ field }: { field: any }) => (
+            <FormItem>
+              <FormLabel>Gender</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
+                  <SelectContent><SelectItem value="Male">Male</SelectItem><SelectItem value="Female">Female</SelectItem></SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
-      <div>
-        <Label>Patient Contact</Label>
-        <Input value={patientContact} onChange={e => setPatientContact(e.target.value)} placeholder="+65 XXXX XXXX" />
-      </div>
-      <div>
-        <Label>Patient's Condition | Chief Complaint</Label>
-        <Textarea value={patientCondition} onChange={e => setPatientCondition(e.target.value)} placeholder="Describe patient's condition or chief complaint..." />
-      </div>
+      <FormField
+        control={control}
+        name="patientContact"
+        render={({ field }: { field: any }) => (
+          <FormItem>
+            <FormLabel>Patient Contact</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="+65 XXXX XXXX" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={control}
+        name="patientCondition"
+        render={({ field }: { field: any }) => (
+          <FormItem>
+            <FormLabel>Patient&apos;s Condition | Chief Complaint</FormLabel>
+            <FormControl>
+              <Textarea {...field} placeholder="Describe patient's condition or chief complaint..." />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 }

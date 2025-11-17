@@ -1,42 +1,75 @@
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CaseFormValues } from "./types";
+import { useFormContext } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-type Props = {
-  nokName: string; setNokName: (v: string) => void;
-  nokContact: string; setNokContact: (v: string) => void;
-  nokRelationship: string; setNokRelationship: (v: string) => void;
-  nokAccompanying: string; setNokAccompanying: (v: string) => void;
-};
+export default function NextOfKin() {
+  const { control } = useFormContext<CaseFormValues>();
 
-export default function NextOfKin({ nokName, setNokName, nokContact, setNokContact, nokRelationship, setNokRelationship, nokAccompanying, setNokAccompanying }: Props) {
   return (
     <div className="space-y-4">
       <h4 className="font-medium text-[#2160AD]">Next of Kin Details</h4>
       <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <Label>NOK Name</Label>
-          <Input value={nokName} onChange={e => setNokName(e.target.value)} placeholder="Enter NOK name" />
-        </div>
-        <div>
-          <Label>NOK Contact</Label>
-          <Input value={nokContact} onChange={e => setNokContact(e.target.value)} placeholder="+65 9123 4567" />
-        </div>
+        <FormField
+          control={control}
+          name="nokName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>NOK Name</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Enter NOK name" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="nokContact"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>NOK Contact</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="+65 9123 4567" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <Label>Relationship</Label>
-          <Select value={nokRelationship} onValueChange={setNokRelationship}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              {["Parent", "Spouse", "Child", "Sibling", "Friend", "Other"].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label>Accompanying NOK</Label>
-          <Input type="number" value={nokAccompanying} onChange={e => setNokAccompanying(e.target.value)} placeholder="0" />
-        </div>
+        <FormField
+          control={control}
+          name="nokRelationship"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Relationship</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger><SelectValue placeholder="Select relationship" /></SelectTrigger>
+                  <SelectContent>
+                    {["Parent", "Spouse", "Child", "Sibling", "Friend", "Other"].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="nokAccompanying"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Accompanying NOK</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} placeholder="0" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     </div>
   );

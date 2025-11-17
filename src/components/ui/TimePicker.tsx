@@ -28,12 +28,12 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           <Input
             ref={ref}
             type="time"
-            className={cn(error && "border-red-500", className)}
+            className={cn(error && "border-red-300", className)}
             {...props}
           />
           <Clock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
-        {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+        {/* {error && <p className="text-sm text-red-500 mt-1">{error}</p>} */}
       </div>
     );
   }
