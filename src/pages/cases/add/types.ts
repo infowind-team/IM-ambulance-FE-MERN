@@ -1,7 +1,6 @@
-// @/components/cases/add/types.ts
 export type TripType = "one-way" | "two-way" | "three-way";
 
-export interface Trip {
+export type Trip = {
   id: string;
   pickupLocation: string;
   pickupBlock: string;
@@ -16,12 +15,12 @@ export interface Trip {
   dropoffRoom: string;
   dropoffBed: string;
   scheduledTime: string;
-}
+};
 
-export interface SelectedService {
+export type SelectedService = {
   id: string;
   name: string;
   price: number;
-  unit: string;
+  unit?: string;
   quantity: number;
-}
+};
