@@ -144,19 +144,8 @@ export default function VehiclesPage() {
       if (selectedStatus !== "All Status") params.append("status", selectedStatus);
       params.append("sortBy", "1");
       params.append("sortOrder", "1");
-
-      // const res = await fetch(
-      //   `/api/vehicles/get-all?page=${page}&limit=30&${params.toString()}`,
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: access_token ? `Bearer ${access_token}` : "",
-      //     },
-      //   }
-      // );
       const res = await fetch(
-        `/api/vehicles/get-all?page=${page}&limit=30&${params.toString()}`,
+        `/api/vehicles/all/${page}/30?${params.toString()}`,
         {
           method: "GET",
           headers: {
