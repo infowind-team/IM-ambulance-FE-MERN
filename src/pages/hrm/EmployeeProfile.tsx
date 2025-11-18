@@ -1,7 +1,7 @@
 // app/employees/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   Users,
   UserCheck,
@@ -106,11 +106,45 @@ export default function EmployeeProfile() {
     return matchesSearch && matchesDept && matchesStatus;
   });
 
-  const totalEmployees = employees.length;
-  const activeEmployees = employees.filter((e) => e.status === "Active").length;
-  const inactiveEmployees = totalEmployees - activeEmployees;
+  // const totalEmployees = employees.length;
+  // const activeEmployees = employees.filter((e) => e.status === "Active").length;
+  // const inactiveEmployees = totalEmployees - activeEmployees;
 
   const departments = Array.from(new Set(employees.map((e) => e.department)));
+
+  const [stats, setStats] = useState({ totalEmployees: 0, activeEmployees: 0, inactiveEmployees: 0 });
+
+  const fetchCurrentDayStats = async () => {
+      try {
+        const access_token =
+          typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  
+        const res = await fetch("/api/hrm/stats", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: access_token ? `Bearer ${access_token}` : "",
+          },
+        });
+  
+        if (!res.ok) throw new Error("Failed to fetch employee stats");
+  
+        const data = await res.json();
+        console.log(data)
+        setStats({
+          totalEmployees: data?.data?.totalEmployees || 0,
+          activeEmployees: data?.data?.activeEmployees || 0,
+          inactiveEmployees: data?.data?.inactiveEmployees || 0,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchCurrentDayStats();
+    }, []);
+  
 
   // If Add Employee is open
   if (showAddEmployee) {
@@ -131,7 +165,7 @@ export default function EmployeeProfile() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-[#2160AD]">
-              {totalEmployees}
+              {stats.totalEmployees}
             </div>
             <p className="text-sm text-muted-foreground">All staff members</p>
           </CardContent>
@@ -146,7 +180,7 @@ export default function EmployeeProfile() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-green-600">
-              {activeEmployees}
+              {stats.activeEmployees}
             </div>
             <p className="text-sm text-muted-foreground">Currently working</p>
           </CardContent>
@@ -161,7 +195,7 @@ export default function EmployeeProfile() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-red-600">
-              {inactiveEmployees}
+              {stats.inactiveEmployees}
             </div>
             <p className="text-sm text-muted-foreground">
               On leave or inactive
