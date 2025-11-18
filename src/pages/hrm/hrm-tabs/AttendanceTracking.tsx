@@ -33,8 +33,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AttendanceRecordDialog from "../attendance-tracking/AttendanceRecordDialog";
-import EditAttendanceDialog from "../attendance-tracking/EditAttendanceDialog";
+import AttendanceRecordDialog from "../hrm-dialogs/AttendanceRecordDialog";
+import EditAttendanceDialog from "../hrm-dialogs/EditAttendanceDialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface AttendanceEntry {
   id: string;
@@ -219,23 +220,12 @@ export default function AttendanceTracking() {
 
       {/* Warning banner – only when there are late-comers */}
       {lateCount > 0 && (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-br-lg rounded-tr-lg">
-          <div className="flex items-center">
-            <div className="shrink-0">
-              <div className="w-4 h-4 bg-red-400 rounded-sm flex items-center justify-center">
-                <TriangleAlert className="w-3 h-3 text-white" />
-              </div>
-            </div>
-            <div className="ml-3">
-              <p className="text-red-700">
-                <span className="font-bold">Warning:</span>{" "}
-                <span className="font-normal">There are </span>
-                <span className="font-bold">{lateCount}</span>{" "}
-                <span className="font-normal">latecomers today</span>
-              </p>
-            </div>
-          </div>
-        </div>
+        <Alert className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4">
+          <TriangleAlert className="h-5 w-5 text-red-600" />
+          <AlertDescription className="text-red-800 flex">
+            <strong>Warning:</strong> There are {lateCount} latecomers today
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Table */}

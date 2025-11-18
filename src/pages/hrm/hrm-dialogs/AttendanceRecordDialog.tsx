@@ -406,9 +406,11 @@ export default function AttendanceRecordDialog({
 
                           <TableCell className="p-4">
                             <Badge
-                              className={`${getStatusColor(record.status).border} ${
-                                getStatusColor(record.status).text
-                              } ${getStatusColor(record.status).bg} font-medium`}
+                              className={`border-[${getStatusColor(record.status).border}] font-medium`}
+                              style={{
+                                background: `${getStatusColor(record.status).bg}`,
+                                color: `${getStatusColor(record.status).text}`
+                              }}
                             >
                               {record.status}
                             </Badge>

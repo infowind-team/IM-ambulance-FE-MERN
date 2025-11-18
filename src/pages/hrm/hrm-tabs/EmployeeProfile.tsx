@@ -245,7 +245,7 @@ export default function EmployeeProfile() {
                     <div className="font-medium">{emp.name}</div>
                   </div>
                 </TableCell>
-                <TableCell className="p-4 font-mono text-muted-foreground text-sm">
+                <TableCell className="p-4 font-mono text-muted-foreground">
                   {emp.staffId}
                 </TableCell>
                 <TableCell className="p-4">{emp.email}</TableCell>
@@ -293,7 +293,7 @@ export default function EmployeeProfile() {
       </Card>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center text-sm text-muted-foreground">
+      <div className="flex justify-between items-center text-base text-muted-foreground">
         <span>
           Showing {filteredEmployees.length} of {employees.length} employees
         </span>
