@@ -249,25 +249,25 @@ export default function IncentivesManagement() {
             <Table>
               <TableHeader className="header-bg-soft">
                 <TableRow>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6">
                     Employee Details
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Cases
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Case Incentives
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Overtime
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Other Incentives
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Net Incentive
                   </TableHead>
-                  <TableHead className="p-4 font-semibold">
+                  <TableHead className="py-4 px-6 text-center">
                     Action
                   </TableHead>
                 </TableRow>

@@ -92,7 +92,7 @@ export default function ServiceSearch({ value, onChange, onSelect }: Props) {
                   className="flex cursor-pointer items-center justify-between rounded-sm px-2 py-2 text-sm outline-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50"
                 >
                   <div className="flex-1">
-                    <div className="font-medium text-base-optimized">{service.label}</div>
+                    <div className="font-medium">{service.label}</div>
                     <div className="text-sm text-muted-foreground">{service.unit ? `${service.unit}` : ""}</div>
                   </div>
                   <div className="ml-4 text-sm font-medium text-[#2160AD]">

@@ -115,7 +115,7 @@ export default function CreateLeaveSchemeDialog({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Settings className="w-5 h-5" />
-                <DialogTitle className="text-lg font-semibold text-base-optimized">
+                <DialogTitle className="text-lg font-semibold">
                   Create MOM-Compliant Leave Scheme
                 </DialogTitle>
               </div>
@@ -158,21 +158,21 @@ export default function CreateLeaveSchemeDialog({
                 <div className="px-6 pb-6 space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-base-optimized font-medium">
+                      <Label className=" font-medium">
                         Scheme Name <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         placeholder="e.g., Senior Staff Enhanced Leave Scheme"
                         value={formData.name}
                         onChange={(e) => updateField('name', e.target.value)}
-                        className="form-input-height text-base-optimized"
+                        className="form-input-height "
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-base-optimized font-medium">
+                      <Label className=" font-medium">
                         Service Years From <span className="text-red-500">*</span>
                       </Label>
                       <Input
@@ -181,30 +181,30 @@ export default function CreateLeaveSchemeDialog({
                         placeholder="0"
                         value={formData.serviceYearsFrom}
                         onChange={(e) => updateField('serviceYearsFrom', parseInt(e.target.value) || 0)}
-                        className="form-input-height text-base-optimized"
+                        className="form-input-height "
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-base-optimized font-medium">Service Years To</Label>
+                      <Label className=" font-medium">Service Years To</Label>
                       <Input
                         type="number"
                         min="1"
                         placeholder="Leave blank for 'X+ years'"
                         value={formData.serviceYearsTo ?? ''}
                         onChange={(e) => updateField('serviceYearsTo', e.target.value === '' ? null : parseInt(e.target.value))}
-                        className="form-input-height text-base-optimized"
+                        className="form-input-height "
                       />
                       <p className="text-xs text-gray-500">Leave blank for open-ended (e.g., "8+ years")</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-base-optimized font-medium">Remarks</Label>
+                    <Label className=" font-medium">Remarks</Label>
                     <Textarea
                       placeholder="Additional notes about this scheme..."
                       value={formData.remarks}
                       onChange={(e) => updateField('remarks', e.target.value)}
-                      className="min-h-20 text-base-optimized"
+                      className="min-h-20 "
                     />
                   </div>
 
@@ -272,7 +272,7 @@ export default function CreateLeaveSchemeDialog({
                               value={leave.type}
                               onValueChange={(value) => updateLeaveType(index, 'type', value)}
                             >
-                              <SelectTrigger className="form-input-height text-base-optimized">
+                              <SelectTrigger className="form-input-height ">
                                 <SelectValue placeholder="Select leave type" />
                               </SelectTrigger>
                               <SelectContent>
@@ -297,7 +297,7 @@ export default function CreateLeaveSchemeDialog({
                               step="0.5"
                               value={leave.days}
                               onChange={(e) => updateLeaveType(index, 'days', parseFloat(e.target.value) || 0)}
-                              className="form-input-height text-base-optimized"
+                              className="form-input-height "
                             />
                           </div>
                         </div>

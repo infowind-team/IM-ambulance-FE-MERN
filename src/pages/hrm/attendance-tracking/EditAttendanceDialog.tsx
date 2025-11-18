@@ -75,7 +75,7 @@ export default function EditAttendanceDialog({
         {/* Header */}
         <DialogHeader className="header-bg-soft p-6 border-b">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-lg font-semibold text-base-optimized">
+            <DialogTitle className="text-lg font-semibold ">
               Edit Attendance - Annette Black
             </DialogTitle>
           </div>
@@ -85,20 +85,20 @@ export default function EditAttendanceDialog({
         <div className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[calc(620px-120px)]">
           {/* Employee Info */}
           <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-            <h3 className="text-base-optimized font-medium text-[#2160AD]">
+            <h3 className=" font-medium text-[#2160AD]">
               Employee Information
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-base-optimized font-medium">Staff Name</Label>
+                <Label className="font-medium">Staff Name</Label>
                 <div className="bg-white border rounded-lg px-3 py-2 mt-1">
-                  <span className="text-base-optimized">Annette Black</span>
+                  <span className="">Annette Black</span>
                 </div>
               </div>
               <div>
-                <Label className="text-base-optimized font-medium">Staff ID</Label>
+                <Label className=" font-medium">Staff ID</Label>
                 <div className="bg-white border rounded-lg px-3 py-2 mt-1">
-                  <span className="text-base-optimized">1</span>
+                  <span className="">1</span>
                 </div>
               </div>
             </div>
@@ -106,31 +106,31 @@ export default function EditAttendanceDialog({
 
           {/* Attendance Details */}
           <div className="space-y-4">
-            <h3 className="text-base-optimized font-medium text-[#2160AD]">
+            <h3 className=" font-medium text-[#2160AD]">
               Attendance Details
             </h3>
 
             {/* Date */}
             <div>
-              <Label className="text-base-optimized font-medium">
+              <Label className=" font-medium">
                 Date <span className="text-red-500">*</span>
               </Label>
               <Input
                 type="date"
                 value={formData.date}
                 onChange={(e) => handleChange('date', e.target.value)}
-                className="mt-1 text-base-optimized"
+                className="mt-1 "
               />
             </div>
 
             {/* Status */}
             <div>
-              <Label className="text-base-optimized font-medium">Status</Label>
+              <Label className=" font-medium">Status</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => handleChange('status', value)}
               >
-                <SelectTrigger className="mt-1 text-base-optimized">
+                <SelectTrigger className="mt-1 ">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -145,7 +145,7 @@ export default function EditAttendanceDialog({
             {/* Clock In / Out */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-base-optimized font-medium">
+                <Label className=" font-medium">
                   Clock In <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative mt-1">
@@ -153,14 +153,14 @@ export default function EditAttendanceDialog({
                     type="time"
                     value={formData.clockIn}
                     onChange={(e) => handleChange('clockIn', e.target.value)}
-                    className="pr-10 text-base-optimized"
+                    className="pr-10 "
                     placeholder="--:--"
                   />
                   <Clock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
               </div>
               <div>
-                <Label className="text-base-optimized font-medium">
+                <Label className=" font-medium">
                   Clock Out <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative mt-1">
@@ -168,7 +168,7 @@ export default function EditAttendanceDialog({
                     type="time"
                     value={formData.clockOut}
                     onChange={(e) => handleChange('clockOut', e.target.value)}
-                    className="pr-10 text-base-optimized"
+                    className="pr-10 "
                     placeholder="--:--"
                   />
                   <Clock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
@@ -178,7 +178,7 @@ export default function EditAttendanceDialog({
 
             {/* Notes */}
             <div>
-              <Label className="text-base-optimized font-medium">
+              <Label className=" font-medium">
                 Notes (Optional)
               </Label>
               <Input
@@ -186,7 +186,7 @@ export default function EditAttendanceDialog({
                 value={formData.notes}
                 onChange={(e) => handleChange('notes', e.target.value)}
                 placeholder="Add any additional notes..."
-                className="mt-1 text-base-optimized"
+                className="mt-1 "
               />
             </div>
           </div>

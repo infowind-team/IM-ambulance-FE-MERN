@@ -21,9 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import ConfigureProrateDialog from './leave-schemes/ConfigureProrateDialog';
-import CreateLeaveSchemeDialog from './leave-schemes/CreateLeaveSchemeDialog';
-import LeaveSchemeDetailsDialog from './leave-schemes/LeaveSchemeDetailsDialog';
+import ConfigureProrateDialog from '../hrm-dialogs/ConfigureProrateDialog';
+import CreateLeaveSchemeDialog from '../hrm-dialogs/CreateLeaveSchemeDialog';
+import LeaveSchemeDetailsDialog from '../hrm-dialogs/LeaveSchemeDetailsDialog';
 
 interface LeaveScheme {
   id: string;
@@ -165,11 +165,11 @@ export default function LeaveSchemesTab({
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow className="border-b">
-              <TableHead className="p-4 font-semibold">Scheme Details</TableHead>
-              <TableHead className="p-4 font-semibold">Leave Types</TableHead>
-              <TableHead className="p-4 font-semibold">Service Years</TableHead>
-              <TableHead className="p-4 font-semibold">Eligible</TableHead>
-              <TableHead className="p-4 font-semibold">Actions</TableHead>
+              <TableHead className="p-4">Scheme Details</TableHead>
+              <TableHead className="p-4">Leave Types</TableHead>
+              <TableHead className="p-4">Service Years</TableHead>
+              <TableHead className="p-4">Eligible</TableHead>
+              <TableHead className="p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

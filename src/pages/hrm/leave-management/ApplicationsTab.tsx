@@ -94,25 +94,25 @@ export default function ApplicationsTab() {
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow className="border-b">
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Employee
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Leave Type
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 End Date
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Days
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Recommendation
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Status
               </TableHead>
-              <TableHead className="p-4 font-semibold">
+              <TableHead className="p-4">
                 Actions
               </TableHead>
             </TableRow>

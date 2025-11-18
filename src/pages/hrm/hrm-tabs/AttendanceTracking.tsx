@@ -243,13 +243,13 @@ export default function AttendanceTracking() {
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="font-semibold p-4">Employee</TableHead>
-              <TableHead className="font-semibold p-4">Status</TableHead>
-              <TableHead className="font-semibold p-4">Clock In</TableHead>
-              <TableHead className="font-semibold p-4">Clock Out</TableHead>
-              <TableHead className="font-semibold p-4">Late</TableHead>
-              <TableHead className="font-semibold p-4">Overtime</TableHead>
-              <TableHead className="font-semibold p-4">Actions</TableHead>
+              <TableHead className="p-4">Employee</TableHead>
+              <TableHead className="p-4">Status</TableHead>
+              <TableHead className="p-4">Clock In</TableHead>
+              <TableHead className="p-4">Clock Out</TableHead>
+              <TableHead className="p-4">Late</TableHead>
+              <TableHead className="p-4">Overtime</TableHead>
+              <TableHead className="p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -259,7 +259,7 @@ export default function AttendanceTracking() {
                 className="hover:header-bg-soft transition"
               >
                 {/* Employee */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex items-center gap-3">
                     <img
                       src={placeholderImg}
@@ -271,7 +271,7 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Status badge */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <Badge
                     className={cn(
                       "border bg-transparent",
@@ -292,7 +292,7 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Clock In */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex items-center justify-between">
                     <span>{entry.clockIn ?? "-"}</span>
                     {entry.lateFlag && entry.clockIn && (
@@ -304,20 +304,20 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Clock Out */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   {entry.clockOut ?? "-"}
                 </TableCell>
 
                 {/* Late */}
-                <TableCell className="py-4">{entry.late ?? "-"}</TableCell>
+                <TableCell className="p-4">{entry.late ?? "-"}</TableCell>
 
                 {/* Overtime */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   {entry.overtime ?? "-"}
                 </TableCell>
 
                 {/* Actions */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex gap-2">
                     <Button
                       size="icon"
@@ -349,7 +349,7 @@ export default function AttendanceTracking() {
       <EditAttendanceDialog open={attEditOpen} onOpenChange={setAttEditOpen} onSave={handleSave} />
 
       {/* Pagination (static for demo) */}
-      <div className="flex justify-end items-center gap-5 py-4">
+      <div className="flex justify-end items-center gap-5 ">
         <Button size="icon" variant="outline">
           <ChevronLeft className="w-4 h-4 text-[#616161]" />
         </Button>

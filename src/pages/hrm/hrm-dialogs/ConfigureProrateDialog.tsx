@@ -48,7 +48,7 @@ export default function ConfigureProrateDialog({
                             </DialogTitle>
                         </div>
                     </div>
-                    <p className="text-case text-base-optimized mt-1">
+                    <p className="text-case mt-1">
                         Choose how leave entitlements are calculated for partial-year employees
                     </p>
                 </DialogHeader>
@@ -64,7 +64,7 @@ export default function ConfigureProrateDialog({
 
                     {/* Radio Group */}
                     <div className="space-y-4">
-                        <Label className="text-base-optimized font-medium">
+                        <Label className=" font-medium">
                             Select Calculation Method <span className="text-red-500">*</span>
                         </Label>
 
