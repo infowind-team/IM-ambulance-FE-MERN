@@ -21,50 +21,52 @@ import { useFieldArray, useForm, useWatch } from "react-hook-form";
 
 const createEmptyTrip = (index: number): Trip => ({
   id: `trip-${index + 1}`,
-  pickupLocation: "",
+  pickUpLocation: "",
   pickupBlock: "",
   pickupUnit: "",
   pickupWard: "",
   pickupRoom: "",
   pickupBed: "",
-  dropoffLocation: "",
+  dropOffLocation: "",
   dropoffBlock: "",
   dropoffUnit: "",
   dropoffWard: "",
   dropoffRoom: "",
   dropoffBed: "",
-  scheduledTime: "",
+  pickUpTime: "",
+  
 });
 
 export default function CasesAddPage() {
   const form = useForm<CaseFormValues>({
     defaultValues: {
       status: "Open",
-      intake: "Phone Call",
+      intakeMode: "Phone Call", // changed from intakeMode to intake
       bookingDate: null,
       bookingTime: "",
       requestorName: "",
       requestorContact: "",
       transportMode: "Wheelchair",
       patientName: "",
-      patientNric: "",
-      patientAge: "",
-      patientWeight: "",
+      nric: "", // changed from patientNric to nric
+      age: 0, // changed from patientAge to age
+      weight: 0, // changed from patientWeight to weight 
       gender: "Male",
       patientContact: "",
       patientCondition: "",
       nokName: "",
       nokContact: "",
-      nokRelationship: "Parent",
-      nokAccompanying: "0",
+      nokRelation: "Parent", //changed from nokRelationship to nokRelation
+      nokAccompany: 0, //changed from nokAccompanying to nokAccompany
       tripType: "one-way",
-      trips: [createEmptyTrip(0)],
+      tripDetails: [createEmptyTrip(0)],
       vehicleType: "Ambulance",
       vehicleNumber: "AMB001",
-      mto: "",
-      emt: "",
-      escort: "",
+      mtoName: "", // mto -> mtoName
+      staffName: "", // emt -> staffName
+      escortName: "", // escort -> escortName
       remarks: "",
+      servicesRequired: [],
     },
     mode: "onSubmit",
   });
@@ -76,7 +78,7 @@ export default function CasesAddPage() {
 
   const { fields: tripFields, replace } = useFieldArray({
     control: form.control,
-    name: "trips",
+    name: "tripDetails",
   });
 
   // === Services ===
@@ -85,7 +87,7 @@ export default function CasesAddPage() {
 
   useEffect(() => {
     const count = tripType === "one-way" ? 1 : tripType === "two-way" ? 2 : 3;
-    const currentTrips = form.getValues("trips");
+    const currentTrips = form.getValues("tripDetails");
     if (currentTrips.length === count) return;
 
     if (currentTrips.length > count) {
@@ -101,12 +103,70 @@ export default function CasesAddPage() {
     replace(nextTrips);
   }, [tripType, form, replace]);
 
-  const onSubmit = (values: CaseFormValues) => {
-    console.log("Case Created:", {
-      ...values,
-      selectedServices,
-    });
-    // API call here
+   useEffect(() => {
+    form.setValue(
+      "servicesRequired",
+      selectedServices.map(service => service.name)
+    );
+  }, [selectedServices, form]);
+
+  const onSubmit = async(values: CaseFormValues) => {
+    // console.log("Case Created:", {
+    //   ...values,
+    //   selectedServices,
+    // });
+    const payload = {
+         ...values,
+    age: Number(values.age),
+    weight: Number(values.weight),
+    nokAccompany: Number(values.nokAccompany),
+    tripDetails: values.tripDetails.map(trip => ({
+      id: trip.id,
+      pickUpTime: new Date(`1970-01-01T${trip.pickUpTime}:00Z`).toISOString(),
+      pickUpAddress: [
+        {blockNumber:Number(trip.pickupBlock),
+        unitNumber:Number(trip.pickupUnit),
+        wardDetails:trip.pickupWard,
+        roomNumber: Number(trip.pickupRoom),
+        bedNumber:Number(trip.pickupBed)}
+      ],
+      dropOffAddress: [
+        {blockNumber:Number(trip.dropoffBlock),
+        unitNumber:Number(trip.dropoffUnit),
+        wardDetails: trip.dropoffWard,
+        roomNumber:Number(trip.dropoffRoom),
+        bedNumber: Number(trip.dropoffBed)}
+      ],
+      pickUpLocation: trip.pickUpLocation,
+      dropOffLocation: trip.dropOffLocation
+    }))
+    }
+    
+    
+    const access_token =
+      typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+    try{
+      const res = await fetch("/api/cases/create-case", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+        body: JSON.stringify(payload),
+      });
+      const response = await res.json();
+      if (res.ok) {
+        alert("Case created successfully!");
+        console.log("Created case:", response);
+      } else {
+        alert(`Error: ${response.message || "Failed to create case"}`);
+      }
+
+    }catch(error:any){
+      console.log(error);
+      alert("something went wrong!")
+    }
   };
 
   return (

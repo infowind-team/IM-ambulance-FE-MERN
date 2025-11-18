@@ -22,7 +22,7 @@ export default function BookingInfo() {
       <CardContent className="space-y-4">
         <FormField
           control={control}
-          name="intake"
+          name="intakeMode"
           rules={{ required: "Mode of intake is required" }}
           render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>

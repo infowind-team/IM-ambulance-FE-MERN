@@ -27,7 +27,7 @@ export default function PatientInfo() {
         />
         <FormField
           control={control}
-          name="patientNric"
+          name="nric"
           rules={{ required: "Patient NRIC is required" }}
           render={({ field }: { field: any }) => (
             <FormItem>
@@ -44,7 +44,7 @@ export default function PatientInfo() {
       <div className="grid sm:grid-cols-3 gap-4">
         <FormField
           control={control}
-          name="patientAge"
+          name="age"
           render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Age</FormLabel>
@@ -57,7 +57,7 @@ export default function PatientInfo() {
         />
         <FormField
           control={control}
-          name="patientWeight"
+          name="weight"
           render={({ field }: { field: any }) => (
             <FormItem>
               <FormLabel>Weight (KG)</FormLabel>

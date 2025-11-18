@@ -41,7 +41,7 @@ export default function NextOfKin() {
       <div className="grid sm:grid-cols-2 gap-4">
         <FormField
           control={control}
-          name="nokRelationship"
+          name="nokRelation"
           render={({ field, fieldState }: { field: any; fieldState: any }) => (
             <FormItem>
               <FormLabel>Relationship</FormLabel>
@@ -59,7 +59,7 @@ export default function NextOfKin() {
         />
         <FormField
           control={control}
-          name="nokAccompanying"
+          name="nokAccompany" //changed from nokAccompanying to nokAccompany
           render={({ field }) => (
             <FormItem>
               <FormLabel>Accompanying NOK</FormLabel>

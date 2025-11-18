@@ -52,7 +52,7 @@ export default function VehicleAssignment() {
       <div className="grid sm:grid-cols-3 gap-6">
         <FormField
           control={control}
-          name="mto"
+          name="mtoName"
           rules={{ required: "MTO is required" }}
           render={({ field }) => (
             <FormItem>
@@ -66,7 +66,7 @@ export default function VehicleAssignment() {
         />
         <FormField
           control={control}
-          name="emt"
+          name="staffName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>EMT / EN / PRM</FormLabel>
@@ -79,7 +79,7 @@ export default function VehicleAssignment() {
         />
         <FormField
           control={control}
-          name="escort"
+          name="escortName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Escort (Person)</FormLabel>

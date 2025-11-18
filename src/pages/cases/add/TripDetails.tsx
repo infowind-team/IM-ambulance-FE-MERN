@@ -8,7 +8,7 @@ import { FieldArrayWithId, useFormContext } from "react-hook-form";
 import { CaseFormValues } from "./types";
 
 type Props = {
-  trips: FieldArrayWithId<CaseFormValues, "trips", "id">[];
+  trips: FieldArrayWithId<CaseFormValues, "tripDetails", "id">[];
 };
 
 export default function TripDetails({ trips }: Props) {
@@ -28,7 +28,7 @@ export default function TripDetails({ trips }: Props) {
             <div className="space-y-4">
               <FormField
                 control={control}
-                name={`trips.${idx}.pickupLocation`}
+                name={`tripDetails.${idx}.pickUpLocation`}
                 rules={{ required: "Trip 1 pickup location is required" }}
                 render={({ field }) => (
                   <FormItem>
@@ -50,26 +50,26 @@ export default function TripDetails({ trips }: Props) {
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
                     <Label className="text-sm text-gray-700">Block Number</Label>
-                    <Input {...register(`trips.${idx}.pickupBlock`)} placeholder="e.g., 123" />
+                    <Input {...register(`tripDetails.${idx}.pickupBlock`)} placeholder="e.g., 123" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Unit Number</Label>
-                    <Input {...register(`trips.${idx}.pickupUnit`)} placeholder="e.g., #12-34" />
+                    <Input {...register(`tripDetails.${idx}.pickupUnit`)} placeholder="e.g., #12-34" />
                   </div>
                 </div>
                 <hr className="mt-6 mb-4" />
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
                     <Label className="text-sm text-gray-700">Ward Details</Label>
-                    <Input {...register(`trips.${idx}.pickupWard`)} placeholder="e.g., Ward A" />
+                    <Input {...register(`tripDetails.${idx}.pickupWard`)} placeholder="e.g., Ward A" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Room Number</Label>
-                    <Input {...register(`trips.${idx}.pickupRoom`)} placeholder="e.g., 101" />
+                    <Input {...register(`tripDetails.${idx}.pickupRoom`)} placeholder="e.g., 101" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Bed Number</Label>
-                    <Input {...register(`trips.${idx}.pickupBed`)} placeholder="e.g., A1" />
+                    <Input {...register(`tripDetails.${idx}.pickupBed`)} placeholder="e.g., A1" />
                   </div>
                 </div>
               </div>
@@ -79,7 +79,7 @@ export default function TripDetails({ trips }: Props) {
             <div className="space-y-4">
               <FormField
                 control={control}
-                name={`trips.${idx}.dropoffLocation`}
+                name={`tripDetails.${idx}.dropOffLocation`}
                 rules={{ required: "Trip 1 dropoff location is required" }}
                 render={({ field }) => (
                   <FormItem>
@@ -101,26 +101,26 @@ export default function TripDetails({ trips }: Props) {
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
                     <Label className="text-sm text-gray-700">Block Number</Label>
-                    <Input {...register(`trips.${idx}.dropoffBlock`)} placeholder="e.g., 123" />
+                    <Input {...register(`tripDetails.${idx}.dropoffBlock`)} placeholder="e.g., 123" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Unit Number</Label>
-                    <Input {...register(`trips.${idx}.dropoffUnit`)} placeholder="e.g., #12-34" />
+                    <Input {...register(`tripDetails.${idx}.dropoffUnit`)} placeholder="e.g., #12-34" />
                   </div>
                 </div>
                 <hr className="mt-6 mb-4" />
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div>
                     <Label className="text-sm text-gray-700">Ward Details</Label>
-                    <Input {...register(`trips.${idx}.dropoffWard`)} placeholder="e.g., Ward A" />
+                    <Input {...register(`tripDetails.${idx}.dropoffWard`)} placeholder="e.g., Ward A" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Room Number</Label>
-                    <Input {...register(`trips.${idx}.dropoffRoom`)} placeholder="e.g., 101" />
+                    <Input {...register(`tripDetails.${idx}.dropoffRoom`)} placeholder="e.g., 101" />
                   </div>
                   <div>
                     <Label className="text-sm text-gray-700">Bed Number</Label>
-                    <Input {...register(`trips.${idx}.dropoffBed`)} placeholder="e.g., A1" />
+                    <Input {...register(`tripDetails.${idx}.dropoffBed`)} placeholder="e.g., A1" />
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function TripDetails({ trips }: Props) {
 
           <FormField
             control={control}
-            name={`trips.${idx}.scheduledTime`}
+            name={`tripDetails.${idx}.pickUpTime`}
             render={({ field, fieldState }) => (
               <FormItem className="mt-4 max-w-md">
                 <FormLabel>Pick up - Scheduled Time</FormLabel>
