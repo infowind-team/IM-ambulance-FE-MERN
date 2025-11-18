@@ -89,31 +89,14 @@ export default function EmployeeProfile() {
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("All Departments");
   const [statusFilter, setStatusFilter] = useState("All Status");
-
-  const filteredEmployees = employees.filter((emp) => {
-    const matchesSearch =
-      emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      emp.staffId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesDept =
-      departmentFilter === "All Departments" ||
-      emp.department === departmentFilter;
-
-    const matchesStatus =
-      statusFilter === "All Status" || emp.status === statusFilter;
-
-    return matchesSearch && matchesDept && matchesStatus;
-  });
-
-  // const totalEmployees = employees.length;
-  // const activeEmployees = employees.filter((e) => e.status === "Active").length;
-  // const inactiveEmployees = totalEmployees - activeEmployees;
-
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [stats, setStats] = useState({ totalEmployees: 0, activeEmployees: 0, inactiveEmployees: 0 });
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  
   const departments = Array.from(new Set(employees.map((e) => e.department)));
 
-  const [stats, setStats] = useState({ totalEmployees: 0, activeEmployees: 0, inactiveEmployees: 0 });
-
+  // employee stats
   const fetchCurrentDayStats = async () => {
       try {
         const access_token =
@@ -141,10 +124,57 @@ export default function EmployeeProfile() {
       }
     };
   
-    useEffect(() => {
-      fetchCurrentDayStats();
-    }, []);
-  
+  useEffect(() => {
+    fetchCurrentDayStats();
+  }, []);
+
+  const fetchEmployeeList = async () => {
+    try {
+      const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+
+      const params = new URLSearchParams();
+      params.append("search", searchQuery || "");
+      params.append("status", statusFilter === "All Status" ? "" : statusFilter);
+      params.append(
+        "department",
+        departmentFilter === "All Departments" ? "" : departmentFilter
+      );
+
+      const res = await fetch(
+        `/api/hrm/employee-list/${page}/${pageSize}?${params.toString()}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: access_token ? `Bearer ${access_token}` : "",
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch employees");
+
+      const data = await res.json();
+      console.log("EMPLOYEE LIST", data);
+      const formatted = (data.data?.data?.list || []).map((emp: any) => ({
+        id: emp._id,
+        name: emp.fullName || emp.userName || "",
+        staffId: emp.staffId || "",
+        email: emp.email || "",
+        department: emp.department || "Not Assigned",
+        positions: emp.positions || [],
+        status: emp.userStatus === "active" ? "Active" : "Inactive",
+      }));
+
+      setEmployees(formatted);
+    } catch (error) {
+      console.error("Employee Fetch Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployeeList();
+  }, [page, pageSize, searchQuery, statusFilter, departmentFilter]);
+
 
   // If Add Employee is open
   if (showAddEmployee) {
@@ -267,7 +297,7 @@ export default function EmployeeProfile() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredEmployees.map((emp) => (
+            {employees.map((emp) => (
               <TableRow key={emp.id} className="border-b hover:bg-muted/30">
                 <TableCell className="p-4">
                   <div className="flex items-center gap-3">
@@ -330,7 +360,7 @@ export default function EmployeeProfile() {
       {/* Pagination */}
       <div className="flex justify-between items-center text-sm text-muted-foreground">
         <span>
-          Showing {filteredEmployees.length} of {employees.length} employees
+          Showing {employees.length} of {employees.length} employees
         </span>
       </div>
     </div>
