@@ -13,53 +13,12 @@ import {
   PenLine,
   Trash2,
 } from "lucide-react";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import FunctionalHeader from "@/layout/FunctionalHeader";
-import LeaveSchemesTab from "../leave-management/LeaveSchemesTab";
-import EntitlementTab from "../leave-management/EntitlementTab";
-import ApplicationsTab from "../leave-management/ApplicationsTab";
-import MassAdjustmentTab from "../leave-management/MassAdjustmentTab";
-
-// Icons for action buttons
-const InfoIcon = () => (
-  <div className="w-4 h-4">
-    <svg
-      viewBox="0 0 60 60"
-      fill="none"
-      className="w-full h-full"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M30 44.375C31.0355 44.375 31.875 43.5355 31.875 42.5V27.5C31.875 26.4645 31.0355 25.625 30 25.625C28.9645 25.625 28.125 26.4645 28.125 27.5V42.5C28.125 43.5355 28.9645 44.375 30 44.375Z"
-        fill="currentColor"
-      />
-      <path
-        d="M30 17.5C31.3807 17.5 32.5 18.6193 32.5 20C32.5 21.3807 31.3807 22.5 30 22.5C28.6193 22.5 27.5 21.3807 27.5 20C27.5 18.6193 28.6193 17.5 30 17.5Z"
-        fill="currentColor"
-      />
-      <path
-        clipRule="evenodd"
-        fillRule="evenodd"
-        d="M3.125 30C3.125 15.1574 15.1574 3.125 30 3.125C44.8427 3.125 56.875 15.1574 56.875 30C56.875 44.8427 44.8427 56.875 30 56.875C15.1574 56.875 3.125 44.8427 3.125 30ZM30 6.875C17.2284 6.875 6.875 17.2284 6.875 30C6.875 42.7715 17.2284 53.125 30 53.125C42.7715 53.125 53.125 42.7715 53.125 30C53.125 17.2284 42.7715 6.875 30 6.875Z"
-        fill="currentColor"
-      />
-    </svg>
-  </div>
-);
+import LeaveSchemesTab from "../leave-management-tabs/LeaveSchemesTab";
+import EntitlementTab from "../leave-management-tabs/EntitlementTab";
+import ApplicationsTab from "../leave-management-tabs/ApplicationsTab";
+import MassAdjustmentTab from "../leave-management-tabs/MassAdjustmentTab";
 
 interface LeaveScheme {
   id: string;
@@ -160,17 +119,11 @@ export default function LeaveManagement() {
             <EntitlementTab />
           </TabsContent>
 
-          <TabsContent
-            value="applications"
-            className="flex-1 overflow-auto p-6"
-          >
+          <TabsContent value="applications" className="flex-1 overflow-auto p-6">
             <ApplicationsTab />
           </TabsContent>
 
-          <TabsContent
-            value="mass-adjustments"
-            className="flex-1 overflow-auto p-6"
-          >
+          <TabsContent value="mass-adjustments" className="flex-1 overflow-auto p-6">
             <MassAdjustmentTab />
           </TabsContent>
         </Tabs>

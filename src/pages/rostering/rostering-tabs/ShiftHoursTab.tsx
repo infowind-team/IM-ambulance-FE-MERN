@@ -307,7 +307,7 @@ export default function ShiftHoursTab() {
                       <span
                         className={`${getStatusColor(
                           c.status
-                        )} text-white px-3 py-2 rounded-lg font-semibold tracking-wide text-base-optimized`}
+                        )} text-white px-3 py-2 rounded-lg font-semibold tracking-wide`}
                       >
                         {c.status}
                       </span>

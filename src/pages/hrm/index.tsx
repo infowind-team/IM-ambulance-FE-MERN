@@ -1,4 +1,3 @@
-// app/payroll-management/page.tsx
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -12,7 +11,13 @@ import LeaveManagement from "./hrm-tabs/LeaveManagement";
 export default function HRManagementPage() {
   return (
     <>
-      <FunctionalHeader title="HR Management" />
+      <FunctionalHeader
+        title="HR Management"
+        breadcrumb={[
+          { label: "Management" },
+          { label: "HR" },
+        ]}
+      />
 
       <div className="flex-1 overflow-hidden flex flex-col">
         <Tabs

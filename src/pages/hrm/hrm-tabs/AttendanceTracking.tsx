@@ -33,8 +33,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AttendanceRecordDialog from "../attendance-tracking/AttendanceRecordDialog";
-import EditAttendanceDialog from "../attendance-tracking/EditAttendanceDialog";
+import AttendanceRecordDialog from "../hrm-dialogs/AttendanceRecordDialog";
+import EditAttendanceDialog from "../hrm-dialogs/EditAttendanceDialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface AttendanceEntry {
   id: string;
@@ -219,23 +220,12 @@ export default function AttendanceTracking() {
 
       {/* Warning banner – only when there are late-comers */}
       {lateCount > 0 && (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-br-lg rounded-tr-lg">
-          <div className="flex items-center">
-            <div className="shrink-0">
-              <div className="w-4 h-4 bg-red-400 rounded-sm flex items-center justify-center">
-                <TriangleAlert className="w-3 h-3 text-white" />
-              </div>
-            </div>
-            <div className="ml-3">
-              <p className="text-red-700">
-                <span className="font-bold">Warning:</span>{" "}
-                <span className="font-normal">There are </span>
-                <span className="font-bold">{lateCount}</span>{" "}
-                <span className="font-normal">latecomers today</span>
-              </p>
-            </div>
-          </div>
-        </div>
+        <Alert className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4">
+          <TriangleAlert className="h-5 w-5 text-red-600" />
+          <AlertDescription className="text-red-800 flex">
+            <strong>Warning:</strong> There are {lateCount} latecomers today
+          </AlertDescription>
+        </Alert>
       )}
 
       {/* Table */}
@@ -243,13 +233,13 @@ export default function AttendanceTracking() {
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="font-semibold p-4">Employee</TableHead>
-              <TableHead className="font-semibold p-4">Status</TableHead>
-              <TableHead className="font-semibold p-4">Clock In</TableHead>
-              <TableHead className="font-semibold p-4">Clock Out</TableHead>
-              <TableHead className="font-semibold p-4">Late</TableHead>
-              <TableHead className="font-semibold p-4">Overtime</TableHead>
-              <TableHead className="font-semibold p-4">Actions</TableHead>
+              <TableHead className="p-4">Employee</TableHead>
+              <TableHead className="p-4">Status</TableHead>
+              <TableHead className="p-4">Clock In</TableHead>
+              <TableHead className="p-4">Clock Out</TableHead>
+              <TableHead className="p-4">Late</TableHead>
+              <TableHead className="p-4">Overtime</TableHead>
+              <TableHead className="p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -259,7 +249,7 @@ export default function AttendanceTracking() {
                 className="hover:header-bg-soft transition"
               >
                 {/* Employee */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex items-center gap-3">
                     <img
                       src={placeholderImg}
@@ -271,7 +261,7 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Status badge */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <Badge
                     className={cn(
                       "border bg-transparent",
@@ -292,7 +282,7 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Clock In */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex items-center justify-between">
                     <span>{entry.clockIn ?? "-"}</span>
                     {entry.lateFlag && entry.clockIn && (
@@ -304,20 +294,20 @@ export default function AttendanceTracking() {
                 </TableCell>
 
                 {/* Clock Out */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   {entry.clockOut ?? "-"}
                 </TableCell>
 
                 {/* Late */}
-                <TableCell className="py-4">{entry.late ?? "-"}</TableCell>
+                <TableCell className="p-4">{entry.late ?? "-"}</TableCell>
 
                 {/* Overtime */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   {entry.overtime ?? "-"}
                 </TableCell>
 
                 {/* Actions */}
-                <TableCell className="py-4">
+                <TableCell className="p-4">
                   <div className="flex gap-2">
                     <Button
                       size="icon"
@@ -349,7 +339,7 @@ export default function AttendanceTracking() {
       <EditAttendanceDialog open={attEditOpen} onOpenChange={setAttEditOpen} onSave={handleSave} />
 
       {/* Pagination (static for demo) */}
-      <div className="flex justify-end items-center gap-5 py-4">
+      <div className="flex justify-end items-center gap-5 ">
         <Button size="icon" variant="outline">
           <ChevronLeft className="w-4 h-4 text-[#616161]" />
         </Button>

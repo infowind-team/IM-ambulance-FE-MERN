@@ -203,7 +203,7 @@ export default function VehiclesPage() {
 
               <div className="md:w-[200px]">
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-full text-base-optimized">
+                  <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

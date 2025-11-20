@@ -91,7 +91,7 @@ export default function DownloadDialog({
                     <div className="space-y-2">
                         <Label className="text-sm font-medium">Select Employee</Label>
                         <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
-                            <SelectTrigger className="h-9 text-base-optimized">
+                            <SelectTrigger className="h-9">
                                 <SelectValue placeholder="Choose an employee" />
                             </SelectTrigger>
                             <SelectContent>

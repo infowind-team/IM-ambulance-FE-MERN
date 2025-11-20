@@ -64,13 +64,13 @@ export default function EmployeeForm() {
 
           <div className="space-y-2">
             <Label>Roles (Select one or more)</Label>
-            <div className="border rounded-md p-3 space-y-2">
+            <div className="border rounded-md p-3 space-y-1">
               {['MTO', 'EMT', 'Medic', 'Operations'].map((role) => (
                 <div key={role} className="flex items-center space-x-2">
                   <Checkbox id={`role-${role.toLowerCase()}`} />
                   <Label
                     htmlFor={`role-${role.toLowerCase()}`}
-                    className="cursor-pointer font-normal"
+                    className="cursor-pointer font-normal text-sm mb-0"
                   >
                     {role}
                   </Label>

@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 interface AttendanceRecord {
   date: string;
@@ -204,7 +205,7 @@ export default function AttendanceRecordDialog({
           <div className="flex flex-col gap-2 p-6 header-bg-soft">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <DialogTitle className="text-lg font-semibold text-base-optimized">
+                <DialogTitle className="text-lg font-semibold ">
                   Attendance Records - Annette Black
                 </DialogTitle>
                 <DialogDescription className="text-sm text-gray-600">
@@ -225,7 +226,7 @@ export default function AttendanceRecordDialog({
                   <div className="p-2 bg-[#2160AD]/10 rounded-lg">
                     <User className="w-5 h-5 text-[#2160AD]" />
                   </div>
-                  <h3 className="text-[#2160AD] text-base-optimized font-semibold">
+                  <h3 className="text-[#2160AD]  font-semibold">
                     Employee Information
                   </h3>
                 </div>
@@ -252,11 +253,11 @@ export default function AttendanceRecordDialog({
                   },
                 ].map((item, i) => (
                   <div key={i} className="space-y-2">
-                    <label className="text-base-optimized font-medium text-gray-700">
+                    <Label className="font-medium text-gray-700">
                       {item.label}
-                    </label>
+                    </Label>
                     <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 min-h-[44px] flex items-center">
-                      <span className="text-base-optimized text-gray-900">
+                      <span className=" text-gray-900">
                         {item.value}
                       </span>
                     </div>
@@ -312,7 +313,7 @@ export default function AttendanceRecordDialog({
                         />
                       </div>
                       <div>
-                        <p className="text-base-optimized font-semibold text-gray-900">
+                        <p className=" font-semibold text-gray-900">
                           {stat.value}
                         </p>
                         <p className="text-sm text-gray-600">{stat.label}</p>
@@ -335,7 +336,7 @@ export default function AttendanceRecordDialog({
               </div>
 
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-[180px] form-input-height text-base-optimized">
+                <SelectTrigger className="w-[180px] form-input-height ">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -358,10 +359,10 @@ export default function AttendanceRecordDialog({
             <div className="bg-white border border-gray-200 rounded-lg">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[#2160AD] text-base-optimized font-semibold">
+                  <h3 className="text-[#2160AD]  font-semibold">
                     Attendance Records
                   </h3>
-                  <div className="text-base-optimized text-gray-600">
+                  <div className=" text-gray-600">
                     {filteredRecords.length} records found
                   </div>
                 </div>
@@ -398,16 +399,18 @@ export default function AttendanceRecordDialog({
                           className="border-b hover:bg-gray-50 transition"
                         >
                           <TableCell className="p-4">
-                            <span className="text-base-optimized font-medium text-gray-900">
+                            <span className=" font-medium text-gray-900">
                               {record.date}
                             </span>
                           </TableCell>
 
                           <TableCell className="p-4">
                             <Badge
-                              className={`${getStatusColor(record.status).border} ${
-                                getStatusColor(record.status).text
-                              } ${getStatusColor(record.status).bg} font-medium`}
+                              className={`border-[${getStatusColor(record.status).border}] font-medium`}
+                              style={{
+                                background: `${getStatusColor(record.status).bg}`,
+                                color: `${getStatusColor(record.status).text}`
+                              }}
                             >
                               {record.status}
                             </Badge>
@@ -415,7 +418,7 @@ export default function AttendanceRecordDialog({
 
                           <TableCell className="p-4">
                             <div className="flex items-center gap-2">
-                              <span className="text-base-optimized text-gray-900">
+                              <span className=" text-gray-900">
                                 {record.clockIn || '-'}
                               </span>
                               {record.lateFlag && (
@@ -432,7 +435,7 @@ export default function AttendanceRecordDialog({
 
                           <TableCell className="p-4">
                             <div className="flex items-center gap-2">
-                              <span className="text-base-optimized text-gray-900">
+                              <span className=" text-gray-900">
                                 {record.workHours || '-'}
                               </span>
                               {record.overtimeFlag && (
@@ -467,7 +470,7 @@ export default function AttendanceRecordDialog({
                       <div className="p-4">
                         <div className="flex justify-between items-start mb-3">
                           <div className="space-y-1">
-                            <p className="text-base-optimized font-semibold text-gray-900">
+                            <p className=" font-semibold text-gray-900">
                               {record.date}
                             </p>
                             <p className="text-sm text-gray-600">
@@ -487,7 +490,7 @@ export default function AttendanceRecordDialog({
                           <div>
                             <span className="text-gray-600">Clock In:</span>
                             <div className="flex items-center gap-2 mt-1">
-                              <span className="text-base-optimized text-gray-900">
+                              <span className=" text-gray-900">
                                 {record.clockIn || '-'}
                               </span>
                               {record.lateFlag && (
@@ -500,7 +503,7 @@ export default function AttendanceRecordDialog({
 
                           <div>
                             <span className="text-gray-600">Clock Out:</span>
-                            <p className="text-base-optimized text-gray-900 mt-1">
+                            <p className=" text-gray-900 mt-1">
                               {record.clockOut || '-'}
                             </p>
                           </div>
@@ -508,7 +511,7 @@ export default function AttendanceRecordDialog({
                           <div>
                             <span className="text-gray-600">Work Hours:</span>
                             <div className="flex items-center gap-2 mt-1">
-                              <span className="text-base-optimized text-gray-900">
+                              <span className=" text-gray-900">
                                 {record.workHours || '-'}
                               </span>
                               {record.overtimeFlag && (
@@ -521,14 +524,14 @@ export default function AttendanceRecordDialog({
 
                           <div>
                             <span className="text-gray-600">Late:</span>
-                            <p className="text-base-optimized text-gray-900 mt-1">
+                            <p className=" text-gray-900 mt-1">
                               {record.late || '-'}
                             </p>
                           </div>
 
                           <div className="col-span-2">
                             <span className="text-gray-600">Overtime:</span>
-                            <p className="text-base-optimized text-gray-900 mt-1">
+                            <p className=" text-gray-900 mt-1">
                               {record.overtime || '-'}
                             </p>
                           </div>

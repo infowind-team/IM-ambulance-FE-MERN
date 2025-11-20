@@ -121,7 +121,7 @@ export default function EmployeeProfile() {
     <div className="space-y-6 p-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+        <Card className="overflow-hidden w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-base font-medium">
               Total Employees
@@ -136,7 +136,7 @@ export default function EmployeeProfile() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="overflow-hidden w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-base font-medium">
               Active Employees
@@ -151,7 +151,7 @@ export default function EmployeeProfile() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="overflow-hidden w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-base font-medium">
               Inactive Employees
@@ -218,17 +218,17 @@ export default function EmployeeProfile() {
       </div>
 
       {/* Employee Table */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden w-full">
         <Table>
           <TableHeader className="header-bg-soft">
             <TableRow className="border-b">
-              <TableHead className="font-semibold p-4">Employee</TableHead>
-              <TableHead className="font-semibold p-4">Staff ID</TableHead>
-              <TableHead className="font-semibold p-4">Email</TableHead>
-              <TableHead className="font-semibold p-4">Department</TableHead>
-              <TableHead className="font-semibold p-4">Position</TableHead>
-              <TableHead className="font-semibold p-4">Status</TableHead>
-              <TableHead className="font-semibold p-4">Actions</TableHead>
+              <TableHead className="p-4">Employee</TableHead>
+              <TableHead className="p-4">Staff ID</TableHead>
+              <TableHead className="p-4">Email</TableHead>
+              <TableHead className="p-4">Department</TableHead>
+              <TableHead className="p-4">Position</TableHead>
+              <TableHead className="p-4">Status</TableHead>
+              <TableHead className="p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -293,7 +293,7 @@ export default function EmployeeProfile() {
       </Card>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center text-sm text-muted-foreground">
+      <div className="flex justify-between items-center text-base text-muted-foreground">
         <span>
           Showing {filteredEmployees.length} of {employees.length} employees
         </span>

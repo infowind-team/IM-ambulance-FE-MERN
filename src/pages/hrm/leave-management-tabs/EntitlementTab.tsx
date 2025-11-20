@@ -191,11 +191,11 @@ export default function EntitlementTab() {
       {/* Table */}
       <Card className="overflow-hidden">
         <Table>
-          <TableHeader className="bg-gray-50">
+          <TableHeader className="header-bg-soft">
             <TableRow>
-              <TableHead className="p-4 font-semibold">Employee Name / ID</TableHead>
-              <TableHead className="p-4 font-semibold">Leave Schemes</TableHead>
-              <TableHead className="p-4 font-semibold">Actions</TableHead>
+              <TableHead className="p-4">Employee Name / ID</TableHead>
+              <TableHead className="p-4">Leave Schemes</TableHead>
+              <TableHead className="p-4">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

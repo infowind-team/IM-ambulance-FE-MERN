@@ -229,7 +229,7 @@ export default function CasesPage() {
 
               <div className="md:w-[200px]">
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-full text-base-optimized">
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="All Status" />
                   </SelectTrigger>
                   <SelectContent>
