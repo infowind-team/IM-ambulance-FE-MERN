@@ -11,13 +11,14 @@ import VehicleSpecsSection from "./VehicleSpecsSection";
 import ArfCoeSection from "./ArfCoeSection";
 import ParfRebateSection from "./ParfRebateSection";
 import EmissionsSection from "./EmissionsSection";
-import DocumentationUploadSection from "./DocumentationUploadSection";
+import DocumentationUploadSection from "./DocumentationUploadSection";   // ← new
 import MaintenanceRecordsSection from "./MaintenanceRecordsSection";
 import CertificatesSection from "./CertificatesSection";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { VehicleFormValues, MaintenanceRecord, CertificateRecord } from "./types";
+import { VehicleFormValues, MaintenanceRecord, CertificateRecord, UploadedFile } from "./types";
+
 
 export default function VehicleAddForm() {
   const form = useForm<VehicleFormValues>({
@@ -102,11 +103,27 @@ export default function VehicleAddForm() {
     },
   ]);
 
+  // ←←← NEW STATE FOR DOCUMENTATION FILES
+  const [documentationFiles, setDocumentationFiles] = useState<UploadedFile[]>([]);
+
   const onSubmit = (values: VehicleFormValues) => {
-    console.log("Form:", values);
+    console.log("Form values:", values);
     console.log("Maintenance:", maintenanceRecords);
     console.log("Certificates:", certificateRecords);
-    // TODO: Send to API
+    console.log(
+      "Documentation files:",
+      documentationFiles.map((f) => ({ name: f.file.name, size: f.file.size, type: f.file.type }))
+    );
+
+    // Example: prepare FormData for API
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => formData.append(key, value as string));
+    documentationFiles.forEach((item, idx) =>
+      formData.append(`documents[${idx}]`, item.file)
+    );
+
+    // TODO: await fetch("/api/vehicles", { method: "POST", body: formData });
+    alert("Vehicle added successfully! Check console for data.");
   };
 
   return (
@@ -131,7 +148,13 @@ export default function VehicleAddForm() {
             <ArfCoeSection />
             <ParfRebateSection />
             <EmissionsSection />
-            <DocumentationUploadSection />
+
+            {/* ←←← NEW CONTROLLED UPLOAD SECTION */}
+            <DocumentationUploadSection
+              value={documentationFiles}
+              onChange={setDocumentationFiles}
+            />
+
             <MaintenanceRecordsSection records={maintenanceRecords} setRecords={setMaintenanceRecords} />
             <CertificatesSection records={certificateRecords} setRecords={setCertificateRecords} />
 
