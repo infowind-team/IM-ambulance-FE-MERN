@@ -1,7 +1,7 @@
 // app/payroll-management/AttendanceTracking.tsx
 "use client";
 
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import {
   Search,
   ChevronLeft,
@@ -151,6 +151,12 @@ export default function AttendanceTracking() {
   const [searchQuery, setSearchQuery] = useState("");
   const [attInfoOpen, setAttInfoOpen] = useState(false);
   const [attEditOpen, setAttEditOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>(""); 
+  const [loading, setLoading] = useState(false);
+  const [employeeId, setEmployeeId] = useState("690c7a1b45111f0357ca0959");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [attendanceData, setAttendanceData] = useState<AttendanceEntry[]>([]);
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -161,10 +167,58 @@ export default function AttendanceTracking() {
   // Count late-comers for the warning banner
   const lateCount = filteredData.filter((e) => e.lateFlag).length;
 
+  const fetchAttendance = async () => {
+      setLoading(true);
+      try {
+        const access_token =
+        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+        const queryParams = new URLSearchParams();
+        if (searchQuery) queryParams.append("search", searchQuery);
+        if (statusFilter) queryParams.append("status", statusFilter); // add status filter
+
+        const res = await fetch(
+          `/api/hrm/emp-attendance-list/${employeeId}/${page}/${limit}?${queryParams.toString()}`,
+          {
+            headers: {
+              Authorization: access_token ? `Bearer ${access_token}` : "",
+            },
+          }
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch attendance");
+
+        const result = await res.json();
+
+        const formattedData: AttendanceEntry[] = result.data.map((item: any) => ({
+          id: item._id,
+          name: item.fullName || item.name,
+          avatar: placeholderImg,
+          status: item.status || "Active",
+          clockIn: item.clockIn || null,
+          clockOut: item.clockOut || null,
+          late: item.late || null,
+          overtime: item.overtime || null,
+          lateFlag: item.lateFlag || false,
+        }));
+
+        setAttendanceData(formattedData);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+  useEffect(() => {
+    fetchAttendance();
+  }, [employeeId, page, limit, searchQuery, statusFilter]);
+
   const handleSave = (data: any) => {
     console.log('Saved:', data);
-    // Call API here
+    fetchAttendance();
   };
+
+
 
   return (
     <div className="p-6 space-y-6">
