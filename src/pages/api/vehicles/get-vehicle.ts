@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+  const { vehicleId } = req.query;
 
   try {
     
-    const response = await axios.get(`${process.env.BASE_URL}/vehicles/details/${id}`, {
+    const response = await axios.get(`${process.env.BASE_URL}/vehicles/details/${vehicleId}`, {
       headers: {
         Authorization: req.headers.authorization,
         "Content-Type": "application/json",

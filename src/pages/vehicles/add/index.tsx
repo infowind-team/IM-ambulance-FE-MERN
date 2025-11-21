@@ -252,11 +252,11 @@ export default function VehicleAddForm() {
 
       const access_token = localStorage.getItem("accessToken");
 
-      const url = vehicleId
-        ? `/api/vehicles/update/${vehicleId}`
+      const url = id
+        ? `/api/vehicles/update-vehicle?id=${id}`
         : `/api/vehicles/create-vehicle`;
       
-      const method = vehicleId ? "PUT" : "POST";
+      const method = id ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
         headers: {
@@ -283,7 +283,7 @@ export default function VehicleAddForm() {
     try {
       const token = localStorage.getItem("accessToken");
 
-      const res = await fetch(`/api/vehicles/details/${vehicleId}`, {
+      const res = await fetch(`/api/vehicles/get-vehicle?vehicleId=${vehicleId}`, {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },
