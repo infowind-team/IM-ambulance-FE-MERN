@@ -9,12 +9,13 @@ import { MaintenanceRecord } from "./types";
 type Props = {
   records: MaintenanceRecord[];
   setRecords: React.Dispatch<React.SetStateAction<MaintenanceRecord[]>>;
+//   isEditing:boolean;
 };
 
 const toIso = (d: string) => d ? `${d.split("/")[2]}-${d.split("/")[1].padStart(2,"0")}-${d.split("/")[0].padStart(2,"0")}` : "";
 const toDisplay = (d: string) => d ? `${d.split("-")[2]}/${d.split("-")[1]}/${d.split("-")[0]}` : "";
 
-export default function MaintenanceTable({ records, setRecords }: Props) {
+export default function MaintenanceTable({ records, setRecords, }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const update = <K extends keyof MaintenanceRecord>(id: number, field: K, value: MaintenanceRecord[K]) => {
@@ -50,7 +51,7 @@ export default function MaintenanceTable({ records, setRecords }: Props) {
             <TableHead className="text-white">Next Service Due</TableHead>
             <TableHead className="text-white">Current Odometer (km)</TableHead>
             <TableHead className="text-white">Documents</TableHead>
-            <TableHead className="text-white">Actions</TableHead>
+            <TableHead className="text-white">Actions </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -58,8 +59,8 @@ export default function MaintenanceTable({ records, setRecords }: Props) {
             <TableRow key={r.id} className="hover:bg-gray-50">
               {r.isEditing ? (
                 <>
-                  <TableCell><Input type="date" value={toIso(r.lastService)} onChange={e => update(r.id, "lastService", toDisplay(e.target.value))} className="h-9" /></TableCell>
-                  <TableCell><Input type="date" value={toIso(r.nextDue)} onChange={e => update(r.id, "nextDue", toDisplay(e.target.value))} className="h-9" /></TableCell>
+                  <TableCell><Input type="date" value={toIso(r.lastService)} onChange={e => update(r.id, "lastService", toDisplay(e.target.value))} className="h-9"  /></TableCell>
+                  <TableCell><Input type="date" value={toIso(r.nextDue)} onChange={e => update(r.id, "nextDue", toDisplay(e.target.value))} className="h-9"  /></TableCell>
                   <TableCell><Input value={r.odometer} onChange={e => update(r.id, "odometer", e.target.value)} className="h-9" placeholder="45,230" /></TableCell>
                   <TableCell>
                     <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()} className="h-8"><Upload className="w-4 h-4 mr-1" /> Upload</Button>

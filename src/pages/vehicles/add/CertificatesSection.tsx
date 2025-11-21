@@ -8,9 +8,10 @@ import CertificateTable from "./CertificateTable";
 type Props = {
   records: CertificateRecord[];
   setRecords: React.Dispatch<React.SetStateAction<CertificateRecord[]>>;
+  isEditing: boolean;
 };
 
-export default function CertificatesSection({ records, setRecords }: Props) {
+export default function CertificatesSection({ records, setRecords, isEditing }: Props) {
   const handleAdd = () => {
     const newId = Math.max(...records.map((r) => r.id), 0) + 1;
     setRecords((prev) => [
@@ -36,7 +37,7 @@ export default function CertificatesSection({ records, setRecords }: Props) {
               Add Certificate
             </Button>
           </div>
-          <CertificateTable records={records} setRecords={setRecords} />
+          <CertificateTable records={records} setRecords={setRecords} isEditing ={isEditing}/>
         </div>
       </CardContent>
     </Card>

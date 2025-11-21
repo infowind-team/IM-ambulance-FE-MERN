@@ -14,9 +14,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, StatusProps } from "./types";
 
-export default function StatusSection() {
+export default function StatusSection({ isEditing }: StatusProps) {
   const { control } = useFormContext<VehicleFormValues>();
 
   return (
@@ -30,7 +30,7 @@ export default function StatusSection() {
             Status <span className="text-red-500">*</span>
           </FormLabel>
           <FormControl>
-            <Select value={field.value} onValueChange={field.onChange}>
+            <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing} >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

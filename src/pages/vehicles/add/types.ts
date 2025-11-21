@@ -1,12 +1,12 @@
 export type VehicleFormValues = {
   status: string;
   vehicleNumber: string;
-  chassisNo: string;
-  vehicleScheme: string;
-  vehicleType: string;
+  chassisNumber: string;
+  scheme: string;
+  type: string;
   makeModel: string;
   year: string;
-  currentPropellant: string;
+  propellant: string;
   driver: string;
   medic: string;
   escort: string;
@@ -48,6 +48,8 @@ export type VehicleFormValues = {
   hcEmission: string;
   noxEmission: string;
   pmEmission: string;
+  maintenance?: [],
+  certificates?: CertificateRecord[]
 };
 
 export type MaintenanceRecord = {
@@ -67,7 +69,8 @@ export type CertificateRecord = {
   issued: string;
   expiry: string;
   file?: string;
-  fileObj?: File;
+  fileObj?: File | string ;
+  fileNames?: string[]
   remarks: string;
   isEditing?: boolean;
 };
@@ -78,3 +81,47 @@ export interface UploadedFile {
   preview?: string;
   progress: number;
 }
+
+export type StatusProps = {
+  isEditing: boolean;
+};
+
+export type VehicleRegistrationProp = {
+  isEditing: boolean;
+}
+
+export type UserItem = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type TeamDetailProp = {
+  isEditing:boolean;
+  users:UserItem[];
+}
+
+export type OwnerDetailProp = {
+  isEditing :boolean;
+}
+
+export type RegistrationDetailProp = {
+  isEditing: boolean;
+}
+
+export type VehicleSpecsProp = {
+  isEditing: boolean;
+}
+
+export type ArfCoeProp = {
+  isEditing: boolean; 
+}
+
+export type ParfRebateProp = {
+  isEditing: boolean;
+}
+
+export type EmissionProp = {
+  isEditing: boolean;
+}
+

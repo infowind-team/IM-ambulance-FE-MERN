@@ -11,9 +11,9 @@ import {
 import { Truck } from "lucide-react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, VehicleRegistrationProp } from "./types";
 
-export default function VehicleRegistrationSection() {
+export default function VehicleRegistrationSection({ isEditing }: VehicleRegistrationProp) {
   const { control } = useFormContext<VehicleFormValues>();
 
   return (
@@ -34,7 +34,7 @@ export default function VehicleRegistrationSection() {
               <FormItem>
                 <FormLabel>Vehicle Number <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., SAZ1234A" />
+                  <Input {...field} placeholder="e.g., SAZ1234A" disabled={!isEditing}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -42,13 +42,13 @@ export default function VehicleRegistrationSection() {
           />
           <FormField
             control={control}
-            name="chassisNo"
+            name="chassisNumber"
             rules={{ required: "Chassis number is required" }}
             render={({ field, fieldState }: { field: any; fieldState: any }) => (
               <FormItem>
                 <FormLabel>Chassis No. <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., JTFST22P200040240" />
+                  <Input {...field} placeholder="e.g., JTFST22P200040240" disabled={!isEditing}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -56,13 +56,13 @@ export default function VehicleRegistrationSection() {
           />
           <FormField
             control={control}
-            name="vehicleScheme"
+            name="scheme"
             rules={{ required: "Vehicle scheme is required" }}
             render={({ field, fieldState }: { field: any; fieldState: any }) => (
               <FormItem>
                 <FormLabel>Vehicle Scheme <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue placeholder="Select scheme" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Ambulance">Ambulance</SelectItem>
@@ -78,13 +78,13 @@ export default function VehicleRegistrationSection() {
           />
           <FormField
             control={control}
-            name="vehicleType"
+            name="type"
             rules={{ required: "Vehicle type is required" }}
             render={({ field, fieldState }: { field: any; fieldState: any }) => (
               <FormItem>
                 <FormLabel>Vehicle Type <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Basic Life Support">Basic Life Support</SelectItem>
@@ -112,7 +112,7 @@ export default function VehicleRegistrationSection() {
               <FormItem>
                 <FormLabel>Make &amp; Model <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., Mercedes-Benz Sprinter" />
+                  <Input {...field} placeholder="e.g., Mercedes-Benz Sprinter" disabled={!isEditing}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -125,19 +125,19 @@ export default function VehicleRegistrationSection() {
               <FormItem>
                 <FormLabel>Year</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., 2023" />
+                  <Input {...field} placeholder="e.g., 2023" disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
           />
           <FormField
             control={control}
-            name="currentPropellant"
+            name="propellant"
             render={({ field, fieldState }: { field: any; fieldState: any }) => (
               <FormItem>
                 <FormLabel>Current Propellant</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Diesel">Diesel</SelectItem>

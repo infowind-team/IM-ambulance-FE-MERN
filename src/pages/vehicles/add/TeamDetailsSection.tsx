@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/select";
 import { User } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, TeamDetailProp } from "./types";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-export default function TeamDetailsSection() {
+export default function TeamDetailsSection({ isEditing, users }: TeamDetailProp) {
   const { control } = useFormContext<VehicleFormValues>();
 
   return (
@@ -36,15 +36,23 @@ export default function TeamDetailsSection() {
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
+                    disabled={!isEditing}
                   >
                     <SelectTrigger
                       className={`${fieldState.error ? "border-red-300 focus-visible:border-red-300" : ""}`}
                     >
                       <SelectValue placeholder="Select Driver" />
                     </SelectTrigger>
-                    <SelectContent>
+                    {/* <SelectContent>
                       <SelectItem value="Annette Black">Annette Black</SelectItem>
                       <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent> */}
+                    <SelectContent>
+                      {users.map((u) => (
+                        <SelectItem key={u._id} value={u._id}>
+                          {u.firstName} {u.lastName}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -59,11 +67,18 @@ export default function TeamDetailsSection() {
               <FormItem>
                 <FormLabel>Medic</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue placeholder="Select Medic" /></SelectTrigger>
-                    <SelectContent>
+                    {/* <SelectContent>
                       <SelectItem value="Annette Black">Annette Black</SelectItem>
                       <SelectItem value="Jennifer Liu">Jennifer Liu</SelectItem>
+                    </SelectContent> */}
+                    <SelectContent>
+                      {users.map((u) => (
+                        <SelectItem key={u._id} value={u._id}>
+                          {u.firstName} {u.lastName}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -77,11 +92,18 @@ export default function TeamDetailsSection() {
               <FormItem>
                 <FormLabel>Escort</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
-                    <SelectContent>
+                    {/* <SelectContent>
                       <SelectItem value="none">-</SelectItem>
                       <SelectItem value="Annette Black">Annette Black</SelectItem>
+                    </SelectContent> */}
+                    <SelectContent>
+                      {users.map((u) => (
+                        <SelectItem key={u._id} value={u._id}>
+                          {u.firstName} {u.lastName}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

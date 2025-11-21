@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FileText } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, ParfRebateProp } from "./types";
 
-export default function ParfRebateSection() {
+export default function ParfRebateSection({isEditing}:ParfRebateProp) {
   const { register } = useFormContext<VehicleFormValues>();
 
   return (
@@ -21,15 +21,15 @@ export default function ParfRebateSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <Label>PARF Eligibility (S$)</Label>
-            <Input {...register("parfEligibility")} />
+            <Input {...register("parfEligibility")} disabled={!isEditing}/>
           </div>
           <div className="space-y-2">
             <Label>PARF Eligibility Expiry Date</Label>
-            <Input type="date" {...register("parfExpiryDate")} />
+            <Input type="date" {...register("parfExpiryDate")}disabled={!isEditing}/>
           </div>
           <div className="space-y-2">
             <Label>Min PARF Benefit (S$)</Label>
-            <Input {...register("minParfBenefit")} />
+            <Input {...register("minParfBenefit")} disabled={!isEditing}/>
           </div>
         </div>
       </CardContent>

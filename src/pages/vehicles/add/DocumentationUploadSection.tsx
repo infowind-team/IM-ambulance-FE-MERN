@@ -28,6 +28,7 @@ const MAX_FILES = 10;
 type DocumentationUploadSectionProps = {
   value?: UploadedFile[];
   onChange?: (files: UploadedFile[]) => void;
+   isEditing: boolean;
 };
 
 const formatBytes = (bytes: number): string => {
@@ -58,6 +59,7 @@ const isSupportedFile = (file: File): boolean => {
 export default function DocumentationUploadSection({
   value = [],
   onChange,
+  isEditing
 }: DocumentationUploadSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<UploadedFile[]>(value);
@@ -189,8 +191,7 @@ export default function DocumentationUploadSection({
               multiple
               accept={ACCEPT_ATTR}
               className="hidden"
-              onChange={(e) => handleAddFiles(e.target.files)}
-            />
+              onChange={(e) => handleAddFiles(e.target.files)} disabled={!isEditing}/>
             <Upload
               className={cn(
                 "w-8 h-8 mx-auto",

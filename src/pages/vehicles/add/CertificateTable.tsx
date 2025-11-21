@@ -11,12 +11,13 @@ import { CertificateRecord } from "./types";
 type Props = {
   records: CertificateRecord[];
   setRecords: React.Dispatch<React.SetStateAction<CertificateRecord[]>>;
+  isEditing:boolean;
 };
 
 const toIso = (d: string) => d ? `${d.split("/")[2]}-${d.split("/")[1].padStart(2,"0")}-${d.split("/")[0].padStart(2,"0")}` : "";
 const toDisplay = (d: string) => d ? `${d.split("-")[2]}/${d.split("-")[1]}/${d.split("-")[0]}` : "";
 
-export default function CertificateTable({ records, setRecords }: Props) {
+export default function CertificateTable({ records, setRecords, isEditing }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const update = <K extends keyof CertificateRecord>(id: number, field: K, value: CertificateRecord[K]) => {
@@ -59,7 +60,7 @@ export default function CertificateTable({ records, setRecords }: Props) {
               {r.isEditing ? (
                 <>
                   <TableCell>
-                    <Select value={r.type} onValueChange={v => update(r.id, "type", v)}>
+                    <Select value={r.type} onValueChange={v => update(r.id, "type", v)} disabled={!isEditing} >
                       <SelectTrigger className="h-9"><SelectValue placeholder="Select type" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Vehicle Inspection Certificate (LTA)">Vehicle Inspection Certificate (LTA)</SelectItem>
@@ -69,15 +70,15 @@ export default function CertificateTable({ records, setRecords }: Props) {
                       </SelectContent>
                     </Select>
                   </TableCell>
-                  <TableCell><Input value={r.number} onChange={e => update(r.id, "number", e.target.value)} className="h-9" placeholder="LTA-2024-001234" /></TableCell>
-                  <TableCell><Input type="date" value={toIso(r.issued)} onChange={e => update(r.id, "issued", toDisplay(e.target.value))} className="h-9" /></TableCell>
-                  <TableCell><Input type="date" value={toIso(r.expiry)} onChange={e => update(r.id, "expiry", toDisplay(e.target.value))} className="h-9" /></TableCell>
+                  <TableCell><Input value={r.number} onChange={e => update(r.id, "number", e.target.value)} className="h-9" placeholder="LTA-2024-001234" disabled={!isEditing} /></TableCell>
+                  <TableCell><Input type="date" value={toIso(r.issued)} onChange={e => update(r.id, "issued", toDisplay(e.target.value))} className="h-9" disabled={!isEditing} /></TableCell>
+                  <TableCell><Input type="date" value={toIso(r.expiry)} onChange={e => update(r.id, "expiry", toDisplay(e.target.value))} className="h-9" disabled={!isEditing} /></TableCell>
                   <TableCell>
                     <label>
                       <Input ref={fileRef} type="file" accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={e => {
                         const f = e.target.files?.[0];
                         if (f) update(r.id, "fileObj", f);
-                      }} />
+                      }} disabled={!isEditing}  />
                       <Button size="sm" variant="outline" className="h-8" onClick={() => fileRef.current?.click()}>
                         <Upload className="w-4 h-4 mr-1" /> Upload
                       </Button>
@@ -85,7 +86,7 @@ export default function CertificateTable({ records, setRecords }: Props) {
                     {r.file && <div className="mt-1 text-xs text-blue-600 truncate max-w-[100px]">{r.file}</div>}
                   </TableCell>
                   <TableCell>
-                    <Textarea value={r.remarks} onChange={e => update(r.id, "remarks", e.target.value)} className="min-h-[40px] resize-none" rows={1} placeholder="Optional notes" />
+                    <Textarea value={r.remarks} onChange={e => update(r.id, "remarks", e.target.value)} className="min-h-[40px] resize-none" rows={1} placeholder="Optional notes" disabled={!isEditing} />
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-1">

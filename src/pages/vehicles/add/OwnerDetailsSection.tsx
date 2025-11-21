@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/select";
 import { FileText } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, OwnerDetailProp } from "./types";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-export default function OwnerDetailsSection() {
+export default function OwnerDetailsSection({isEditing}: OwnerDetailProp) {
   const { control } = useFormContext<VehicleFormValues>();
 
   return (
@@ -34,7 +34,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>Owner&apos;s Name <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Enter owner's name" />
+                  <Input {...field} placeholder="Enter owner's name"  disabled={!isEditing}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -48,7 +48,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>NRIC/Passport/Company Cert No. <span className="text-red-500">*</span></FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Enter nric/passport/company cert no." />
+                  <Input {...field} placeholder="Enter nric/passport/company cert no." disabled={!isEditing} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -63,7 +63,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>Registered Address</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -75,7 +75,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>Mailing Address</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -89,7 +89,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>Owner&apos;s ID Type</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Company Registration">Company Registration</SelectItem>
@@ -108,7 +108,7 @@ export default function OwnerDetailsSection() {
               <FormItem>
                 <FormLabel>Registration Date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}

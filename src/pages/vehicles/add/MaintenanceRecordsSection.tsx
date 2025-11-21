@@ -8,9 +8,10 @@ import { MaintenanceRecord } from "./types";
 type Props = {
   records: MaintenanceRecord[];
   setRecords: React.Dispatch<React.SetStateAction<MaintenanceRecord[]>>;
+  isEditing: boolean;
 };
 
-export default function MaintenanceRecordsSection({ records, setRecords }: Props) {
+export default function MaintenanceRecordsSection({ records, setRecords, isEditing }: Props) {
   const handleAdd = () => {
     const newId = Math.max(...records.map((r) => r.id), 0) + 1;
     setRecords((prev) => [
@@ -36,7 +37,7 @@ export default function MaintenanceRecordsSection({ records, setRecords }: Props
               Add Record
             </Button>
           </div>
-          <MaintenanceTable records={records} setRecords={setRecords} />
+          <MaintenanceTable records={records} setRecords={setRecords}   />
         </div>
       </CardContent>
     </Card>

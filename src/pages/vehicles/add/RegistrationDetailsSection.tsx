@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { FileText } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues ,RegistrationDetailProp } from "./types";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
-export default function RegistrationDetailsSection() {
+export default function RegistrationDetailsSection({isEditing}:RegistrationDetailProp) {
   const { control } = useFormContext<VehicleFormValues>();
 
   return (
@@ -26,7 +26,7 @@ export default function RegistrationDetailsSection() {
               <FormItem>
                 <FormLabel>Previous Vehicle No.</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="-" />
+                  <Input {...field} placeholder="-" disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -38,7 +38,7 @@ export default function RegistrationDetailsSection() {
               <FormItem>
                 <FormLabel>Effective Date of Ownership</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -50,7 +50,7 @@ export default function RegistrationDetailsSection() {
               <FormItem>
                 <FormLabel>Original Registration Date</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -64,7 +64,7 @@ export default function RegistrationDetailsSection() {
               <FormItem>
                 <FormLabel>No. of Transfers</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}
@@ -76,7 +76,7 @@ export default function RegistrationDetailsSection() {
               <FormItem>
                 <FormLabel>IU Label No.</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="e.g., 40057623" />
+                  <Input {...field} placeholder="e.g., 40057623" disabled={!isEditing}/>
                 </FormControl>
               </FormItem>
             )}

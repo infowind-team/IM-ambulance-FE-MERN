@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/select";
 import { Settings } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { VehicleFormValues } from "./types";
+import { VehicleFormValues, VehicleSpecsProp } from "./types";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
-export default function VehicleSpecsSection() {
+export default function VehicleSpecsSection({isEditing}:VehicleSpecsProp) {
   const { control, register } = useFormContext<VehicleFormValues>();
 
   return (
@@ -30,7 +30,7 @@ export default function VehicleSpecsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Engine No.</Label>
-            <Input {...register("engineNo")} placeholder="e.g., 1KDB045665" />
+            <Input {...register("engineNo")} placeholder="e.g., 1KDB045665" disabled={!isEditing}/>
           </div>
           <FormField
             control={control}
@@ -39,7 +39,7 @@ export default function VehicleSpecsSection() {
               <FormItem>
                 <FormLabel>Engine Type</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Diesel">Diesel</SelectItem>
@@ -54,22 +54,22 @@ export default function VehicleSpecsSection() {
           />
           <div className="space-y-2">
             <Label>Maximum Unladen Weight (kg)</Label>
-            <Input {...register("maxUnladenWeight")} />
+            <Input {...register("maxUnladenWeight")} disabled={!isEditing}/>
           </div>
           <div className="space-y-2">
             <Label>Maximum Laden Weight (kg)</Label>
-            <Input {...register("maxLadenWeight")} />
+            <Input {...register("maxLadenWeight")} disabled={!isEditing}/>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Engine Capacity (cc)</Label>
-            <Input {...register("engineCapacity")} />
+            <Input {...register("engineCapacity")}disabled={!isEditing}/>
           </div>
           <div className="space-y-2">
             <Label>Maximum Power Output (kW)</Label>
-            <Input {...register("maxPowerOutput")} />
+            <Input {...register("maxPowerOutput")} disabled={!isEditing} />
           </div>
           <FormField
             control={control}
@@ -78,7 +78,7 @@ export default function VehicleSpecsSection() {
               <FormItem>
                 <FormLabel>Primary Color</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="White">White</SelectItem>
@@ -99,7 +99,7 @@ export default function VehicleSpecsSection() {
               <FormItem>
                 <FormLabel>Secondary Color</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={field.value} onValueChange={field.onChange} disabled={!isEditing}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Red">Red</SelectItem>
@@ -119,7 +119,7 @@ export default function VehicleSpecsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label>Passenger Capacity</Label>
-            <Input {...register("passengerCapacity")} />
+            <Input {...register("passengerCapacity")} disabled={!isEditing}/>
           </div>
           <FormField
             control={control}
