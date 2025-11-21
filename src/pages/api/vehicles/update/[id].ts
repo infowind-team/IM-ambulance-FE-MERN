@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     
     const response = await axios.put(
-      `http://192.168.1.73:9000/vehicles/update/${id}`,
+      `${process.env.BASE_URL}/vehicles/update/${id}`,
       payload,
       {
         headers: {

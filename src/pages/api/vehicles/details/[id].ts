@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     
-    const response = await axios.get(`http://192.168.1.73:9000/vehicles/details/${id}`, {
+    const response = await axios.get(`${process.env.BASE_URL}/vehicles/details/${id}`, {
       headers: {
         Authorization: req.headers.authorization,
         "Content-Type": "application/json",

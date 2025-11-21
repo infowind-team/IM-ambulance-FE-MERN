@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
 
-    const response = await axios.delete(`http://192.168.1.73:9000/vehicles/${id}`, {
+    const response = await axios.delete(`${process.env.BASE_URL}/vehicles/${id}`, {
       headers: {
         Authorization: req.headers.authorization || "", 
         "Content-Type": "application/json",
