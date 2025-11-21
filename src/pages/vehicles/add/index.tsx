@@ -19,10 +19,12 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { VehicleFormValues, MaintenanceRecord, CertificateRecord, UploadedFile } from "./types";
+import { useApi } from "@/hooks/useApi";
 
 
 export default function VehicleAddForm() {
   const router = useRouter();
+  const { get, post, put } = useApi();
   const { id } = router.query;
   const vehicleId = Array.isArray(id) ? id[0] : id;
   const isViewMode = !!vehicleId; 
@@ -149,18 +151,12 @@ export default function VehicleAddForm() {
 
   useEffect(() => {
     async function fetchUsers() {
-      try{
-        const access_token = localStorage.getItem("accessToken");
-      const res = await fetch("/api/vehicles/userlist",{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: access_token ? `Bearer ${access_token}` : "",
-        }});
-      const data = await res.json();
-      setUsersList(data?.data || []);  
-      }catch(error:any){
-        console.log(error)
+      try {
+        const data = await post("/api/vehicles/userlist");
+
+        setUsersList(data?.data || []);
+      } catch (error) {
+        console.error("Error fetching users:", error);
       }
     }
     fetchUsers();
@@ -168,9 +164,6 @@ export default function VehicleAddForm() {
 
   const onSubmit = async (formValues: VehicleFormValues) => {
     try {
-      
-
-      // Construct payload EXACTLY like Code 2
       const payload = {
         vehicleNumber: formValues.vehicleNumber,
         chassisNumber: formValues.chassisNumber,
@@ -182,7 +175,7 @@ export default function VehicleAddForm() {
         status: formValues.status,
         propellant: formValues.propellant,
 
-        // STATIC IDs (same as Code 2)
+        
         driverId:  formValues.driver || null,
         medicId: formValues.medic||null,
         escortId: formValues.escort || null,
@@ -247,32 +240,17 @@ export default function VehicleAddForm() {
           remarks: certificateRecords[0]?.remarks || "",
         },
       };
-
-      console.log(payload)
-
-      const access_token = localStorage.getItem("accessToken");
-
       const url = id
         ? `/api/vehicles/update-vehicle?id=${id}`
         : `/api/vehicles/create-vehicle`;
-      
-      const method = id ? "PUT" : "POST";
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
-        body: JSON.stringify(payload),
-      });
 
-      if (!response.ok) throw new Error("Failed to save vehicle");
+      const result = id
+        ? await put(url, payload)
+        : await post(url, payload);
 
       alert("Vehicle added successfully!");
 
-      setTimeout(() => {
-        router.push("/vehicles");
-      }, 2000);
+      router.push("/vehicles");
 
     } catch (error) {
       console.error(error);
@@ -281,18 +259,10 @@ export default function VehicleAddForm() {
 
   const fetchVehicle = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
-
-      const res = await fetch(`/api/vehicles/get-vehicle?vehicleId=${vehicleId}`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
+      const data = await get("/api/vehicles/get-vehicle", {
+        vehicleId: vehicleId,
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error("Failed to fetch vehicle");
-
-      
       const vehicle = data?.data; // shortcut
 
       const prefilledValues: VehicleFormValues = {

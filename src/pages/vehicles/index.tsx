@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useMemo , useEffect} from "react";
+import { useApi } from "@/hooks/useApi";
 
 import {
   Search,
@@ -133,6 +134,7 @@ const VEHICLES_DATA: Vehicle[] = [
 
 export default function VehiclesPage() {
   const router = useRouter();
+  const { del,get } = useApi();
 
   const [vehicles, setVehicles] = useState<Vehicle[]>(VEHICLES_DATA);
   const [page, setPage] = useState(1);
@@ -170,31 +172,11 @@ export default function VehiclesPage() {
     return { active, inactive, eas, mts, total: sortedVehicles.length };
   }, [sortedVehicles]);
 
-  // Delete
-  // const handleDelete = (id: string) => {
-  //   if (confirm("Are you sure you want to delete this vehicle?")) {
-  //     setVehicles((prev) => prev.filter((v) => v.id !== id));
-  //   }
-  // };
   const handleDelete = async (id: string) => {
     try {
-      const token = localStorage.getItem("accessToken");
+      await del(`/api/vehicles/delete-vehicles?id=${id}`);
 
-      const res = await fetch(`/api/vehicles/delete-vehicles?id=${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to delete vehicle");
-      }
-
-      setVehicles((prev) => prev.filter((v) => v.id !== id));
+      setVehicles(prev => prev.filter(v => v.id !== id));
       alert("Vehicle deleted successfully!");
     } catch (error) {
       console.error("Error deleting vehicle:", error);
@@ -211,65 +193,52 @@ export default function VehiclesPage() {
     router.push(`/vehicles/add?id=${id}`);
   };
 
+  // get all vehicle list
   const fetchVehicles = async () => {
     try {
-      const access_token =
-        typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+      const params: any = {
+        page,
+        limit: 30,
+        sortBy: 1,
+        sortOrder: 1,
+      };
 
-      const params = new URLSearchParams();
-      params.append("page", page.toString());       // page number
-      params.append("limit", "30");                // fixed limit
-      params.append("sortBy", "1");
-      params.append("sortOrder", "1");
-
-      if (searchQuery) params.append("search", searchQuery);
+      if (searchQuery) params.search = searchQuery;
       if (selectedStatus && selectedStatus !== "All Status") {
-        params.append("status", selectedStatus);
+        params.status = selectedStatus;
       }
 
-      const res = await fetch(`/api/vehicles/get-all?${params.toString()}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: access_token ? `Bearer ${access_token}` : "",
-        },
-      });
+      const data = await get("/api/vehicles/get-all", params);
 
-      if (!res.ok) throw new Error("Failed to fetch vehicles");
-
-      const data = await res.json();
       console.log("Vehicle API Response:", data);
+
       const fetchedVehicles = data?.data?.data?.list || [];
 
-  
-    const mappedVehicles: Vehicle[] = fetchedVehicles.map((item: any) => ({
-      id: item._id,
-      vehicleId: item._id, 
-      plateNumber: item.vehicleNumber,
-      name: `${item.make || ""} ${item.model || ""}`.trim(),
-      model: item.model,
-      mileage: "-", 
-      driver: item.driverId || "-", 
-      type: item.type === "Ambulance" ? "EAS" : "MTS", 
-      nextService: "-", 
-      coeExpiry: "-", 
-      status: item.status,
-    }));
+      const mappedVehicles: Vehicle[] = fetchedVehicles.map((item: any) => ({
+        id: item._id,
+        vehicleId: item._id,
+        plateNumber: item.vehicleNumber,
+        name: `${item.make || ""} ${item.model || ""}`.trim(),
+        model: item.model,
+        mileage: "-",
+        driver: item.driverId || "-",
+        type: item.type === "Ambulance" ? "EAS" : "MTS",
+        nextService: "-",
+        coeExpiry: "-",
+        status: item.status,
+      }));
 
-    
-    setVehicles(mappedVehicles);
-   
+      setVehicles(mappedVehicles);
+
     } catch (error) {
       console.error("Error fetching vehicles:", error);
     }
   };
 
+
   useEffect(() => {
     fetchVehicles();
   }, [page, limit, searchQuery, selectedStatus]);
-
-
-
 
   return (
     <>
