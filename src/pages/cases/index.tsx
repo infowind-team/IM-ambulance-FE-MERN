@@ -1,7 +1,8 @@
 // app/cases/page.tsx
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo , useEffect} from "react";
+import { useApi } from "@/hooks/useApi";
 import {
   Clock,
   Briefcase,
@@ -154,10 +155,55 @@ const stats = [
 
 export default function CasesPage() {
   const router = useRouter();
-
+  const { get } = useApi();
   const [cases, setCases] = useState<Case[]>(CASES_DATA);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+
+  const formatDate = (isoString: string) => {
+    if (!isoString) return "";  // prevents invalid date
+
+    const d = new Date(isoString);
+
+    if (isNaN(d.getTime())) return ""; // prevents invalid date
+
+    return d.toLocaleDateString("en-GB"); // dd/mm/yyyy
+  };
+
+
+
+  const fetchCases = async () => {
+    try {
+      const data = await get("/api/cases/all-cases", {
+        page: 1,
+        limit: 20,
+        search: searchQuery,
+        status: selectedStatus,
+      });
+
+      const formatted = data.data.list.map((item: any) => ({
+        id: item.id,
+        caseId: item.caseId,
+        patientName: item.patientName,
+        patientInitials: item.patientInitials,
+        phone: item.patientContact,
+        type: item.type,
+        vehicle: item.vehicleNumber,
+        date: item.bookingDate,  
+        time: item.time,
+        location: item.location,
+        status: item.status,
+      }));
+
+    setCases(formatted);
+    } catch (error) {
+      console.error("Error fetching cases:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCases();
+  }, [searchQuery, selectedStatus]);
 
   const filteredCases = useMemo(() => {
     return cases.filter((item) => {
@@ -329,7 +375,7 @@ export default function CasesPage() {
                       <div className="font-medium">{item.vehicle}</div>
                     </TableCell>
                     <TableCell className="p-4">
-                      <div className="font-medium">{item.date}</div>
+                      <div className="font-medium">{formatDate(item.date)}</div>
                       <div className="flex items-center gap-1 text-sm text-gray-600">
                         <Clock className="w-3 h-3" />
                         {item.time}
