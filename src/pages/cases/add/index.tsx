@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useApi } from "@/hooks/useApi";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import FunctionalHeader from "@/layout/FunctionalHeader";
@@ -38,6 +40,8 @@ const createEmptyTrip = (index: number): Trip => ({
 });
 
 export default function CasesAddPage() {
+  const router = useRouter();
+   const { post } = useApi();
   const form = useForm<CaseFormValues>({
     defaultValues: {
       status: "Open",
@@ -111,10 +115,6 @@ export default function CasesAddPage() {
   }, [selectedServices, form]);
 
   const onSubmit = async(values: CaseFormValues) => {
-    // console.log("Case Created:", {
-    //   ...values,
-    //   selectedServices,
-    // });
     const payload = {
          ...values,
     age: Number(values.age),
@@ -147,21 +147,11 @@ export default function CasesAddPage() {
       typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
 
     try{
-      const res = await fetch("/api/cases/create-case", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: access_token ? `Bearer ${access_token}` : "",
-        },
-        body: JSON.stringify(payload),
-      });
-      const response = await res.json();
-      if (res.ok) {
-        alert("Case created successfully!");
-        console.log("Created case:", response);
-      } else {
-        alert(`Error: ${response.message || "Failed to create case"}`);
-      }
+      const response = await post("/api/cases/create-case", payload);
+      console.log(response)
+      alert("Case created successfully!");
+      router.push('/cases')
+      
 
     }catch(error:any){
       console.log(error);

@@ -55,3 +55,4 @@ export type CaseFormValues = {
   remarks: string;
   servicesRequired: string[]
 };
+

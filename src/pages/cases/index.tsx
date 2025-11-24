@@ -50,6 +50,14 @@ interface Case {
   status: string;
 }
 
+
+type StatItem = {
+  label: string;
+  value: number;
+  color: string;
+  icon: React.ComponentType<any>;
+};
+
 const CASES_DATA: Case[] = [
   {
     id: "1",
@@ -132,7 +140,7 @@ const statusOptions = [
   { label: "Cancelled", value: "Cancelled" },
 ];
 
-const stats = [
+const staticStats: StatItem[] = [
   {
     label: "Today's Cases",
     value: 1,
@@ -159,6 +167,9 @@ export default function CasesPage() {
   const [cases, setCases] = useState<Case[]>(CASES_DATA);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [stats, setStats] = useState<StatItem[]>(staticStats);
+
+
 
   const formatDate = (isoString: string) => {
     if (!isoString) return "";  // prevents invalid date
@@ -201,9 +212,38 @@ export default function CasesPage() {
     }
   };
 
+  const fetchCurrentDayStats = async () => {
+  try {
+    const data = await get("/api/cases/current-day-stats");
+    console.log("Current Day Stats:", data);
+    setStats((prevStats) =>
+      prevStats.map((item) => {
+        if (item.label === "Today's Cases") {
+          return { ...item, value: data.data.totalCases };
+        }
+        if (item.label === "Completed") {
+          return { ...item, value: data.data.completedCases };
+        }
+        if (item.label === "Dispatched") {
+          return { ...item, value: data.data.dispatchedCases };
+        }
+        return item;
+      })
+    );
+    
+  } catch (error) {
+    console.error("Error fetching current-day-stats:", error);
+  }
+};
+
+
   useEffect(() => {
     fetchCases();
   }, [searchQuery, selectedStatus]);
+
+  useEffect(() => {
+    fetchCurrentDayStats();
+  }, []);
 
   const filteredCases = useMemo(() => {
     return cases.filter((item) => {
